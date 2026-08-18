@@ -1859,6 +1859,78 @@ body:has(#loginScreen:not([style*="display: none"])) > .app{
 }
 </style>
 
+
+
+<style id="pm2v-global-custom-scrollbar">
+/* PM2V — GLOBAL CUSTOM SCROLLBAR
+   CSS-only visual update. Application behavior is untouched. */
+
+html, body, * {
+  scrollbar-width: thin;
+  scrollbar-color: #146f37 #eaf7eb;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+  background: #eaf7eb;
+  border-radius: 999px;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  background: #146f37;
+  border: 2px solid #eaf7eb;
+  border-radius: 999px;
+  min-height: 42px;
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:hover {
+  background: #0f5c2d;
+}
+
+html::-webkit-scrollbar-thumb:active,
+body::-webkit-scrollbar-thumb:active,
+*::-webkit-scrollbar-thumb:active {
+  background: #0b4c25;
+}
+
+/* Preserve the app's intentionally hidden internal scroll areas. */
+.filters,
+.tx-filter-row,
+.nav,
+.pm2v-nav-final {
+  scrollbar-width: none !important;
+}
+
+.filters::-webkit-scrollbar,
+.tx-filter-row::-webkit-scrollbar,
+.nav::-webkit-scrollbar,
+.pm2v-nav-final::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
+
+/* Login remains a fixed no-scroll surface. */
+.login-screen {
+  scrollbar-width: none !important;
+}
+.login-screen::-webkit-scrollbar {
+  display: none !important;
+}
+</style>
+
 </head>
 <body class="auth-pending">
 <div id="loginScreen" class="login-screen">
