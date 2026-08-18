@@ -1738,6 +1738,253 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 }
 </style>
 
+
+/* PM2V(34) — DESKTOP SINGLE-VIEW LOGIN
+   Keep the complete login experience inside one viewport.
+   Mobile login rules below remain unchanged.
+*/
+@media (min-width: 601px) {
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .login-screen {
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .login-header {
+    height: 64px;
+    flex: 0 0 64px;
+    padding: 0 clamp(22px, 4vw, 58px);
+  }
+
+  .login-header-brand {
+    font-size: 16px;
+  }
+
+  .login-header-brand img {
+    width: 34px;
+    height: 34px;
+  }
+
+  .login-header-nav {
+    gap: 24px;
+  }
+
+  .login-header-nav a {
+    font-size: 13px;
+  }
+
+  .login-shell {
+    width: min(1180px, calc(100% - 56px));
+    height: min(650px, calc(100dvh - 96px));
+    min-height: 0;
+    margin: 16px auto;
+    align-self: center;
+    grid-template-columns: 1.02fr .98fr;
+    border-radius: 24px;
+  }
+
+  .login-company {
+    min-height: 0;
+    padding: 30px 48px;
+  }
+
+  .login-company-logo {
+    width: 118px;
+    height: 118px;
+    margin-bottom: 16px;
+  }
+
+  .login-company h2 {
+    font-size: 22px;
+    margin-bottom: 11px;
+  }
+
+  .login-company-divider {
+    width: 52px;
+    height: 4px;
+    margin-bottom: 15px;
+  }
+
+  .login-company-copy {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 17px;
+    max-width: 430px;
+  }
+
+  .login-company-stats {
+    padding: 11px 0;
+    margin-bottom: 12px;
+  }
+
+  .login-company-stats strong {
+    font-size: 19px;
+  }
+
+  .login-company-stats span {
+    font-size: 8px;
+  }
+
+  .login-materials {
+    gap: 7px;
+  }
+
+  .login-material {
+    padding: 8px 9px;
+    font-size: 11px;
+  }
+
+  .login-panel {
+    padding: 34px 54px 28px;
+    min-height: 0;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .login-panel h1 {
+    font-size: 32px;
+    margin-bottom: 7px;
+  }
+
+  .login-panel-subtitle {
+    font-size: 15px;
+    margin-bottom: 20px;
+  }
+
+  .login-form {
+    gap: 9px;
+  }
+
+  .login-field input {
+    height: 52px;
+    border-radius: 12px;
+  }
+
+  .login-forgot {
+    margin: 2px auto 3px;
+  }
+
+  .login-submit {
+    height: 52px;
+    border-radius: 12px;
+  }
+
+  .login-message {
+    min-height: 17px;
+    font-size: 12px;
+  }
+
+  .login-protected {
+    margin: 12px 0 14px;
+    font-size: 11px;
+  }
+
+  .login-protected .lock {
+    font-size: 16px;
+    margin-right: 5px;
+  }
+
+  .login-apply {
+    margin-bottom: 14px;
+    font-size: 12px;
+  }
+
+  .login-apply button {
+    font-size: 14px;
+  }
+
+  .login-legal {
+    padding-top: 12px;
+    font-size: 9px;
+    line-height: 1.4;
+  }
+}
+
+/* Short desktop/laptop view: compress the composition further rather than
+   allowing the login page itself to scroll. */
+@media (min-width: 601px) and (max-height: 760px) {
+  .login-header {
+    height: 60px;
+    flex-basis: 60px;
+  }
+
+  .login-shell {
+    height: calc(100dvh - 76px);
+    margin: 8px auto;
+  }
+
+  .login-company {
+    padding: 22px 40px;
+  }
+
+  .login-company-logo {
+    width: 104px;
+    height: 104px;
+    margin-bottom: 11px;
+  }
+
+  .login-company h2 {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  .login-company-divider {
+    margin-bottom: 10px;
+  }
+
+  .login-company-copy {
+    font-size: 13px;
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+
+  .login-company-stats {
+    padding: 8px 0;
+    margin-bottom: 9px;
+  }
+
+  .login-material {
+    padding: 6px 8px;
+  }
+
+  .login-panel {
+    padding: 24px 46px 20px;
+  }
+
+  .login-panel h1 {
+    font-size: 29px;
+  }
+
+  .login-panel-subtitle {
+    margin-bottom: 14px;
+  }
+
+  .login-field input {
+    height: 48px;
+  }
+
+  .login-submit {
+    height: 48px;
+  }
+
+  .login-protected {
+    margin: 9px 0 10px;
+  }
+
+  .login-apply {
+    margin-bottom: 10px;
+  }
+
+  .login-legal {
+    padding-top: 9px;
+  }
+}
+
 </head>
 <body class="auth-pending">
 <div id="loginScreen" class="login-screen">
