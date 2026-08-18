@@ -1861,73 +1861,85 @@ body:has(#loginScreen:not([style*="display: none"])) > .app{
 
 
 
-<style id="pm2v-global-custom-scrollbar">
-/* PM2V — GLOBAL CUSTOM SCROLLBAR
-   CSS-only visual update. Application behavior is untouched. */
+<style id="pm2v-global-custom-scrollbar-safe">
+/*
+  PM2V GLOBAL SCROLLBAR — VISUAL ONLY
+  This block intentionally contains CSS only.
+  No JavaScript, Firebase, DOM events, form behavior, permissions,
+  navigation logic, or application state is modified.
+*/
 
-html, body, * {
-  scrollbar-width: thin;
-  scrollbar-color: #146f37 #eaf7eb;
-}
-
-html::-webkit-scrollbar,
-body::-webkit-scrollbar,
-*::-webkit-scrollbar {
+/* Chromium / Brave / Edge / WebKit */
+html::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 
-html::-webkit-scrollbar-track,
-body::-webkit-scrollbar-track,
-*::-webkit-scrollbar-track {
+html::-webkit-scrollbar-track {
   background: #eaf7eb;
   border-radius: 999px;
 }
 
-html::-webkit-scrollbar-thumb,
-body::-webkit-scrollbar-thumb,
-*::-webkit-scrollbar-thumb {
+html::-webkit-scrollbar-thumb {
   background: #146f37;
   border: 2px solid #eaf7eb;
   border-radius: 999px;
   min-height: 42px;
 }
 
-html::-webkit-scrollbar-thumb:hover,
-body::-webkit-scrollbar-thumb:hover,
-*::-webkit-scrollbar-thumb:hover {
+html::-webkit-scrollbar-thumb:hover {
   background: #0f5c2d;
 }
 
-html::-webkit-scrollbar-thumb:active,
-body::-webkit-scrollbar-thumb:active,
-*::-webkit-scrollbar-thumb:active {
+html::-webkit-scrollbar-thumb:active {
   background: #0b4c25;
 }
 
-/* Preserve the app's intentionally hidden internal scroll areas. */
-.filters,
-.tx-filter-row,
-.nav,
-.pm2v-nav-final {
-  scrollbar-width: none !important;
+/* The document/body can become the scrolling element depending on browser state. */
+body::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
 }
 
+body::-webkit-scrollbar-track {
+  background: #eaf7eb;
+  border-radius: 999px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #146f37;
+  border: 2px solid #eaf7eb;
+  border-radius: 999px;
+  min-height: 42px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background: #0f5c2d;
+}
+
+body::-webkit-scrollbar-thumb:active {
+  background: #0b4c25;
+}
+
+/* Firefox */
+html,
+body {
+  scrollbar-width: thin;
+  scrollbar-color: #146f37 #eaf7eb;
+}
+
+/*
+  Keep PM2V's intentionally hidden horizontal/internal filter scrollbars hidden.
+  These rules only affect scrollbar presentation.
+*/
 .filters::-webkit-scrollbar,
-.tx-filter-row::-webkit-scrollbar,
-.nav::-webkit-scrollbar,
-.pm2v-nav-final::-webkit-scrollbar {
-  width: 0 !important;
-  height: 0 !important;
-  display: none !important;
+.tx-filter-row::-webkit-scrollbar {
+  display: none;
 }
 
-/* Login remains a fixed no-scroll surface. */
-.login-screen {
-  scrollbar-width: none !important;
-}
-.login-screen::-webkit-scrollbar {
-  display: none !important;
+.filters,
+.tx-filter-row {
+  scrollbar-width: none;
 }
 </style>
 
