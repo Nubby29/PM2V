@@ -3045,7 +3045,7 @@ async function approveApplicant(applicantId,button){
 }
 document.getElementById('applicantBody')?.addEventListener('click',async e=>{const b=e.target.closest('[data-approve]');if(!b)return;await approveApplicant(b.dataset.approve,b);});
 window.approveApplicant=approveApplicant;
-function updateRoleClocks(){const d=new Date(),dateText=d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}),timeText=d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'}),html='▣ &nbsp; '+dateText+' <span class="sep">|</span> ◷ &nbsp;'+timeText;document.querySelectorAll('.date').forEach(el=>el.innerHTML=html)}
+function updateRoleClocks(){const d=new Date(),dateText=d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}),timeText=d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'}),markup='▣ &nbsp; '+dateText+' <span class="sep">|</span> ◷ &nbsp;'+timeText;document.querySelectorAll('.date').forEach(el=>{el.innerHTML=markup})}
 setInterval(updateRoleClocks,1000);updateRoleClocks();
 
 const manualEntryToggle=document.getElementById('manualEntryToggle');const inventoryWriteSection=document.getElementById('inventoryWriteSection');if(manualEntryToggle&&inventoryWriteSection){manualEntryToggle.addEventListener('click',()=>{const open=!inventoryWriteSection.classList.contains('manual-entry-collapsed');if(open){inventoryWriteSection.classList.add('manual-entry-collapsed');manualEntryToggle.setAttribute('aria-expanded','false')}else{inventoryWriteSection.classList.remove('manual-entry-collapsed');manualEntryToggle.setAttribute('aria-expanded','true');setTimeout(()=>inventoryWriteSection.scrollIntoView({behavior:'smooth',block:'nearest'}),30)}})}
