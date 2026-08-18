@@ -2147,6 +2147,86 @@ body.auth-pending #loginScreen.login-screen{
 }
 
 </style>
+
+<style id="pm2v-login-auth-safe-no-scroll">
+
+/* PM2V(39) — NO-SCROLL WITHOUT TOUCHING AUTH LOGIC
+   Uses the actual inline display state of #loginScreen.
+*/
+body:has(#loginScreen[style*="display: flex"]) {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+}
+
+body:has(#loginScreen[style*="display: flex"]) > .app {
+  display: none !important;
+}
+
+body:has(#loginScreen[style*="display: flex"]) #loginScreen.login-screen {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  min-height: 0 !important;
+  max-height: 100dvh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  display: flex !important;
+  box-sizing: border-box !important;
+}
+
+@media (min-width: 601px) {
+  body:has(#loginScreen[style*="display: flex"]) #loginScreen .login-header {
+    flex: 0 0 60px !important;
+    height: 60px !important;
+    min-height: 60px !important;
+  }
+
+  body:has(#loginScreen[style*="display: flex"]) #loginScreen .login-shell {
+    flex: 0 0 auto !important;
+    width: min(1180px, calc(100vw - 48px)) !important;
+    height: calc(100dvh - 68px) !important;
+    min-height: 0 !important;
+    max-height: calc(100dvh - 68px) !important;
+    margin: 4px auto !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  body:has(#loginScreen[style*="display: flex"]) #loginScreen .login-company,
+  body:has(#loginScreen[style*="display: flex"]) #loginScreen .login-panel {
+    min-height: 0 !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  body:has(#loginScreen[style*="display: flex"]) #loginScreen .login-panel {
+    justify-content: center !important;
+  }
+}
+
+@media (min-width: 601px) and (max-height: 680px) {
+  body:has(#loginScreen[style*="display: flex"]) #loginScreen .login-header {
+    flex-basis: 54px !important;
+    height: 54px !important;
+    min-height: 54px !important;
+  }
+
+  body:has(#loginScreen[style*="display: flex"]) #loginScreen .login-shell {
+    width: min(1160px, calc(100vw - 32px)) !important;
+    height: calc(100dvh - 60px) !important;
+    max-height: calc(100dvh - 60px) !important;
+    margin: 3px auto !important;
+  }
+}
+
+</style>
 </head>
 <body class="auth-pending">
 <div id="loginScreen" class="login-screen">
@@ -2929,12 +3009,12 @@ document.querySelector('.logout a')?.addEventListener('click',async e=>{
 onAuthStateChanged(auth,async user=>{
   if(!user){
     document.getElementById('loginScreen').style.display='flex';
-    document.body.classList.add('auth-pending');
+    document.body.classList.remove('auth-pending');
     document.getElementById('authLoading')?.remove();
     return;
   }
   try{await initPM2V(user)}
-  catch(e){console.error(e);await signOut(auth).catch(()=>{});const msg=document.getElementById('loginMessage');msg.textContent=e.message||'Unable to verify your PM2V account.';document.getElementById('loginScreen').style.display='flex';document.body.classList.add('auth-pending');document.getElementById('authLoading')?.remove();}
+  catch(e){console.error(e);await signOut(auth).catch(()=>{});const msg=document.getElementById('loginMessage');msg.textContent=e.message||'Unable to verify your PM2V account.';document.getElementById('loginScreen').style.display='flex';document.body.classList.remove('auth-pending');document.getElementById('authLoading')?.remove();}
 });
 
 const links=document.querySelectorAll('.nav a[data-page]');
