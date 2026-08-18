@@ -2148,87 +2148,9 @@ body.auth-pending #loginScreen.login-screen{
 
 </style>
 
-<style id="pm2v-login-auth-safe-no-scroll">
 
-/* PM2V(39) — NO-SCROLL WITHOUT TOUCHING AUTH LOGIC
-   Uses the actual inline display state of #loginScreen.
-*/
-body:has(#loginScreen[style*="display: flex"]) {
-  width: 100% !important;
-  height: 100% !important;
-  min-height: 0 !important;
-  margin: 0 !important;
-  overflow: hidden !important;
-  overscroll-behavior: none !important;
-}
-
-body:has(#loginScreen[style*="display: flex"]) > .app {
-  display: none !important;
-}
-
-body:has(#loginScreen[style*="display: flex"]) #loginScreen.login-screen {
-  position: fixed !important;
-  inset: 0 !important;
-  width: 100vw !important;
-  height: 100dvh !important;
-  min-height: 0 !important;
-  max-height: 100dvh !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-  display: flex !important;
-  box-sizing: border-box !important;
-}
-
-@media (min-width: 601px) {
-  body:has(#loginScreen[style*="display: flex"]) #loginScreen .login-header {
-    flex: 0 0 60px !important;
-    height: 60px !important;
-    min-height: 60px !important;
-  }
-
-  body:has(#loginScreen[style*="display: flex"]) #loginScreen .login-shell {
-    flex: 0 0 auto !important;
-    width: min(1180px, calc(100vw - 48px)) !important;
-    height: calc(100dvh - 68px) !important;
-    min-height: 0 !important;
-    max-height: calc(100dvh - 68px) !important;
-    margin: 4px auto !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-  }
-
-  body:has(#loginScreen[style*="display: flex"]) #loginScreen .login-company,
-  body:has(#loginScreen[style*="display: flex"]) #loginScreen .login-panel {
-    min-height: 0 !important;
-    height: 100% !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-  }
-
-  body:has(#loginScreen[style*="display: flex"]) #loginScreen .login-panel {
-    justify-content: center !important;
-  }
-}
-
-@media (min-width: 601px) and (max-height: 680px) {
-  body:has(#loginScreen[style*="display: flex"]) #loginScreen .login-header {
-    flex-basis: 54px !important;
-    height: 54px !important;
-    min-height: 54px !important;
-  }
-
-  body:has(#loginScreen[style*="display: flex"]) #loginScreen .login-shell {
-    width: min(1160px, calc(100vw - 32px)) !important;
-    height: calc(100dvh - 60px) !important;
-    max-height: calc(100dvh - 60px) !important;
-    margin: 3px auto !important;
-  }
-}
-
-</style>
 </head>
-<body class="auth-pending">
+<body class="auth-pending login-active">
 <div id="loginScreen" class="login-screen">
   <header class="login-header">
     <div class="login-header-brand"><img src="./pm2v-logo.png" alt="PM2V Scrap Trading logo"><span>PM2V Scrap Trading</span></div>
@@ -2268,7 +2190,212 @@ body:has(#loginScreen[style*="display: flex"]) #loginScreen.login-screen {
           <input id="loginEmail" type="email" autocomplete="username" placeholder="Email Address" aria-label="Email Address" required>
         </div>
         <div class="login-field">
-          <span class="login-field-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+          <span class="login-field-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><
+<style id="pm2v-login-active-no-scroll">
+
+/* ============================================================
+   PM2V(40) — ROOT NO-SCROLL FIX
+   login-active is purely a visual/layout state. It NEVER controls
+   Firebase authentication.
+   ============================================================ */
+
+html:has(body.login-active),
+body.login-active {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+}
+
+/* The authenticated application must contribute ZERO layout height
+   while the login page is active. */
+body.login-active > .app {
+  display: none !important;
+}
+
+/* Login screen itself is the only viewport-sized layer. */
+body.login-active #loginScreen.login-screen {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  min-height: 0 !important;
+  max-height: 100dvh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Desktop: header + shell = exactly one viewport, including shell margins. */
+@media (min-width: 601px) {
+  body.login-active #loginScreen .login-header {
+    flex: 0 0 60px !important;
+    height: 60px !important;
+    min-height: 60px !important;
+    box-sizing: border-box !important;
+  }
+
+  body.login-active #loginScreen .login-shell {
+    flex: 0 0 auto !important;
+    width: min(1180px, calc(100vw - 48px)) !important;
+    height: calc(100dvh - 68px) !important;
+    min-height: 0 !important;
+    max-height: calc(100dvh - 68px) !important;
+    margin: 4px auto !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  body.login-active #loginScreen .login-company,
+  body.login-active #loginScreen .login-panel {
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  body.login-active #loginScreen .login-panel {
+    justify-content: center !important;
+  }
+
+  /* Compress the design instead of allowing any overflow on short screens. */
+  body.login-active #loginScreen .login-company {
+    padding: clamp(12px, 2.5vh, 28px) clamp(26px, 4vw, 46px) !important;
+  }
+
+  body.login-active #loginScreen .login-company-logo {
+    width: clamp(78px, 12vh, 112px) !important;
+    height: clamp(78px, 12vh, 112px) !important;
+    margin-bottom: clamp(6px, 1.4vh, 14px) !important;
+  }
+
+  body.login-active #loginScreen .login-company h2 {
+    font-size: clamp(17px, 2.7vh, 22px) !important;
+    margin-bottom: clamp(5px, 1vh, 10px) !important;
+  }
+
+  body.login-active #loginScreen .login-company-copy {
+    font-size: clamp(11px, 1.7vh, 14px) !important;
+    line-height: 1.4 !important;
+    margin-bottom: clamp(6px, 1.5vh, 15px) !important;
+  }
+
+  body.login-active #loginScreen .login-company-stats {
+    padding: clamp(6px, 1.2vh, 10px) 0 !important;
+    margin-bottom: clamp(6px, 1.3vh, 11px) !important;
+  }
+
+  body.login-active #loginScreen .login-material {
+    padding: clamp(4px, .9vh, 8px) 8px !important;
+    font-size: clamp(8px, 1.35vh, 11px) !important;
+  }
+
+  body.login-active #loginScreen .login-panel {
+    padding: clamp(14px, 3vh, 30px) clamp(28px, 4vw, 52px) !important;
+  }
+
+  body.login-active #loginScreen .login-panel h1 {
+    font-size: clamp(24px, 3.8vh, 32px) !important;
+    margin-bottom: 5px !important;
+  }
+
+  body.login-active #loginScreen .login-panel-subtitle {
+    font-size: clamp(12px, 1.8vh, 15px) !important;
+    margin-bottom: clamp(9px, 2vh, 18px) !important;
+  }
+
+  body.login-active #loginScreen .login-form {
+    gap: clamp(6px, 1vh, 9px) !important;
+  }
+
+  body.login-active #loginScreen .login-field input,
+  body.login-active #loginScreen .login-submit {
+    height: clamp(42px, 6.2vh, 52px) !important;
+    min-height: 42px !important;
+    box-sizing: border-box !important;
+  }
+
+  body.login-active #loginScreen .login-protected {
+    margin: clamp(5px, 1.3vh, 11px) 0 clamp(6px, 1.5vh, 13px) !important;
+  }
+
+  body.login-active #loginScreen .login-apply {
+    margin-bottom: clamp(5px, 1.4vh, 12px) !important;
+  }
+
+  body.login-active #loginScreen .login-legal {
+    padding-top: clamp(5px, 1.2vh, 10px) !important;
+  }
+}
+
+@media (min-width: 601px) and (max-height: 680px) {
+  body.login-active #loginScreen .login-header {
+    flex-basis: 54px !important;
+    height: 54px !important;
+    min-height: 54px !important;
+  }
+
+  body.login-active #loginScreen .login-shell {
+    width: min(1160px, calc(100vw - 32px)) !important;
+    height: calc(100dvh - 60px) !important;
+    max-height: calc(100dvh - 60px) !important;
+    margin: 3px auto !important;
+  }
+
+  body.login-active #loginScreen .login-company {
+    padding: 9px 24px !important;
+  }
+
+  body.login-active #loginScreen .login-company-logo {
+    width: 72px !important;
+    height: 72px !important;
+    margin-bottom: 5px !important;
+  }
+
+  body.login-active #loginScreen .login-panel {
+    padding: 10px 30px !important;
+  }
+
+  body.login-active #loginScreen .login-field input,
+  body.login-active #loginScreen .login-submit {
+    height: 40px !important;
+    min-height: 40px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  html:has(body.login-active),
+  body.login-active {
+    height: auto !important;
+    min-height: 100% !important;
+    max-height: none !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+  }
+
+  body.login-active > .app {
+    display: none !important;
+  }
+
+  body.login-active #loginScreen.login-screen {
+    position: relative !important;
+    width: 100% !important;
+    min-height: 100dvh !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+}
+
+</style>
+rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
           <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password" aria-label="Password" required>
           <button type="button" class="login-password-toggle" id="loginPasswordToggle" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.6" stroke="currentColor" stroke-width="1.8"/></svg></button>
         </div>
@@ -2904,7 +3031,7 @@ async function initPM2V(user){
     await loadReports();
     if(role==='owner'){ await loadApplicants(); await loadUsers(); }
   }
-  document.body.classList.remove('auth-pending');
+  document.body.classList.remove('auth-pending','login-active');
   document.getElementById('authLoading')?.remove();
   document.getElementById('loginScreen').style.display='none';
   const initial=location.hash.replace('#','');
@@ -3004,17 +3131,18 @@ document.getElementById('forgotBtn')?.addEventListener('click',async()=>{
   catch(e){msg.textContent=friendlyLoginError(e)}
 });
 document.querySelector('.logout a')?.addEventListener('click',async e=>{
-  e.preventDefault(); await signOut(auth); document.body.classList.add('auth-pending'); document.getElementById('loginScreen').style.display='flex'; showPage('dashboard');
+  e.preventDefault(); await signOut(auth); document.body.classList.add('auth-pending','login-active'); document.getElementById('loginScreen').style.display='flex'; showPage('dashboard');
 });
 onAuthStateChanged(auth,async user=>{
   if(!user){
     document.getElementById('loginScreen').style.display='flex';
     document.body.classList.remove('auth-pending');
+    document.body.classList.add('login-active');
     document.getElementById('authLoading')?.remove();
     return;
   }
   try{await initPM2V(user)}
-  catch(e){console.error(e);await signOut(auth).catch(()=>{});const msg=document.getElementById('loginMessage');msg.textContent=e.message||'Unable to verify your PM2V account.';document.getElementById('loginScreen').style.display='flex';document.body.classList.remove('auth-pending');document.getElementById('authLoading')?.remove();}
+  catch(e){console.error(e);await signOut(auth).catch(()=>{});const msg=document.getElementById('loginMessage');msg.textContent=e.message||'Unable to verify your PM2V account.';document.getElementById('loginScreen').style.display='flex';document.body.classList.remove('auth-pending');document.body.classList.add('login-active');document.getElementById('authLoading')?.remove();}
 });
 
 const links=document.querySelectorAll('.nav a[data-page]');
