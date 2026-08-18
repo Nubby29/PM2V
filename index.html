@@ -1312,6 +1312,63 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   #inventory .inventory-condition-pill.condition-unknown{background:#f1f3f5;color:#6b7785}
 }
 </style>
+
+<style id="pm2v-global-desktop-ui">
+/* =========================================================
+   PM2V GLOBAL DESKTOP UI
+   One visual system for every role. Role visibility remains
+   controlled by the existing permission logic.
+   ========================================================= */
+@media (min-width:761px){
+  .sidebar{width:280px;padding:22px 22px 22px;background:#146b35}
+  .logo-wrap{height:142px}
+  .logo{width:124px;height:124px}
+  .user-card{height:72px;border-radius:14px;padding:10px 13px;margin:0 0 25px}
+  .avatar{width:44px;height:44px;border-radius:11px;font-size:18px}
+  .user-text{margin-left:12px;min-width:0}
+  .user-name{font-size:14px;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .user-role{font-size:11px;text-transform:uppercase;letter-spacing:.65px}
+  .nav{gap:4px}
+  .nav-section-label{padding:9px 13px 6px;color:rgba(255,255,255,.58);font-size:9px;font-weight:900;letter-spacing:1.15px;text-transform:uppercase}
+  .nav-section-label:not(:first-child){margin-top:12px}
+  .nav a{height:46px;gap:13px;padding:0 14px;border-radius:11px;font-size:14px}
+  .nav a.active{box-shadow:inset 3px 0 0 #fff;background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.08)}
+  .nav-icon,.nav-icon svg{width:19px;height:19px}
+  .logout{left:22px;right:22px;bottom:22px;padding-top:18px}
+  .logout a{gap:12px;font-size:13px;padding-left:14px}
+
+  .main{margin-left:280px;width:calc(100% - 280px);padding:34px 38px 64px;background:#f3f8f4}
+  .topbar{margin-bottom:24px;align-items:center}
+  h1{font-size:30px;letter-spacing:-.7px}
+  .subtitle{margin-top:8px;font-size:13px;color:#68809a}
+  .date{padding:11px 14px;border-radius:10px;font-size:12px;box-shadow:0 2px 7px rgba(16,40,68,.035)}
+  .date .sep{margin:0 9px}
+
+  .dashboard-stats,.stats{gap:16px;margin-bottom:24px}
+  .dashboard-stat,.stat{height:104px;border-radius:15px;padding:21px 23px;box-shadow:0 2px 8px rgba(23,57,40,.045);border:1px solid #edf1ee}
+  .dashboard-stat-icon,.stat-icon{width:46px;height:46px;border-radius:12px;margin-right:15px;font-size:22px}
+  .dashboard-stat-label,.stat-label{font-size:10px;letter-spacing:.75px;margin-bottom:6px}
+  .dashboard-stat-value,.stat-value{font-size:26px}
+
+  .dashboard-card,.card,.classifier,.ai-scanner,.role-card{border-radius:16px;box-shadow:0 3px 10px rgba(23,57,40,.045);border:1px solid #edf1ee}
+  .dashboard-card{margin-bottom:22px}
+  .card{padding:27px 27px 26px;margin-bottom:24px}
+  .card-title{font-size:18px;margin-bottom:21px}
+  .classifier,.ai-scanner{padding:25px 28px 29px;margin-bottom:24px}
+  .section-title{font-size:18px}
+  .filters{gap:7px;margin-bottom:20px}
+  .filter{padding:11px 16px;border-radius:9px;font-size:13px}
+
+  .table-wrap{border-radius:13px}
+  table th{font-size:10px;letter-spacing:.45px}
+  table td{font-size:12px}
+
+  .report-grid,.user-grid,.transaction-grid{gap:15px}
+  .role-card{padding:18px}
+  .role-card h3{font-size:13px}
+  .role-card .big{font-size:27px}
+}
+</style>
 </head>
 <body class="auth-pending">
 <div id="loginScreen" class="login-screen">
@@ -1392,13 +1449,16 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   </div>
 
   <nav class="nav">
+    <div class="nav-section-label workspace-label">Workspace</div>
     <div class="nav-group-label">Workspace</div>
     <a href="#" data-page="dashboard"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/></svg></span>Dashboard</a>
     <a href="#" data-page="inventory"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 20 7.5v9L12 21l-8-4.5v-9L12 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m4.5 7.5 7.5 4.25 7.5-4.25M12 11.75V21" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>Physical Inventory</a>
     <a href="#" data-page="transactions" class="role-secretary-owner"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3h9l3 3v15H6V3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M15 3v4h4M9 11h6M9 15h6M9 19h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>Transactions</a>
     <a href="#" data-page="reports" class="role-secretary-owner"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="m4 8 6-4 6 5 6-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Reports</a>
+    <div class="nav-section-label admin-label role-owner">Administration</div>
     <a href="#" data-page="users" class="role-only role-owner"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="2"/><path d="M3 20c.7-3.1 2.7-5 6-5s5.3 1.9 6 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="9" r="2.3" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.2c2.5.3 4.1 1.9 4.5 4.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>User Management</a>
     <div class="nav-group-label account-label">Account</div>
+    <div class="nav-section-label account-label">Account</div>
     <a href="#" data-page="profile"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="2"/><path d="M4.5 21c.8-4.1 3.2-6.5 7.5-6.5s6.7 2.4 7.5 6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>Profile</a>
   </nav>
 
