@@ -1490,6 +1490,252 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   table td{font-size:14px}
 }
 </style>
+
+<style id="pm2v-global-sidebar-final">
+/* =========================================================
+   PM2V GLOBAL DESKTOP SIDEBAR — FINAL POLISH
+   Same visual shell for every role; existing role classes
+   continue to control visibility and permissions.
+   ========================================================= */
+@media (min-width:761px){
+  .pm2v-sidebar-final{
+    position:fixed!important;
+    inset:0 auto 0 0!important;
+    width:264px!important;
+    height:100vh!important;
+    min-height:100vh!important;
+    padding:20px 18px 18px!important;
+    background:#146b35!important;
+    color:#fff!important;
+    display:flex!important;
+    flex-direction:column!important;
+    overflow:hidden!important;
+    z-index:100!important;
+    box-sizing:border-box!important;
+  }
+
+  .pm2v-sidebar-final .logo-wrap{
+    height:118px!important;
+    min-height:118px!important;
+    flex:0 0 118px!important;
+    margin:0!important;
+    padding:0!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+  }
+  .pm2v-sidebar-final .logo{
+    width:108px!important;
+    height:108px!important;
+    object-fit:contain!important;
+  }
+
+  .pm2v-sidebar-final .user-card{
+    width:100%!important;
+    height:68px!important;
+    min-height:68px!important;
+    flex:0 0 68px!important;
+    margin:0 0 22px!important;
+    padding:9px 12px!important;
+    border-radius:14px!important;
+    display:flex!important;
+    align-items:center!important;
+    background:rgba(255,255,255,.115)!important;
+    border:1px solid rgba(255,255,255,.18)!important;
+    box-shadow:0 5px 16px rgba(0,0,0,.06)!important;
+  }
+  .pm2v-sidebar-final .avatar{
+    width:44px!important;
+    height:44px!important;
+    min-width:44px!important;
+    border-radius:11px!important;
+    font-size:18px!important;
+    border:2px solid rgba(255,255,255,.28)!important;
+    background:rgba(255,255,255,.14)!important;
+  }
+  .pm2v-sidebar-final .user-text{margin-left:12px!important;min-width:0!important}
+  .pm2v-sidebar-final .user-name{
+    margin:0 0 4px!important;
+    font-size:15px!important;
+    line-height:1.15!important;
+    font-weight:800!important;
+    color:#fff!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+  .pm2v-sidebar-final .user-role{
+    font-size:11px!important;
+    line-height:1!important;
+    font-weight:800!important;
+    letter-spacing:.7px!important;
+    text-transform:uppercase!important;
+    color:#c9ead1!important;
+  }
+
+  /* Navigation is the flexible middle region. This prevents the
+     Account/Profile area from ever colliding with Logout. */
+  .pm2v-nav-final{
+    flex:1 1 auto!important;
+    min-height:0!important;
+    width:100%!important;
+    margin:0!important;
+    padding:0!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:3px!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    scrollbar-width:none!important;
+  }
+  .pm2v-nav-final::-webkit-scrollbar{display:none!important}
+
+  .pm2v-nav-final .nav-section-label{
+    width:100%!important;
+    height:25px!important;
+    min-height:25px!important;
+    flex:0 0 25px!important;
+    margin:0!important;
+    padding:0 13px 6px!important;
+    display:flex!important;
+    align-items:flex-end!important;
+    box-sizing:border-box!important;
+    color:rgba(218,244,224,.64)!important;
+    font-size:9px!important;
+    line-height:1!important;
+    font-weight:900!important;
+    letter-spacing:1.2px!important;
+    text-transform:uppercase!important;
+  }
+
+  .pm2v-nav-final .nav-section-label.admin-label{
+    height:38px!important;
+    min-height:38px!important;
+    flex-basis:38px!important;
+    margin:12px 0 0!important;
+    padding:16px 13px 6px!important;
+    border-top:1px solid rgba(255,255,255,.15)!important;
+  }
+  .pm2v-nav-final .nav-section-label.account-label{
+    height:38px!important;
+    min-height:38px!important;
+    flex-basis:38px!important;
+    margin:12px 0 0!important;
+    padding:16px 13px 6px!important;
+    border-top:1px solid rgba(255,255,255,.15)!important;
+  }
+
+  /* If a role hides an entire permission-controlled section,
+     remove the section label too. */
+  .pm2v-nav-final .nav-section-label.role-owner[style*="display: none"]{
+    display:none!important;
+  }
+  .pm2v-nav-final a.role-secretary-owner[style*="display: none"],
+  .pm2v-nav-final a.role-owner[style*="display: none"]{
+    display:none!important;
+  }
+
+  .pm2v-nav-final > a{
+    width:100%!important;
+    height:46px!important;
+    min-height:46px!important;
+    flex:0 0 46px!important;
+    margin:0!important;
+    padding:0 13px!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:13px!important;
+    border:1px solid transparent!important;
+    border-radius:11px!important;
+    box-sizing:border-box!important;
+    color:rgba(255,255,255,.92)!important;
+    text-decoration:none!important;
+    font-size:14px!important;
+    line-height:1!important;
+    font-weight:750!important;
+    transition:background .16s ease,color .16s ease,box-shadow .16s ease,transform .16s ease!important;
+  }
+  .pm2v-nav-final > a:hover{
+    background:rgba(255,255,255,.075)!important;
+    color:#fff!important;
+  }
+  .pm2v-nav-final > a.active{
+    background:rgba(255,255,255,.14)!important;
+    color:#fff!important;
+    border-color:rgba(255,255,255,.10)!important;
+    box-shadow:inset 3px 0 0 #fff!important;
+  }
+  .pm2v-nav-final .nav-icon{
+    width:19px!important;
+    height:19px!important;
+    min-width:19px!important;
+    flex:0 0 19px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    color:currentColor!important;
+  }
+  .pm2v-nav-final .nav-icon svg{
+    width:19px!important;
+    height:19px!important;
+    display:block!important;
+  }
+
+  /* Account stays inside the scrollable navigation; Logout is a
+     dedicated bottom action. */
+  .pm2v-logout-final{
+    position:static!important;
+    left:auto!important;
+    right:auto!important;
+    bottom:auto!important;
+    width:100%!important;
+    height:52px!important;
+    min-height:52px!important;
+    flex:0 0 52px!important;
+    margin:10px 0 0!important;
+    padding:8px 0 0!important;
+    border-top:1px solid rgba(255,255,255,.16)!important;
+    box-sizing:border-box!important;
+  }
+  .pm2v-logout-final a{
+    width:100%!important;
+    height:42px!important;
+    min-height:42px!important;
+    margin:0!important;
+    padding:0 13px!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:13px!important;
+    border-radius:10px!important;
+    box-sizing:border-box!important;
+    color:#ffaaa2!important;
+    font-size:13px!important;
+    line-height:1!important;
+    font-weight:800!important;
+    text-decoration:none!important;
+    transition:background .16s ease,color .16s ease!important;
+  }
+  .pm2v-logout-final a:hover{
+    background:rgba(255,255,255,.07)!important;
+    color:#ffd0cb!important;
+  }
+  .pm2v-logout-final a span{
+    width:19px!important;
+    min-width:19px!important;
+    display:inline-flex!important;
+    justify-content:center!important;
+    font-size:16px!important;
+    line-height:1!important;
+  }
+
+  /* Keep main content perfectly aligned with the new sidebar. */
+  .main{
+    margin-left:264px!important;
+    width:calc(100% - 264px)!important;
+  }
+}
+</style>
+
 </head>
 <body class="auth-pending">
 <div id="loginScreen" class="login-screen">
@@ -1561,7 +1807,7 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 <div class="auth-loading" id="authLoading"><div class="auth-loading-card"><div class="auth-loading-spinner"></div><strong>Checking your PM2V account…</strong></div></div>
 <div class="app">
 
-<aside class="sidebar">
+<aside class="sidebar pm2v-sidebar-final">
   <div class="logo-wrap"><img src="./pm2v-logo.png" class="logo" alt="PM2V Scrap Trading"></div>
 
   <div class="user-card">
@@ -1569,7 +1815,7 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
     <div class="user-text"><div class="user-name">Nando Reyes</div><div class="user-role">Staff</div></div>
   </div>
 
-  <nav class="nav">
+  <nav class="nav pm2v-nav-final">
     <div class="nav-section-label workspace-label">Workspace</div>
     <a href="#" data-page="dashboard"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/></svg></span>Dashboard</a>
     <a href="#" data-page="inventory"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 20 7.5v9L12 21l-8-4.5v-9L12 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m4.5 7.5 7.5 4.25 7.5-4.25M12 11.75V21" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>Physical Inventory</a>
@@ -1581,7 +1827,7 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
     <a href="#" data-page="profile"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="2"/><path d="M4.5 21c.8-4.1 3.2-6.5 7.5-6.5s6.7 2.4 7.5 6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>Profile</a>
   </nav>
 
-  <div class="logout"><a href="#"><span>↪</span>Logout</a></div>
+  <div class="logout pm2v-logout-final"><a href="#"><span>↪</span>Logout</a></div>
 </aside>
 
 <main class="main">
