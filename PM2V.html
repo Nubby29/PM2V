@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PM2V Scrap Trading</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif;color:#17335a}
+body{background:#eaf7eb}
+button,input,select{font-family:inherit}
+.app{min-height:100vh;display:flex}
+
+/* SIDEBAR */
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:295px;background:#146b35;color:#fff;padding:26px 25px 24px;z-index:10}
+.logo-wrap{height:184px;display:flex;align-items:center;justify-content:center}
+.logo{width:158px;height:158px;object-fit:contain}
+.user-card{height:84px;border-radius:15px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.17);display:flex;align-items:center;padding:12px 17px;margin:2px 0 37px}
+.avatar{width:48px;height:48px;border-radius:12px;border:2px solid rgba(255,255,255,.28);background:rgba(255,255,255,.16);display:grid;place-items:center;font-weight:700;font-size:20px}
+.user-text{margin-left:14px}.user-name{font-size:16px;font-weight:700;margin-bottom:7px}.user-role{font-size:13px;color:#bce3c6;font-weight:600}
+.nav{display:flex;flex-direction:column;gap:7px}
+.nav a{height:52px;display:flex;align-items:center;gap:15px;padding:0 17px;border-radius:12px;color:#c9ead1;text-decoration:none;font-weight:700;font-size:16px;cursor:pointer}
+.nav a.active{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.14)}
+.nav-icon{width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 20px;color:currentColor}
+.nav-icon svg{width:20px;height:20px;display:block;overflow:visible}
+.logout{position:absolute;left:25px;right:25px;bottom:25px;border-top:1px solid rgba(255,255,255,.18);padding-top:23px}
+.logout a{display:flex;align-items:center;gap:14px;color:#ff9c96;text-decoration:none;font-weight:700;font-size:15px;padding-left:17px}
+
+/* MAIN */
+.main{margin-left:295px;width:calc(100% - 295px);padding:40px 43px 70px;min-height:100vh}
+.page{display:none}.page.active{display:block}
+.topbar{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:30px}
+h1{margin:0;font-size:31px;line-height:1.1;color:#071c3b;letter-spacing:-.8px}
+.subtitle{margin-top:15px;color:#597395;font-size:15px}
+.date{background:#fff;border:1px solid #e3e8ee;border-radius:12px;padding:14px 17px;color:#24466d;font-weight:600;font-size:14px;box-shadow:0 2px 6px rgba(0,0,0,.03)}
+.date .sep{color:#b8c3cf;margin:0 12px}
+
+
+/* AI SCRAP SCANNER */
+.ai-scanner{background:#fff;border-radius:21px;padding:29px 33px 34px;box-shadow:0 2px 5px rgba(23,57,40,.04);margin-bottom:29px}
+.ai-scanner-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:20px}
+.ai-mode{display:inline-flex;align-items:center;gap:8px;background:#eef8f0;color:#16743c;border:1px solid #d9eedc;border-radius:18px;padding:7px 12px;font-size:11px;font-weight:800;white-space:nowrap}
+.ai-mode-dot{width:7px;height:7px;border-radius:50%;background:#19a65b;box-shadow:0 0 0 3px rgba(25,166,91,.12)}
+.ai-mode.busy .ai-mode-dot{background:#e59b16;box-shadow:0 0 0 3px rgba(229,155,22,.12)}
+.ai-mode.error{color:#b02a2a;background:#fff0f0;border-color:#ffd5d5}
+.ai-mode.error .ai-mode-dot{background:#d83a3a;box-shadow:0 0 0 3px rgba(216,58,58,.12)}
+.scanner-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px;margin-bottom:22px}
+.scanner-btn{height:54px;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer}
+.scanner-upload{background:#fff;border:2px solid #e0e7ef;color:#334b6a;position:relative}
+.scanner-camera{border:0;background:#146f37;color:#fff}
+.scanner-scan{border:0;background:#2d394d;color:#fff}
+.scanner-btn:disabled{opacity:.55;cursor:not-allowed}
+.scanner-file{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+.scanner-stage{border:1px solid #dce5ee;background:#f8fafc;border-radius:18px;min-height:270px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center}
+.scanner-stage video,.scanner-stage img{display:none;width:100%;height:360px;object-fit:contain;background:#08131a}
+.scanner-placeholder{padding:55px 20px;text-align:center;color:#7589a1}
+.scanner-placeholder-icon{font-size:43px;margin-bottom:12px;color:#146f37}
+.scanner-placeholder strong{display:block;color:#294662;font-size:16px;margin-bottom:7px}
+.scanner-placeholder span{font-size:13px}
+.scanner-status{position:absolute;left:14px;bottom:14px;display:none;gap:8px;flex-wrap:wrap}
+.scanner-status-pill{background:rgba(7,28,59,.84);color:#fff;border-radius:18px;padding:7px 11px;font-size:11px;font-weight:700}
+.scanner-result{display:none;margin-top:18px;border:1px solid #dce5ee;border-radius:16px;background:#fbfdff;padding:18px}
+.scanner-result-top{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}
+.scanner-result-label{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:#71849b;font-weight:800;margin-bottom:7px}
+.scanner-material{font-size:23px;font-weight:900;color:#102844}
+.scanner-confidence{font-size:20px;font-weight:900;color:#146f37}
+.scanner-bar{height:9px;background:#e8eef3;border-radius:20px;overflow:hidden;margin:13px 0}
+.scanner-bar i{display:block;height:100%;background:#22a05a;border-radius:20px;width:0;transition:width .35s ease}
+.scanner-description{font-size:13px;line-height:1.55;color:#58708d}
+.scanner-meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.scanner-meta-box{border:1px solid #e3e9ef;background:#fff;border-radius:11px;padding:12px}
+.scanner-meta-box span{display:block;text-transform:uppercase;font-size:10px;letter-spacing:.7px;color:#8192a7;font-weight:800;margin-bottom:6px}
+.scanner-meta-box strong{font-size:14px;color:#193553}
+.scanner-alts{margin-top:13px;padding-top:13px;border-top:1px solid #edf0f3}
+.scanner-alts-title{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:#8192a7;font-weight:800;margin-bottom:7px}
+.scanner-alt-row{display:flex;justify-content:space-between;padding:5px 0;color:#49617e;font-size:12px}
+.scanner-error{display:none;margin-top:14px;padding:13px 15px;border-radius:12px;background:#fff1f1;border:1px solid #ffd7d7;color:#a72c2c;font-size:13px;line-height:1.5}
+.scanner-apply{margin-top:15px;border:0;background:#146f37;color:#fff;height:46px;border-radius:10px;padding:0 17px;font-size:13px;font-weight:800;cursor:pointer}
+.scanner-note{margin-top:12px;color:#7c8ea3;font-size:11px;line-height:1.5}
+@media(max-width:760px){
+  .scanner-actions{grid-template-columns:1fr}
+  .ai-scanner-head{flex-direction:column}
+  .scanner-stage video,.scanner-stage img{height:280px}
+}
+
+/* PHYSICAL INVENTORY */
+.filters{display:flex;gap:9px;margin-bottom:26px}
+.filter{border:0;background:#fff;color:#5c718f;border-radius:11px;padding:14px 20px;font-size:15px;font-weight:700;cursor:pointer}
+.filter.active{background:#146f37;color:#fff;box-shadow:0 5px 12px rgba(20,111,55,.18)}
+.classifier{background:#fff;border-radius:21px;padding:29px 33px 34px;box-shadow:0 2px 5px rgba(23,57,40,.04);margin-bottom:29px}
+.section-title{font-size:20px;font-weight:800;color:#142b4b;margin:0 0 8px}
+.badge{font-size:11px;letter-spacing:.5px;color:#13703b;background:#e5f5e8;border-radius:12px;padding:6px 11px;margin-left:7px;vertical-align:2px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:22px}
+.upload,.take{height:56px;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer}
+.upload{background:#fff;border:2px solid #e0e7ef;color:#334b6a}
+.take{border:0;background:#146f37;color:#fff}
+.preview{border:1px solid #dce5ee;background:#f8fafc;border-radius:18px;padding:23px 21px;display:flex;gap:20px;align-items:center}
+.preview-img{width:151px;height:151px;border-radius:12px;object-fit:cover;background:#fff}
+.preview-info{flex:1}.filename{font-size:14px;color:#49617e;margin:0 0 17px}
+.classify{width:100%;height:55px;border:0;border-radius:12px;background:#2d394d;color:#fff;font-size:16px;font-weight:800;cursor:pointer;margin-bottom:23px}
+.remove{width:100%;height:47px;border:1px solid #ff4242;background:#fff;border-radius:12px;color:#ef3434;font-size:15px;font-weight:700;cursor:pointer}
+.add-title{font-size:19px;font-weight:800;color:#142b4b;margin:0 0 7px}
+.form-grid-inventory{display:grid;grid-template-columns:1.05fr 1fr 1fr 1fr;gap:22px}
+label{display:block;text-transform:uppercase;font-size:12px;font-weight:700;letter-spacing:1px;color:#47627f;margin-bottom:14px}
+input,select{width:100%;height:50px;border:1px solid #e0e7ee;border-radius:12px;background:#fff;padding:0 17px;font-size:15px;color:#203c60;outline:none}
+input::placeholder{color:#9badc1}
+.save,.log-btn{border:0;background:#146f37;color:#fff;height:55px;border-radius:12px;padding:0 25px;font-size:15px;font-weight:800;cursor:pointer}
+.save{margin-top:22px}
+.table-wrap{background:#fff;border:1px solid #e1e7ed;border-radius:17px;overflow:hidden;margin-top:1px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;height:50px;background:#f7fafc;color:#55708e;font-size:11px;letter-spacing:1px;padding:0 25px}
+td{height:59px;border-top:1px solid #edf0f3;padding:0 25px;font-size:15px;color:#254566}
+
+/* COLLECTION LOG */
+.collection-topbar{margin-bottom:61px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:19px;margin-bottom:30px}
+.stat{height:112px;background:#fff;border-radius:17px;padding:25px 27px;display:flex;align-items:center;box-shadow:0 2px 5px rgba(23,57,40,.04)}
+.stat-icon{width:48px;height:48px;border-radius:13px;display:grid;place-items:center;margin-right:17px;font-size:25px}
+.stat:nth-child(1) .stat-icon{background:#e8f7eb;color:#16743c}
+.stat:nth-child(2) .stat-icon{background:#eef4ff;color:#2364ee}
+.stat:nth-child(3) .stat-icon{background:#fff3c9;color:#ec9700}
+.stat-label{color:#58708d;text-transform:uppercase;font-size:11px;font-weight:800;letter-spacing:.7px;margin-bottom:8px}
+.stat-value{font-size:27px;font-weight:800;color:#081c3a}
+.card{background:#fff;border-radius:19px;padding:33px 31px 31px;box-shadow:0 2px 5px rgba(23,57,40,.04);margin-bottom:30px}
+.card-title{display:flex;align-items:center;gap:13px;font-size:20px;font-weight:800;color:#122a4a;margin:0 0 28px}
+.plus{font-size:27px;font-weight:400;color:#14743c;line-height:1}
+.form-grid-collection{display:grid;grid-template-columns:1.02fr 1fr .98fr 1fr 1.05fr;gap:17px}
+.log-btn{margin-top:17px;height:49px;box-shadow:0 4px 9px rgba(18,107,52,.15)}
+.log-btn .check{font-size:17px;margin-right:8px}
+.log-card{padding:0;overflow:hidden}
+.log-head{height:89px;padding:0 31px;display:flex;align-items:center;justify-content:space-between}
+.log-title{display:flex;align-items:center;gap:13px;font-size:20px;font-weight:800;color:#122a4a}
+.table-icon{color:#14743c;font-size:22px}
+.date-input{width:168px;height:43px;border:1px solid #dfe7ef;border-radius:10px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;color:#385372;font-size:14px;background:#fff}
+.table-wrap.collection-table{border-top:1px solid #edf0f3;border-left:0;border-right:0;border-bottom:0;border-radius:0}
+.collection-table th{height:50px}.collection-table td{height:66px}
+.empty{text-align:center!important;color:#98a8ba!important;font-style:italic;padding:0!important}
+
+
+
+/* PROFILE */
+.profile-hero{background:linear-gradient(135deg,#126b35,#075c2b);border-radius:17px;min-height:173px;padding:29px 31px;display:flex;align-items:center;color:#fff;margin-bottom:23px;box-shadow:0 2px 5px rgba(23,57,40,.04)}
+.profile-avatar-large{width:78px;height:78px;border-radius:16px;background:rgba(255,255,255,.13);border:2px solid rgba(255,255,255,.25);display:grid;place-items:center;font-size:29px;font-weight:800;margin-right:22px}
+.profile-name{font-size:25px;font-weight:900;line-height:1.1;margin-bottom:15px}
+.profile-badges{display:flex;gap:9px;margin-bottom:13px}
+.profile-badge{display:inline-flex;align-items:center;background:rgba(83,177,113,.38);border-radius:18px;padding:8px 14px;font-size:12px;font-weight:800}
+.profile-email{font-size:14px;color:#d6f0dc;font-weight:600}
+.profile-card{background:#fff;border-radius:17px;padding:25px 25px 27px;margin-bottom:18px;box-shadow:0 2px 5px rgba(23,57,40,.04)}
+.profile-card-title{height:36px;display:flex;align-items:center;gap:11px;font-size:16px;font-weight:900;color:#10243e;border-bottom:1px solid #edf0f3;padding-bottom:20px;margin-bottom:23px}
+.profile-card-icon{color:#0d743b;font-size:20px;line-height:1}
+.profile-field-label{color:#8092a9;text-transform:uppercase;font-size:11px;font-weight:800;letter-spacing:.7px;margin-bottom:10px}
+.profile-field-value{font-size:16px;color:#122b4a;font-weight:500}
+.profile-account-grid{display:grid;grid-template-columns:1fr 1fr;gap:27px 50px}
+.profile-account-item:last-child{grid-column:1}
+.profile-actions{display:flex;gap:13px;margin-top:26px}
+.profile-action{height:51px;border-radius:11px;padding:0 23px;font-size:15px;font-weight:800;cursor:pointer}
+.profile-edit{border:0;background:#0c6b34;color:#fff;box-shadow:0 4px 9px rgba(18,107,52,.15)}
+.profile-password{border:1px solid #dfe6ed;background:#fff;color:#304a69}
+@media(max-width:760px){
+  .profile-hero{padding:24px;align-items:flex-start}
+  .profile-account-grid{grid-template-columns:1fr}
+  .profile-account-item:last-child{grid-column:auto}
+  .profile-actions{flex-direction:column}
+}
+
+/* DASHBOARD */
+.dashboard-topbar{margin-bottom:34px}
+.dashboard-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:21px;margin-bottom:34px}
+.dashboard-stat{height:113px;background:#fff;border-radius:17px;padding:24px 27px;display:flex;align-items:center;box-shadow:0 2px 5px rgba(23,57,40,.04)}
+.dashboard-stat-icon{width:51px;height:51px;border-radius:13px;display:grid;place-items:center;margin-right:18px;font-size:25px;font-weight:700}
+.dashboard-stat:nth-child(1) .dashboard-stat-icon{background:#e8f7eb;color:#16743c}
+.dashboard-stat:nth-child(2) .dashboard-stat-icon{background:#eef4ff;color:#2364ee}
+.dashboard-stat:nth-child(3) .dashboard-stat-icon{background:#e8f9f2;color:#16a06a}
+.dashboard-stat-label{color:#58708d;text-transform:uppercase;font-size:11px;font-weight:800;letter-spacing:.8px;margin-bottom:7px}
+.dashboard-stat-value{font-size:28px;font-weight:900;color:#071c3b;line-height:1}
+.dashboard-card{background:#fff;border-radius:19px;box-shadow:0 2px 5px rgba(23,57,40,.04);margin-bottom:34px;overflow:hidden}
+.dashboard-card-head{height:79px;padding:0 29px;display:flex;align-items:center;justify-content:space-between}
+.dashboard-card-title{display:flex;align-items:center;gap:13px;font-size:19px;font-weight:800;color:#122a4a}
+.dashboard-card-icon{color:#14743c;font-size:22px;line-height:1}
+.dashboard-view-all{color:#08783a;text-decoration:none;font-size:14px;font-weight:800}
+.dashboard-view-all .arrow{font-size:20px;margin-left:6px;vertical-align:-1px}
+.dashboard-table-wrap{border-top:1px solid #edf0f3}
+.dashboard-table th{height:50px;background:#f7fafc}
+.dashboard-table td{height:68px}
+.category-pill,.status-pill{display:inline-flex;align-items:center;justify-content:center;border-radius:10px;padding:9px 14px;font-size:13px;font-weight:800}
+.category-pill{background:#e7f4e9;color:#08733a}
+.status-pill{background:#e7f5e9;color:#08733a;border-radius:18px;padding:8px 14px}
+.dashboard-updated{color:#58708d}
+.dashboard-activity{padding-bottom:9px}
+.activity-row{min-height:93px;margin:0 27px;border-top:1px solid #edf0f3;display:flex;align-items:center;justify-content:space-between}
+.activity-row:first-child{border-top:0}
+.activity-name{font-size:16px;font-weight:800;color:#153253;margin-bottom:7px}
+.activity-category{font-size:14px;color:#66809d}
+.activity-right{display:flex;align-items:center;gap:16px}
+.activity-weight{font-size:14px;color:#58708d}
+.activity-status{background:#e7f5e9;color:#08733a;border-radius:18px;padding:8px 14px;font-size:13px;font-weight:800}
+@media(max-width:1050px){
+  .dashboard-stats{grid-template-columns:1fr 1fr}
+}
+@media(max-width:760px){
+  .dashboard-stats{grid-template-columns:1fr}
+  .dashboard-card-head{height:auto;padding:23px 20px;gap:15px}
+  .dashboard-table-wrap{overflow-x:auto}
+  .dashboard-table{min-width:850px}
+  .activity-row{margin:0 20px;gap:20px}
+  .activity-right{flex-direction:column;align-items:flex-end;gap:8px}
+}
+
+/* RESPONSIVE */
+@media(max-width:1050px){
+.sidebar{width:230px}.main{margin-left:230px;width:calc(100% - 230px);padding:30px 25px 60px}
+.form-grid-inventory{grid-template-columns:1fr 1fr 1fr}
+.form-grid-collection{grid-template-columns:1fr 1fr 1fr}
+.topbar{margin-bottom:40px}.collection-topbar{margin-bottom:40px}
+}
+@media(max-width:760px){
+.app{display:block}.sidebar{position:relative;width:100%;height:auto}.main{margin:0;width:100%}
+.logout{position:static;margin-top:30px}.stats{grid-template-columns:1fr}
+.form-grid-inventory,.form-grid-collection{grid-template-columns:1fr}
+.actions{grid-template-columns:1fr}.preview{flex-direction:column;align-items:stretch}
+.preview-img{width:100%;height:190px}.topbar{gap:20px;flex-direction:column}
+.log-head{height:auto;padding:24px 20px;gap:15px;flex-direction:column;align-items:flex-start}
+.table-wrap{overflow-x:auto}table{min-width:900px}
+}
+
+/* FIREBASE AUTH / DATA LOADING */
+body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#eaf7eb;z-index:9999}.auth-loading-card{background:#fff;border-radius:18px;padding:28px 34px;box-shadow:0 15px 45px rgba(18,72,38,.12);text-align:center;color:#17335a}.auth-loading-spinner{width:30px;height:30px;border:3px solid #d9eadc;border-top-color:#146b35;border-radius:50%;animation:pm2vspin .8s linear infinite;margin:0 auto 14px}@keyframes pm2vspin{to{transform:rotate(360deg)}}.pm2v-toast{position:fixed;right:24px;bottom:24px;z-index:10001;max-width:420px;background:#17335a;color:#fff;padding:14px 18px;border-radius:12px;box-shadow:0 12px 35px rgba(0,0,0,.18);font-weight:700}.pm2v-toast.error{background:#b42318}.pm2v-toast.success{background:#146b35}
+
+/* LOGIN / PUBLIC ACCESS */
+.login-screen{position:fixed;inset:0;z-index:20000;display:flex;flex-direction:column;background:linear-gradient(135deg,#e9f7eb 0%,#f7fbf8 55%,#e6f1e8 100%);overflow:auto;padding:0;color:#172235}
+.login-header{height:88px;flex:0 0 88px;background:#063c20;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(28px,5vw,72px);box-shadow:0 2px 10px rgba(3,50,27,.18);border-bottom:1px solid rgba(255,255,255,.18)}
+.login-header-brand{display:flex;align-items:center;gap:13px;color:#fff;font-weight:900;font-size:18px;letter-spacing:-.3px}.login-header-brand img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid #000;background:#25d36d}.login-header-nav{display:flex;align-items:center;gap:34px}.login-header-nav a{color:#d8e9df;text-decoration:none;font-size:14px;font-weight:800;transition:color .2s ease}.login-header-nav a:hover{color:#fff}
+.login-shell{width:min(1160px,calc(100% - 64px));margin:22px auto 40px;display:grid;grid-template-columns:1fr 1fr;background:#fff;border-radius:25px;overflow:hidden;box-shadow:0 22px 65px rgba(19,68,39,.14);min-height:640px}
+.login-company{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:56px 58px;background:linear-gradient(145deg,#075329 0%,#0a6a34 54%,#0c7c3d 100%);color:#fff;overflow:hidden}
+.login-company:before{content:"";position:absolute;inset:0;opacity:.2;background-image:linear-gradient(45deg,rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(-45deg,rgba(255,255,255,.08) 1px,transparent 1px);background-size:38px 38px}
+.login-company:after{content:"";position:absolute;width:260px;height:260px;border:26px solid rgba(56,219,112,.08);border-radius:50%;right:-90px;top:-80px;box-shadow:0 0 0 34px rgba(56,219,112,.035),0 0 0 68px rgba(56,219,112,.025)}
+.login-company > *{position:relative;z-index:1}.login-company-logo{width:158px;height:158px;border-radius:50%;object-fit:cover;border:4px solid #000;background:#2bd56f;box-shadow:0 10px 24px rgba(0,0,0,.18);margin-bottom:30px}.login-company h2{font-size:18px;margin:0 0 18px;font-weight:900;letter-spacing:.1px}.login-company-divider{width:55px;height:4px;border-radius:10px;background:#36d877;margin-bottom:30px}.login-company-copy{max-width:450px;font-size:16px;line-height:1.75;color:#d9f3e2;margin:0 0 30px}.login-materials{display:flex;gap:9px;flex-wrap:wrap;justify-content:center}.login-material{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid rgba(255,255,255,.24);border-radius:20px;background:rgba(255,255,255,.08);color:#f2fff5;font-size:12px;font-weight:800}.login-material i{display:inline-block;width:12px;height:12px;border:1.5px solid currentColor;border-radius:2px}.login-material:nth-child(2) i{border-radius:50%}.login-material:nth-child(3) i{transform:rotate(45deg);border-radius:1px;width:10px;height:10px}.login-material:nth-child(4) i{border-radius:2px;width:10px;height:13px}
+.login-panel{padding:60px 60px 46px;display:flex;flex-direction:column;justify-content:center}.login-panel h1{font-size:32px;color:#172235;margin:0 0 10px;letter-spacing:-1px}.login-panel-subtitle{font-size:17px;color:#6f8199;margin-bottom:40px}.login-form{display:grid;gap:14px}.login-field{position:relative}.login-field input{width:100%;height:59px;border:1px solid #d7e0e9;border-radius:13px;padding:0 48px 0 56px;font-size:15px;color:#24364d;outline:none;background:#fbfcfd;transition:border-color .2s,box-shadow .2s}.login-field input:focus{border-color:#149149;box-shadow:0 0 0 4px rgba(20,145,73,.09);background:#fff}.login-field input::placeholder{color:#91a2b7}.login-field-icon{position:absolute;left:18px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:#8aa0b8;pointer-events:none}.login-field-icon svg{width:100%;height:100%}.login-password-toggle{position:absolute;right:16px;top:50%;transform:translateY(-50%);border:0;background:none;color:#8aa0b8;padding:4px;cursor:pointer}.login-password-toggle svg{width:20px;height:20px}.login-forgot{border:0;background:none;color:#0b7438;font-size:14px;font-weight:800;cursor:pointer;margin:7px auto 7px}.login-submit{height:58px;border:0;border-radius:13px;background:linear-gradient(135deg,#146d35,#087d3e);color:#fff;font-size:16px;font-weight:900;cursor:pointer;box-shadow:0 10px 22px rgba(14,112,57,.18);transition:transform .15s,box-shadow .15s}.login-submit:hover{transform:translateY(-1px);box-shadow:0 13px 27px rgba(14,112,57,.23)}.login-submit:disabled{opacity:.65;cursor:wait;transform:none}.login-protected{text-align:center;color:#6e829b;font-size:13px;margin:27px 0 29px}.login-protected .lock{color:#0db95a;font-size:18px;vertical-align:-2px;margin-right:7px}.login-apply{text-align:center;color:#71839a;font-size:15px;margin-bottom:29px}.login-apply button{border:0;background:none;color:#0b7438;font-size:15px;font-weight:900;cursor:pointer;padding:0}.login-legal{border-top:1px solid #e3e8ee;padding-top:25px;text-align:center;color:#8493a7;font-size:11px}.login-legal a{color:#0b7438;text-decoration:none;font-weight:800}.login-message{min-height:20px;text-align:center;font-size:13px;font-weight:700;color:#b42318;margin-top:2px}.login-message.success{color:#146b35}
+
+/* Public application modal */
+#pm2vAccessModal{position:fixed;inset:0;z-index:21000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(5,25,16,.56);backdrop-filter:blur(7px)}#pm2vAccessModal.open{display:flex}.pm2v-access-card{position:relative;width:min(474px,100%);background:#fff;border-radius:22px;padding:31px 34px 34px;box-shadow:0 25px 80px rgba(0,0,0,.26);max-height:calc(100vh - 40px);overflow:auto}.pm2v-access-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;margin-bottom:20px}.pm2v-access-head h2{margin:0;color:#172235;font-size:24px;letter-spacing:-.4px}.pm2v-access-sub{margin:7px 0 0;color:#77879c;font-size:13px}.pm2v-access-close{border:0;background:#f1f5f8;color:#8293a8;width:36px;height:36px;border-radius:10px;font-size:22px;cursor:pointer}.pm2v-access-form{display:grid;gap:14px}.pm2v-access-form label{font-size:11px;color:#4e6076;font-weight:900;letter-spacing:.7px}.pm2v-access-form input,.pm2v-access-form select{width:100%;height:51px;margin-top:7px;border:1px solid #d7e0e9;border-radius:11px;padding:0 13px;color:#24364d;background:#fbfcfd;outline:none;font-size:14px}.pm2v-access-form input:focus,.pm2v-access-form select:focus{border-color:#149149;box-shadow:0 0 0 4px rgba(20,145,73,.08);background:#fff}.pm2v-role-info{padding:13px 14px;border:1px solid #dfe7ee;border-radius:10px;color:#61748b;font-size:12px;line-height:1.55;background:#fbfcfd}.pm2v-role-info strong{color:#11713b}.pm2v-access-submit{height:53px;border:0;border-radius:11px;background:#146d35;color:#fff;font-size:14px;font-weight:900;cursor:pointer;margin-top:1px}.pm2v-access-submit:disabled{opacity:.65;cursor:wait}.pm2v-access-msg{min-height:18px;text-align:center;color:#b42318;font-size:12px;font-weight:700}.pm2v-access-msg.success{color:#146b35}
+
+@media(max-width:900px){.login-shell{grid-template-columns:1fr;width:min(720px,calc(100% - 32px));margin:20px auto 30px}.login-company{min-height:400px;padding:45px 35px}.login-panel{padding:42px 35px}.login-header-nav{gap:18px}.login-header{padding:0 24px}}
+@media(max-width:600px){.login-header{height:70px;flex-basis:70px;padding:0 16px}.login-header-brand{font-size:15px}.login-header-brand img{width:36px;height:36px}.login-header-nav{display:none}.login-shell{width:calc(100% - 20px);margin:10px auto 20px;border-radius:19px}.login-company{min-height:355px;padding:35px 22px}.login-company-logo{width:112px;height:112px;margin-bottom:22px}.login-company-copy{font-size:13px;line-height:1.65;margin-bottom:22px}.login-panel{padding:34px 22px}.login-panel h1{font-size:28px}.login-panel-subtitle{font-size:15px;margin-bottom:28px}.pm2v-access-card{padding:25px 20px}.login-screen{position:fixed}}
+.role-only{display:none}.role-secretary-owner{display:none}
+.report-grid,.user-grid,.transaction-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}.role-card{background:#fff;border:1px solid #dfe8e2;border-radius:16px;padding:20px}.role-card h3{margin:0 0 8px;color:#17335a;font-size:14px}.role-card .big{font-size:30px;font-weight:900;color:#17335a}.role-card .muted{color:#71819a;font-size:12px}.role-table{width:100%;border-collapse:collapse}.role-table th,.role-table td{padding:12px 10px;border-bottom:1px solid #e8eee9;text-align:left;font-size:13px}.role-table th{color:#60728b;font-size:11px}.role-btn{border:0;border-radius:8px;padding:8px 11px;font-weight:800;cursor:pointer}.role-btn.primary{background:#146b35;color:#fff}.role-btn.danger{background:#fdecec;color:#b42318}.role-form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.role-form input,.role-form select{height:42px;border:1px solid #ccd9d0;border-radius:9px;padding:0 10px}.role-form button{height:42px;border:0;border-radius:9px;background:#146b35;color:#fff;font-weight:800}.empty-role{padding:28px;text-align:center;color:#8090a4}
+.inventory-form-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.inventory-cancel{margin-top:22px;height:55px;border:1px solid #ccd9d0;background:#fff;color:#146f37;border-radius:12px;padding:0 20px;font-size:15px;font-weight:800;cursor:pointer}.inventory-actions{display:flex;gap:8px;align-items:center}.inventory-action{border:0;border-radius:8px;padding:8px 11px;font-weight:800;cursor:pointer;font-size:12px}.inventory-action.edit{background:#eaf5ed;color:#146f37}.inventory-action.delete{background:#fdecec;color:#b42318}.inventory-write-section.editing{border-left:4px solid #146f37;padding-left:18px}
+@media(max-width:900px){.report-grid,.user-grid,.transaction-grid{grid-template-columns:1fr 1fr}.role-form{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.report-grid,.user-grid,.transaction-grid,.role-form{grid-template-columns:1fr}.login-card{padding:26px}}
+</style>
+
+<style id="pm2v-logo-fix">
+  .logo,
+  .sidebar-logo,
+  .brand-logo,
+  .logo img,
+  .sidebar-logo img,
+  .brand-logo img,
+  img[alt*="PM2V" i] {
+    border-radius: 100%;
+    border: 3px solid black;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+</style>
+
+<style id="pm2v-approval-modal-css">
+#pm2vApprovalModal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}.pm2v-approval-backdrop{position:absolute;inset:0;background:rgba(7,28,59,.48);backdrop-filter:blur(3px)}#pm2vApprovalModal.open{display:flex}.pm2v-approval-card{position:relative;width:min(520px,100%);background:#fff;border-radius:20px;padding:26px;box-shadow:0 22px 70px rgba(7,28,59,.24);z-index:1}.pm2v-approval-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}.pm2v-approval-eyebrow{font-size:10px;letter-spacing:1px;font-weight:800;color:#146f37;margin-bottom:6px}.pm2v-approval-head h2{margin:0;color:#071c3b;font-size:24px}.pm2v-approval-close{border:0;background:#f2f5f7;color:#52677e;border-radius:10px;width:36px;height:36px;font-size:24px;cursor:pointer}.pm2v-approval-person{padding:13px 15px;background:#f4faf5;border:1px solid #dceee0;border-radius:12px;color:#28513a;font-size:13px;font-weight:700;margin-bottom:17px}.pm2v-approval-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.pm2v-approval-card label{display:block;color:#46627e;font-size:12px;font-weight:800}.pm2v-approval-card input,.pm2v-approval-card select{width:100%;height:44px;margin-top:7px;border:1px solid #d8e1e9;border-radius:10px;padding:0 12px;background:#fff;color:#17335a;outline:none}.pm2v-approval-password-label{margin-top:13px}.pm2v-approval-note{margin-top:12px;color:#71849b;font-size:11px;line-height:1.5}.pm2v-approval-error{min-height:18px;margin-top:10px;color:#b42318;font-size:12px;font-weight:700}.pm2v-approval-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:12px}.pm2v-approval-actions button{height:44px;border-radius:10px;padding:0 16px;font-weight:800;cursor:pointer}.pm2v-approval-cancel{border:1px solid #d8e1e9;background:#fff;color:#49617e}.pm2v-approval-confirm{border:0;background:#146f37;color:#fff}@media(max-width:600px){.pm2v-approval-grid{grid-template-columns:1fr}.pm2v-approval-card{padding:20px}}
+</style></head>
+<body class="auth-pending">
+<div id="loginScreen" class="login-screen">
+  <header class="login-header">
+    <div class="login-header-brand"><img src="pm2v-logo.png" alt="PM2V Scrap Trading logo"><span>PM2V Scrap Trading</span></div>
+    <nav class="login-header-nav" aria-label="Public navigation">
+      <a href="#about" data-login-info="about">About Us</a>
+      <a href="#faqs" data-login-info="faqs">FAQs</a>
+      <a href="#privacy" data-login-info="privacy">Privacy</a>
+      <a href="#terms" data-login-info="terms">Terms</a>
+    </nav>
+  </header>
+
+  <div class="login-shell">
+    <section class="login-company">
+      <img class="login-company-logo" src="pm2v-logo.png" alt="PM2V Scrap Trading">
+      <h2>Smart Inventory. Sustainable Future.</h2>
+      <div class="login-company-divider"></div>
+      <p class="login-company-copy">Founded in 2007, we are a trusted partner in waste management in Los Baños, Laguna. Specializing in metal, wood, plastic, and carton scraps.</p>
+      <div class="login-materials" aria-label="Materials handled">
+        <span class="login-material"><i></i>Metal</span>
+        <span class="login-material"><i></i>Plastic</span>
+        <span class="login-material"><i></i>Wood</span>
+        <span class="login-material"><i></i>Paper</span>
+      </div>
+    </section>
+
+    <section class="login-panel">
+      <h1>Welcome Back</h1>
+      <div class="login-panel-subtitle">Sign in to manage your inventory</div>
+      <form id="loginForm" class="login-form">
+        <div class="login-field">
+          <span class="login-field-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <input id="loginEmail" type="email" autocomplete="username" placeholder="Email Address" aria-label="Email Address" required>
+        </div>
+        <div class="login-field">
+          <span class="login-field-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+          <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password" aria-label="Password" required>
+          <button type="button" class="login-password-toggle" id="loginPasswordToggle" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+        </div>
+        <button id="forgotBtn" type="button" class="login-forgot">Forgot password?</button>
+        <button id="loginBtn" class="login-submit" type="submit">Sign In &nbsp;→</button>
+        <div id="loginMessage" class="login-message"></div>
+      </form>
+      <div class="login-protected"><span class="lock">♧</span>Protected by encrypted connection</div>
+      <div class="login-apply">Don't have an account? <button type="button" id="openAccessBtn">Apply for Access</button></div>
+      <div class="login-legal">By signing in, you agree to our <a href="#privacy" data-login-info="privacy">Privacy Policy</a> and <a href="#terms" data-login-info="terms">Terms of Service.</a></div>
+    </section>
+  </div>
+</div>
+
+<div id="pm2vAccessModal" aria-hidden="true">
+  <div class="pm2v-access-card" role="dialog" aria-modal="true" aria-labelledby="pm2vAccessTitle">
+    <div class="pm2v-access-head">
+      <div><h2 id="pm2vAccessTitle">Apply for Access</h2><p class="pm2v-access-sub">Submit your application for review</p></div>
+      <button type="button" class="pm2v-access-close" id="closeAccessBtn" aria-label="Close">×</button>
+    </div>
+    <form id="accessForm" class="pm2v-access-form">
+      <label>FULL NAME<input id="accessFullName" type="text" placeholder="Enter your full name" required></label>
+      <label>EMAIL ADDRESS<input id="accessEmail" type="email" placeholder="Enter your email" required></label>
+      <label>REQUESTED ROLE<select id="accessRole" required><option value="" selected disabled>Select a role</option><option value="staff">Staff</option><option value="secretary">Secretary</option></select></label>
+      <div class="pm2v-role-info"><strong>Staff</strong> — Manage daily collection logs and view physical inventory.<br><br><strong>Secretary</strong> — Handle transactions, generate reports, and manage inventory records.</div>
+      <div id="accessMessage" class="pm2v-access-msg"></div>
+      <button type="submit" class="pm2v-access-submit" id="accessSubmitBtn">Submit Application</button>
+    </form>
+  </div>
+</div>
+
+<div class="auth-loading" id="authLoading"><div class="auth-loading-card"><div class="auth-loading-spinner"></div><strong>Checking your PM2V account…</strong></div></div>
+<div class="app">
+
+<aside class="sidebar">
+  <div class="logo-wrap"><img src="pm2v-logo.png" class="logo" alt="PM2V Scrap Trading"></div>
+
+  <div class="user-card">
+    <div class="avatar">N</div>
+    <div class="user-text"><div class="user-name">Nando Reyes</div><div class="user-role">Staff</div></div>
+  </div>
+
+  <nav class="nav">
+    <a href="#" data-page="dashboard"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/></svg></span>Dashboard</a>
+    <a href="#" data-page="inventory"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 20 7.5v9L12 21l-8-4.5v-9L12 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m4.5 7.5 7.5 4.25 7.5-4.25M12 11.75V21" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>Physical Inventory</a>
+    <a href="#" data-page="transactions" class="role-secretary-owner"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3h9l3 3v15H6V3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M15 3v4h4M9 11h6M9 15h6M9 19h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>Transactions</a>
+    <a href="#" data-page="reports" class="role-secretary-owner"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="m4 8 6-4 6 5 6-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Reports</a>
+    <a href="#" data-page="users" class="role-only role-owner"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="2"/><path d="M3 20c.7-3.1 2.7-5 6-5s5.3 1.9 6 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="9" r="2.3" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.2c2.5.3 4.1 1.9 4.5 4.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>User Management</a>
+    <a href="#" data-page="profile"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="2"/><path d="M4.5 21c.8-4.1 3.2-6.5 7.5-6.5s6.7 2.4 7.5 6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>Profile</a>
+  </nav>
+
+  <div class="logout"><a href="#"><span>↪</span>Logout</a></div>
+</aside>
+
+<main class="main">
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="page active">
+  <div class="topbar dashboard-topbar">
+    <div>
+      <h1>Dashboard</h1>
+      <div class="subtitle">Welcome back! Here's your inventory overview.</div>
+    </div>
+    <div class="date">▣ &nbsp; Tuesday, August 18, 2026 <span class="sep">|</span> ◷ &nbsp;05:26:40 PM</div>
+  </div>
+
+  <section class="dashboard-stats">
+    <div class="dashboard-stat">
+      <div class="dashboard-stat-icon">⬡</div>
+      <div>
+        <div class="dashboard-stat-label">Total Items</div>
+        <div class="dashboard-stat-value" id="dashTotalItems">0</div>
+      </div>
+    </div>
+    <div class="dashboard-stat">
+      <div class="dashboard-stat-icon">☷</div>
+      <div>
+        <div class="dashboard-stat-label">Categories</div>
+        <div class="dashboard-stat-value" id="dashCategories">0</div>
+      </div>
+    </div>
+    <div class="dashboard-stat">
+      <div class="dashboard-stat-icon">✓</div>
+      <div>
+        <div class="dashboard-stat-label">Active Items</div>
+        <div class="dashboard-stat-value" id="dashActiveItems">0</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dashboard-card">
+    <div class="dashboard-card-head">
+      <div class="dashboard-card-title">
+        <span class="dashboard-card-icon">▣</span>
+        Current Inventory
+      </div>
+      <a href="#inventory" class="dashboard-view-all" data-dashboard-inventory>View All <span class="arrow">›</span></a>
+    </div>
+
+    <div class="dashboard-table-wrap">
+      <table class="dashboard-table">
+        <thead>
+          <tr>
+            <th>ITEM NAME</th>
+            <th>CATEGORY</th>
+            <th>WEIGHT (KG)</th>
+            <th>STATUS</th>
+            <th>LAST UPDATED</th>
+          </tr>
+        </thead>
+        <tbody id="dashboardInventoryBody"><tr><td colspan="5" style="text-align:center;color:#98a8ba">Loading inventory…</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="dashboard-card dashboard-activity">
+    <div class="dashboard-card-head">
+      <div class="dashboard-card-title">
+        <span class="dashboard-card-icon">◷</span>
+        Recent Activity
+      </div>
+    </div>
+
+    <div class="activity-row">
+      <div>
+        <div class="activity-name">Panggatong</div>
+        <div class="activity-category">Wood</div>
+      </div>
+      <div class="activity-right">
+        <span class="activity-weight">0 kg</span>
+        <span class="activity-status">Updated</span>
+      </div>
+    </div>
+
+    <div class="activity-row">
+      <div>
+        <div class="activity-name">Wooden Pallets</div>
+        <div class="activity-category">Wood</div>
+      </div>
+      <div class="activity-right">
+        <span class="activity-weight">10 kg</span>
+        <span class="activity-status">Updated</span>
+      </div>
+    </div>
+
+    <div class="activity-row">
+      <div>
+        <div class="activity-name">Wooden Pallets</div>
+        <div class="activity-category">Wood</div>
+      </div>
+      <div class="activity-right">
+        <span class="activity-weight">0 kg</span>
+        <span class="activity-status">Updated</span>
+      </div>
+    </div>
+  </section>
+</section>
+
+<!-- PHYSICAL INVENTORY -->
+<section id="inventory" class="page">
+  <div class="topbar">
+    <div><h1>Physical Inventory</h1><div class="subtitle">Manage scrap materials and classify items with AI.</div></div>
+    <div class="date">Tuesday, August 18, 2026 <span class="sep">|</span> 05:11:45 PM</div>
+  </div>
+
+  <div class="filters">
+    <button class="filter active">All</button><button class="filter">Metal</button><button class="filter">Wood</button>
+    <button class="filter">Plastic</button><button class="filter">Paper</button><button class="filter">Fiber</button>
+  </div>
+
+  <section class="ai-scanner" id="aiScannerSection">
+    <div class="ai-scanner-head">
+      <div>
+        <h2 class="section-title">AI Scrap Classifier <span class="badge">MUSE SPARK 1.1</span></h2>
+        <div class="subtitle" style="margin-top:8px;font-size:13px">Upload or capture a scrap image, then let the ScrapScan workflow classify the material.</div>
+      </div>
+      <div class="ai-mode" id="aiMode"><span class="ai-mode-dot"></span><span id="aiModeText">Ready</span></div>
+    </div>
+
+    <div class="scanner-actions">
+      <button type="button" class="scanner-btn scanner-upload" id="aiUploadBtn">
+        Upload Image
+        <input id="aiFileInput" class="scanner-file" type="file" accept="image/*" capture="environment">
+      </button>
+      <button type="button" class="scanner-btn scanner-camera" id="aiCameraBtn">Take Photo</button>
+      <button type="button" class="scanner-btn scanner-scan" id="aiScanBtn" disabled>Classify with AI</button>
+    </div>
+
+    <div class="scanner-stage" id="aiStage">
+      <video id="aiVideo" autoplay playsinline muted></video>
+      <img id="aiPreview" alt="Selected scrap image">
+      <div class="scanner-placeholder" id="aiPlaceholder">
+        <div class="scanner-placeholder-icon">▣</div>
+        <strong>Camera or image ready</strong>
+        <span>Choose Upload Image or Take Photo to begin.</span>
+      </div>
+      <div class="scanner-status" id="aiStatus">
+        <span class="scanner-status-pill" id="aiCameraStatus">Image ready</span>
+        <span class="scanner-status-pill">Keep the scrap inside the frame</span>
+      </div>
+    </div>
+
+    <div class="scanner-result" id="aiResult">
+      <div class="scanner-result-top">
+        <div>
+          <div class="scanner-result-label">Detected material</div>
+          <div class="scanner-material" id="aiMaterial">Unknown</div>
+        </div>
+        <div class="scanner-confidence" id="aiConfidence">0%</div>
+      </div>
+      <div class="scanner-bar"><i id="aiConfidenceBar"></i></div>
+      <div class="scanner-description" id="aiDescription"></div>
+      <div class="scanner-meta">
+        <div class="scanner-meta-box"><span>Scrap</span><strong id="aiIsScrap">—</strong></div>
+        <div class="scanner-meta-box"><span>Condition</span><strong id="aiCondition">Detected</strong></div>
+      </div>
+      <div class="scanner-alts" id="aiAlternativesBox" style="display:none">
+        <div class="scanner-alts-title">Other classifications</div>
+        <div id="aiAlternatives"></div>
+      </div>
+      <button type="button" class="scanner-apply" id="aiApplyBtn">Use Result in Inventory Form</button>
+    </div>
+
+    <div class="scanner-error" id="aiError"></div>
+    <div class="scanner-note">
+      AI classification uses the ScrapScan Muse Spark 1.1 workflow. The app first tries the local <b>/api/roboflow</b> proxy used by ScrapScan; if it is unavailable, it can use the configured Roboflow workflow directly.
+    </div>
+  </section>
+
+  <section id="inventoryWriteSection" class="inventory-write-section">
+    <h2 class="add-title" id="inventoryFormTitle">Add New Scrap Item</h2>
+    <div class="form-grid-inventory">
+      <div><label>Item Name</label><input id="inventoryItemName" placeholder="e.g. Aluminum Cans"></div>
+      <div><label>Category</label><select id="inventoryCategory"><option>Metal</option><option>Wood</option><option>Plastic</option><option>Paper</option><option>Fiber</option></select></div>
+      <div><label>Weight (kg)</label><input id="inventoryWeight" placeholder="0.00" type="number" step="0.01"></div>
+      <div><label>Condition</label><select id="inventoryCondition"><option>Good</option><option>Fair</option><option>Poor</option></select></div>
+    </div>
+    <div class="inventory-form-actions">
+      <button type="button" class="save" id="saveInventoryBtn">Save Item to Inventory</button>
+      <button type="button" class="inventory-cancel" id="cancelInventoryEditBtn" style="display:none">Cancel Edit</button>
+    </div>
+  </section>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ITEM NAME</th><th>CATEGORY</th><th>WEIGHT</th><th>CONDITION</th><th>LAST UPDATED</th><th id="inventoryActionsHeader" style="display:none">ACTIONS</th></tr></thead>
+      <tbody id="inventoryTableBody"><tr><td colspan="6" class="empty">Loading inventory…</td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- TRANSACTIONS: SECRETARY + OWNER -->
+<section id="transactions" class="page role-secretary-owner">
+  <div class="topbar">
+    <div><h1>Transactions</h1><div class="subtitle">Record and review scrap trading transactions.</div></div>
+    <div class="date" id="transactionsDate"></div>
+  </div>
+  <section class="role-card" style="margin-bottom:18px">
+    <h2 class="card-title">Record Transaction</h2>
+    <div class="role-form">
+      <input id="txItem" placeholder="Item / Material">
+      <select id="txType"><option value="sale">Sale</option><option value="collection">Collection</option></select>
+      <input id="txCategory" placeholder="Category">
+      <input id="txWeight" type="number" step="0.01" placeholder="Weight (kg)">
+      <input id="txParty" placeholder="Buyer / Supplier">
+      <input id="txAmount" type="number" step="0.01" placeholder="Amount">
+      <input id="txNotes" placeholder="Notes">
+      <button id="txSave">Save Transaction</button>
+    </div>
+  </section>
+  <section class="role-card">
+    <div class="dashboard-card-head"><div class="dashboard-card-title">Transaction History</div><button class="role-btn primary" id="txRefresh">Refresh</button></div>
+    <div style="overflow:auto">
+      <table class="role-table"><thead><tr><th>DATE</th><th>TYPE</th><th>ITEM</th><th>CATEGORY</th><th>WEIGHT</th><th>PARTY</th><th>AMOUNT</th><th>STATUS</th></tr></thead>
+      <tbody id="txBody"><tr><td colspan="8" class="empty-role">Loading transactions…</td></tr></tbody></table>
+    </div>
+  </section>
+</section>
+
+<!-- REPORTS: SECRETARY + OWNER -->
+<section id="reports" class="page role-secretary-owner">
+  <div class="topbar">
+    <div><h1>Reports</h1><div class="subtitle">Inventory and transaction overview.</div></div>
+    <div class="date" id="reportsDate"></div>
+  </div>
+  <div class="report-grid">
+    <div class="role-card"><h3>Total Items</h3><div class="big" id="rTotal">0</div><div class="muted">Inventory records</div></div>
+    <div class="role-card"><h3>Available</h3><div class="big" id="rAvailable">0</div><div class="muted">Active inventory</div></div>
+    <div class="role-card"><h3>Transactions</h3><div class="big" id="rTransactions">0</div><div class="muted">Recorded transactions</div></div>
+    <div class="role-card"><h3>Total Weight</h3><div class="big" id="rWeight">0 kg</div><div class="muted">Current inventory weight</div></div>
+  </div>
+  <section class="role-card" style="margin-top:18px">
+    <h2 class="card-title">Category Breakdown</h2>
+    <div id="categoryReport" class="role-table-wrap"><table class="role-table"><thead><tr><th>CATEGORY</th><th>ITEMS</th><th>WEIGHT</th></tr></thead><tbody id="categoryReportBody"></tbody></table></div>
+  </section>
+</section>
+
+<!-- USER MANAGEMENT: OWNER ONLY -->
+<section id="users" class="page role-only role-owner">
+  <div class="topbar">
+    <div><h1>User Management</h1><div class="subtitle">Review applications and manage PM2V user records.</div></div>
+    <div class="date" id="usersDate"></div>
+  </div>
+  <section class="role-card" style="margin-bottom:18px">
+    <h2 class="card-title">Pending Applicants</h2>
+    <div style="overflow:auto"><table class="role-table"><thead><tr><th>NAME</th><th>EMAIL</th><th>ROLE REQUESTED</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="applicantBody"><tr><td colspan="5" class="empty-role">Loading applicants…</td></tr></tbody></table></div>
+  </section>
+  <section class="role-card">
+    <h2 class="card-title">Current Users</h2>
+    <div style="overflow:auto"><table class="role-table"><thead><tr><th>NAME</th><th>EMAIL</th><th>ROLE</th><th>STATUS</th></tr></thead><tbody id="usersBody"><tr><td colspan="4" class="empty-role">Loading users…</td></tr></tbody></table></div>
+  </section>
+</section>
+
+<!-- PROFILE -->
+<section id="profile" class="page">
+  <div class="topbar">
+    <div>
+      <h1>Profile</h1>
+      <div class="subtitle">Manage your account information and settings.</div>
+    </div>
+    <div class="date">▣ &nbsp; Tuesday, August 18, 2026 <span class="sep">|</span> ◷ &nbsp;05:30:22 PM</div>
+  </div>
+
+  <section class="profile-hero">
+    <div class="profile-avatar-large" id="profileAvatar">N</div>
+    <div>
+      <div class="profile-name" id="profileName">Nando Reyes</div>
+      <div class="profile-badges">
+        <span class="profile-badge" id="profileRoleBadge">Staff</span>
+        <span class="profile-badge" id="profileStatusBadge">Active</span>
+      </div>
+      <div class="profile-email" id="profileEmail">staff@pm2v.com</div>
+    </div>
+  </section>
+
+  <section class="profile-card">
+    <div class="profile-card-title">
+      <span class="profile-card-icon">♙</span>
+      PERSONAL INFORMATION
+    </div>
+    <div>
+      <div class="profile-field-label">Full Name</div>
+      <div class="profile-field-value" id="profileFullName">Nando Reyes</div>
+    </div>
+  </section>
+
+  <section class="profile-card">
+    <div class="profile-card-title">
+      <span class="profile-card-icon">✉</span>
+      ACCOUNT INFORMATION
+    </div>
+    <div class="profile-account-grid">
+      <div class="profile-account-item">
+        <div class="profile-field-label">Email</div>
+        <div class="profile-field-value" id="profileAccountEmail">staff@pm2v.com</div>
+      </div>
+      <div class="profile-account-item">
+        <div class="profile-field-label">Role</div>
+        <div class="profile-field-value" id="profileRole">Staff</div>
+      </div>
+      <div class="profile-account-item">
+        <div class="profile-field-label">Status</div>
+        <div class="profile-field-value" id="profileStatus">Active</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="profile-card">
+    <div class="profile-card-title">
+      <span class="profile-card-icon">◷</span>
+      ACTIVITY INFORMATION
+    </div>
+    <div>
+      <div class="profile-field-label">Member Since</div>
+      <div class="profile-field-value" id="profileMemberSince" style="color:#58708d">—</div>
+    </div>
+  </section>
+
+  <div class="profile-actions">
+    <button class="profile-action profile-edit">♧ &nbsp; Edit Profile</button>
+    <button class="profile-action profile-password" id="changePasswordBtn">♧ &nbsp; Change Password</button>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, createUserWithEmailAndPassword, deleteUser } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, doc, getDoc, getDocs, addDoc, updateDoc, setDoc, deleteDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyDBIkDxyrj6JU-wDgaTCvf_B6fpXAE7wH8",authDomain:"pm2vstorage.firebaseapp.com",projectId:"pm2vstorage",storageBucket:"pm2vstorage.firebasestorage.app",messagingSenderId:"399594566749",appId:"1:399594566749:web:2b357f98d2801fe36889b4",measurementId:"G-SX0TDMD407"};
+const firebaseApp=initializeApp(firebaseConfig),auth=getAuth(firebaseApp),db=getFirestore(firebaseApp);
+const provisionApp=initializeApp(firebaseConfig,'pm2vProvisioner');
+const provisionAuth=getAuth(provisionApp);
+let PM2V_USER=null,PM2V_PROFILE=null;
+window.PM2VFirebase={firebaseApp,auth,db};
+function toast(message,type="success"){document.querySelector('.pm2v-toast')?.remove();const el=document.createElement('div');el.className=`pm2v-toast ${type}`;el.textContent=message;document.body.appendChild(el);setTimeout(()=>el.remove(),3600)}
+function valueDate(v){if(!v)return null;if(v?.toDate)return v.toDate();const d=new Date(v);return Number.isNaN(d.getTime())?null:d}
+function fmtDate(v){const d=valueDate(v);return d?d.toLocaleDateString('en-US',{month:'numeric',day:'numeric',year:'numeric'}):'—'}
+function fmtDateTime(v){const d=valueDate(v);return d?d.toLocaleString('en-US',{month:'numeric',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit'}):'—'}
+function initials(n){return String(n||'U').trim().split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase()||'U'}
+async function loadInventory(){try{const s=await getDocs(collection(db,'inventory'));const rows=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(valueDate(b.lastUpdated)?.getTime()||0)-(valueDate(a.lastUpdated)?.getTime()||0));const body=document.getElementById('inventoryTableBody'),dash=document.getElementById('dashboardInventoryBody');const role=String(PM2V_PROFILE?.role||'').trim().toLowerCase();const canManage=role==='secretary'||role==='owner';const canCreate=role==='staff';const actionHead=document.getElementById('inventoryActionsHeader');if(actionHead)actionHead.style.display=canManage?'':'none';if(body)body.innerHTML=rows.length?rows.map(x=>`<tr><td>${esc(x.itemName||'Unnamed Item')}</td><td>${esc(x.category||'—')}</td><td>${Number(x.weight||0).toLocaleString(undefined,{maximumFractionDigits:2})} kg</td><td>${esc(x.condition||'—')}</td><td>${fmtDate(x.lastUpdated)}</td>${canManage?`<td><div class="inventory-actions"><button type="button" class="inventory-action edit" data-inventory-action="edit" data-inventory-id="${encodeURIComponent(x.id)}">Edit</button><button type="button" class="inventory-action delete" data-inventory-action="delete" data-inventory-id="${encodeURIComponent(x.id)}">Delete</button></div></td>`:''}</tr>`).join(''):`<tr><td colspan="${canManage?6:5}" class="empty">No inventory records found.</td></tr>`;if(dash)dash.innerHTML=rows.slice(0,10).map(x=>`<tr><td><strong>${esc(x.itemName||'Unnamed Item')}</strong></td><td><span class="category-pill">${esc(x.category||'—')}</span></td><td>${Number(x.weight||0).toLocaleString(undefined,{maximumFractionDigits:2})} kg</td><td><span class="status-pill">Active</span></td><td class="dashboard-updated">${fmtDate(x.lastUpdated)}</td></tr>`).join('')||'<tr><td colspan="5" style="text-align:center;color:#98a8ba">No inventory records found.</td></tr>';document.getElementById('dashTotalItems')?.replaceChildren(document.createTextNode(String(rows.length)));document.getElementById('dashCategories')?.replaceChildren(document.createTextNode(String(new Set(rows.map(x=>x.category).filter(Boolean)).size)));document.getElementById('dashActiveItems')?.replaceChildren(document.createTextNode(String(rows.filter(x=>String(x.status||'Active').toLowerCase()!=='inactive').length)));const writeSection=document.getElementById('inventoryWriteSection');if(writeSection&&!document.body.classList.contains('inventory-editing'))writeSection.style.display=canCreate?'':'none'}catch(e){console.error(e);toast('Could not load inventory. Check Firestore rules.','error')}}
+async function saveInventory(){const role=String(PM2V_PROFILE?.role||'').trim().toLowerCase();if(role!=='staff'){toast('Only staff can create new inventory items.','error');return}const name=document.getElementById('inventoryItemName')?.value.trim(),category=document.getElementById('inventoryCategory')?.value,weight=Number(document.getElementById('inventoryWeight')?.value),condition=document.getElementById('inventoryCondition')?.value;if(!name){toast('Enter an item name first.','error');return}if(!Number.isFinite(weight)||weight<0){toast('Enter a valid weight.','error');return}const b=document.getElementById('saveInventoryBtn');b.disabled=true;b.textContent='Saving…';try{await addDoc(collection(db,'inventory'),{itemName:name,category:category||'Metal',weight,condition:condition||'Good',quantity:1,status:'Active',updatedBy:PM2V_USER?.email||'PM2V Staff',lastUpdated:serverTimestamp()});document.getElementById('inventoryItemName').value='';document.getElementById('inventoryWeight').value='';await loadInventory();toast('Inventory item saved to Firebase.')}catch(e){console.error(e);toast('Could not save inventory item. Check Firestore write rules.','error')}finally{b.disabled=false;b.textContent='Save Item to Inventory'}}
+async function editInventory(id){const role=String(PM2V_PROFILE?.role||'').trim().toLowerCase();if(!['secretary','owner'].includes(role)){toast('Only secretary and owner can edit inventory items.','error');return}try{const snap=await getDoc(doc(db,'inventory',id));if(!snap.exists()){toast('Inventory item no longer exists.','error');await loadInventory();return}const x=snap.data();document.getElementById('inventoryItemName').value=x.itemName||'';document.getElementById('inventoryCategory').value=x.category||'Metal';document.getElementById('inventoryWeight').value=Number(x.weight||0);document.getElementById('inventoryCondition').value=x.condition||'Good';const section=document.getElementById('inventoryWriteSection');section.style.display='';section.classList.add('editing');document.body.classList.add('inventory-editing');document.getElementById('inventoryFormTitle').textContent='Edit Scrap Item';const b=document.getElementById('saveInventoryBtn');b.textContent='Update Inventory Item';b.dataset.editId=id;document.getElementById('cancelInventoryEditBtn').style.display='inline-block';section.scrollIntoView({behavior:'smooth',block:'start'})}catch(e){console.error(e);toast('Could not load inventory item for editing.','error')}}
+async function updateInventory(){const role=String(PM2V_PROFILE?.role||'').trim().toLowerCase();if(!['secretary','owner'].includes(role)){toast('Only secretary and owner can edit inventory items.','error');return}const b=document.getElementById('saveInventoryBtn'),id=b.dataset.editId;if(!id)return;const name=document.getElementById('inventoryItemName')?.value.trim(),category=document.getElementById('inventoryCategory')?.value,weight=Number(document.getElementById('inventoryWeight')?.value),condition=document.getElementById('inventoryCondition')?.value;if(!name){toast('Enter an item name first.','error');return}if(!Number.isFinite(weight)||weight<0){toast('Enter a valid weight.','error');return}b.disabled=true;b.textContent='Updating…';try{await updateDoc(doc(db,'inventory',id),{itemName:name,category:category||'Metal',weight,condition:condition||'Good',updatedBy:PM2V_USER?.email||'PM2V User',lastUpdated:serverTimestamp()});cancelInventoryEdit();await loadInventory();toast('Inventory item updated.')}catch(e){console.error(e);toast('Could not update inventory item. Check Firestore rules.','error')}finally{b.disabled=false}}
+async function deleteInventory(id){const role=String(PM2V_PROFILE?.role||'').trim().toLowerCase();if(!['secretary','owner'].includes(role)){toast('Only secretary and owner can delete inventory items.','error');return}if(!confirm('Delete this inventory item? This action cannot be undone.'))return;try{await deleteDoc(doc(db,'inventory',id));await loadInventory();toast('Inventory item deleted.')}catch(e){console.error(e);toast('Could not delete inventory item. Check Firestore rules.','error')}}
+// Compatibility: expose inventory actions globally as well as through the
+// delegated table listener. This prevents module-scope functions from breaking
+// if an older cached DOM still contains inline action handlers.
+window.editInventory=editInventory;
+window.updateInventory=updateInventory;
+window.deleteInventory=deleteInventory;
+window.cancelInventoryEdit=cancelInventoryEdit;
+
+function cancelInventoryEdit(){const section=document.getElementById('inventoryWriteSection'),b=document.getElementById('saveInventoryBtn');if(!section||!b)return;document.body.classList.remove('inventory-editing');section.classList.remove('editing');section.style.display='none';document.getElementById('inventoryFormTitle').textContent='Add New Scrap Item';document.getElementById('inventoryItemName').value='';document.getElementById('inventoryWeight').value='';b.textContent='Save Item to Inventory';delete b.dataset.editId;document.getElementById('cancelInventoryEditBtn').style.display='none'}
+async function loadCollections(){try{let s;try{s=await getDocs(query(collection(db,'transactions'),where('type','==','collection')))}catch(e){s=await getDocs(collection(db,'transactions'))}const rows=s.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.type==='collection');const start=new Date();start.setHours(0,0,0,0);const end=new Date(start);end.setDate(end.getDate()+1);const today=rows.filter(x=>{const d=valueDate(x.createdAt||x.uploadedAt);return d&&d>=start&&d<end});const weight=today.reduce((a,x)=>a+Number(x.weight||0),0),suppliers=new Set(today.map(x=>String(x.supplierName||x.buyerName||'').trim()).filter(Boolean));document.getElementById('collectionsToday')?.replaceChildren(document.createTextNode(String(today.length)));document.getElementById('collectionWeightToday')?.replaceChildren(document.createTextNode(`${weight.toLocaleString(undefined,{maximumFractionDigits:2})} kg`));document.getElementById('suppliersToday')?.replaceChildren(document.createTextNode(String(suppliers.size)));const body=document.getElementById('collectionTableBody');if(body)body.innerHTML=today.length?today.sort((a,b)=>(valueDate(b.createdAt)?.getTime()||0)-(valueDate(a.createdAt)?.getTime()||0)).map(x=>`<tr><td>${esc(x.supplierName||x.buyerName||'—')}</td><td>${esc(x.category||'—')}</td><td>${Number(x.weight||0).toLocaleString(undefined,{maximumFractionDigits:2})}</td><td>${esc(x.condition||'—')}</td><td>${esc(x.notes||'')}</td><td>${fmtDateTime(x.createdAt||x.uploadedAt)}</td><td>Recorded</td></tr>`).join(''):'<tr><td colspan="7" class="empty">No collections logged yet today.</td></tr>'}catch(e){console.error(e);toast('Could not load collection records. Check Firestore rules.','error')}}
+async function logCollection(){const supplier=document.getElementById('collectionSupplier')?.value.trim(),category=document.getElementById('collectionCategory')?.value,weight=Number(document.getElementById('collectionWeight')?.value),condition=document.getElementById('collectionCondition')?.value,notes=document.getElementById('collectionNotes')?.value.trim();if(!supplier){toast('Enter the supplier / seller name.','error');return}if(!Number.isFinite(weight)||weight<=0){toast('Enter a valid collection weight greater than 0.','error');return}const b=document.getElementById('logCollectionBtn');b.disabled=true;b.textContent='Logging…';try{await addDoc(collection(db,'transactions'),{type:'collection',supplierName:supplier,category:category||'Metal',weight,condition:condition||'Good',notes,status:'Recorded',createdBy:PM2V_USER?.email||'PM2V Staff',createdAt:serverTimestamp()});document.getElementById('collectionSupplier').value='';document.getElementById('collectionWeight').value='';document.getElementById('collectionNotes').value='';await loadCollections();toast('Collection logged to Firebase.')}catch(e){console.error(e);toast('Could not log the collection. Check Firestore write rules.','error')}finally{b.disabled=false;b.textContent='Log Collection'}}
+function updateProfile(user,p){const name=p.fullName||user.displayName||user.email?.split('@')[0]||'PM2V User',role=p.role||'Staff',status=p.status||'Active',ini=initials(name);document.querySelectorAll('.user-name').forEach(e=>e.textContent=name);document.querySelectorAll('.user-role').forEach(e=>e.textContent=role);document.querySelectorAll('.avatar').forEach(e=>e.textContent=ini);document.getElementById('profileName')?.replaceChildren(document.createTextNode(name));document.getElementById('profileFullName')?.replaceChildren(document.createTextNode(name));document.getElementById('profileEmail')?.replaceChildren(document.createTextNode(user.email||''));document.getElementById('profileAccountEmail')?.replaceChildren(document.createTextNode(user.email||''));document.getElementById('profileRole')?.replaceChildren(document.createTextNode(role));document.getElementById('profileStatus')?.replaceChildren(document.createTextNode(status));document.getElementById('profileRoleBadge')?.replaceChildren(document.createTextNode(role));document.getElementById('profileStatusBadge')?.replaceChildren(document.createTextNode(status));document.getElementById('profileAvatar')?.replaceChildren(document.createTextNode(ini));document.getElementById('profileMemberSince')?.replaceChildren(document.createTextNode(fmtDateTime(p.memberSince||p.createdAt||user.metadata?.creationTime)))}
+
+function applyProfile(user,p){
+  const name=p.fullName||user.displayName||user.email?.split('@')[0]||'PM2V User';
+  const role=String(p.role||'Staff');
+  const status=p.status||'Active';
+  const ini=initials(name);
+  document.querySelectorAll('.user-name').forEach(e=>e.textContent=name);
+  document.querySelectorAll('.user-role').forEach(e=>e.textContent=role);
+  document.querySelectorAll('.avatar').forEach(e=>e.textContent=ini);
+  document.getElementById('profileName')?.replaceChildren(document.createTextNode(name));
+  document.getElementById('profileFullName')?.replaceChildren(document.createTextNode(name));
+  document.getElementById('profileEmail')?.replaceChildren(document.createTextNode(user.email||''));
+  document.getElementById('profileAccountEmail')?.replaceChildren(document.createTextNode(user.email||''));
+  document.getElementById('profileRole')?.replaceChildren(document.createTextNode(role));
+  document.getElementById('profileStatus')?.replaceChildren(document.createTextNode(status));
+  document.getElementById('profileRoleBadge')?.replaceChildren(document.createTextNode(role));
+  document.getElementById('profileStatusBadge')?.replaceChildren(document.createTextNode(status));
+  document.getElementById('profileAvatar')?.replaceChildren(document.createTextNode(ini));
+  document.getElementById('profileMemberSince')?.replaceChildren(document.createTextNode(fmtDateTime(p.memberSince||p.createdAt||user.metadata?.creationTime)));
+}
+function setRoleAccess(role){
+  const r=String(role||'').trim().toLowerCase();
+  document.querySelectorAll('.role-secretary-owner').forEach(el=>el.style.display=(r==='secretary'||r==='owner')?'':'none');
+  document.querySelectorAll('.role-owner').forEach(el=>el.style.display=r==='owner'?'':'none');
+  document.querySelectorAll('.nav [data-page="transactions"],.nav [data-page="reports"]').forEach(el=>el.style.display=(r==='secretary'||r==='owner')?'':'none');
+  document.querySelectorAll('.nav [data-page="users"]').forEach(el=>el.style.display=r==='owner'?'':'none');
+
+  // AI Scrap Scanner is STAFF-ONLY.
+  // It remains in the single PM2V.html file with the integrated ScrapScan workflow,
+  // but is hidden for secretary and owner accounts.
+  const aiScanner=document.getElementById('aiScannerSection');
+  if(aiScanner) aiScanner.style.display=r==='staff'?'':'none';
+
+  const inv=document.querySelector('.nav [data-page="inventory"]');
+  if(inv) inv.style.display='';
+}
+async function initPM2V(user){
+  const s=await getDoc(doc(db,'users',user.uid));
+  if(!s.exists())throw new Error('Your account is not registered in users/{uid}.');
+  const p=s.data();
+  const role=String(p.role||'').trim().toLowerCase();
+  if(!['staff','secretary','owner'].includes(role))throw new Error('Your PM2V account has an unsupported role.');
+  if(String(p.status||'').trim().toLowerCase()!=='active')throw new Error('Your PM2V account is not active.');
+  PM2V_USER=user; PM2V_PROFILE=p; window.PM2VCurrentUser={...user,profile:p};
+  applyProfile(user,p); setRoleAccess(role);
+  await loadInventory();
+  if(role==='secretary'||role==='owner'){
+    await loadTransactions();
+    await loadReports();
+    if(role==='owner'){ await loadApplicants(); await loadUsers(); }
+  }
+  document.body.classList.remove('auth-pending');
+  document.getElementById('authLoading')?.remove();
+  document.getElementById('loginScreen').style.display='none';
+  const initial=location.hash.replace('#','');
+  const allowed=(initial && document.getElementById(initial) && canAccessPage(initial,role))?initial:'dashboard';
+  showPage(allowed);
+}
+function canAccessPage(id,role){
+  if(id==='transactions'||id==='reports')return role==='secretary'||role==='owner';
+  if(id==='users')return role==='owner';
+  return true;
+}
+function friendlyLoginError(e){
+  const c=e?.code||'';
+  if(c.includes('invalid-credential')||c.includes('wrong-password')||c.includes('user-not-found'))return 'Invalid email or password.';
+  if(c.includes('too-many-requests'))return 'Too many attempts. Please wait and try again.';
+  if(c.includes('network-request-failed'))return 'Network error. Check your internet connection.';
+  return e?.message||'Unable to sign in.';
+}
+function closeAccessModal(){
+  const modal=document.getElementById('pm2vAccessModal');
+  if(modal){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');}
+}
+function openAccessModal(){
+  const modal=document.getElementById('pm2vAccessModal');
+  if(!modal)return;
+  document.getElementById('accessMessage').textContent='';
+  document.getElementById('accessMessage').className='pm2v-access-msg';
+  modal.classList.add('open');modal.setAttribute('aria-hidden','false');
+  setTimeout(()=>document.getElementById('accessFullName')?.focus(),80);
+}
+document.getElementById('openAccessBtn')?.addEventListener('click',openAccessModal);
+document.getElementById('closeAccessBtn')?.addEventListener('click',closeAccessModal);
+document.getElementById('pm2vAccessModal')?.addEventListener('click',e=>{if(e.target.id==='pm2vAccessModal')closeAccessModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAccessModal()});
+document.getElementById('loginPasswordToggle')?.addEventListener('click',()=>{
+  const input=document.getElementById('loginPassword'),btn=document.getElementById('loginPasswordToggle');
+  if(!input)return; const show=input.type==='password'; input.type=show?'text':'password'; btn.setAttribute('aria-label',show?'Hide password':'Show password');
+});
+document.querySelectorAll('[data-login-info]').forEach(a=>a.addEventListener('click',e=>{
+  e.preventDefault();
+  const key=a.dataset.loginInfo;
+  const text={about:'PM2V Scrap Trading — smart inventory and sustainable scrap management.',faqs:'For access questions, use Apply for Access and wait for owner approval.',privacy:'Your PM2V account information is used to authenticate and manage your access.',terms:'Use of PM2V is subject to your organization’s account and access policies.'}[key]||'PM2V Scrap Trading';
+  toast(text,'success');
+}));
+document.getElementById('accessForm')?.addEventListener('submit',async e=>{
+  e.preventDefault();
+  const btn=document.getElementById('accessSubmitBtn'),msg=document.getElementById('accessMessage');
+  const fullName=document.getElementById('accessFullName').value.trim();
+  const email=document.getElementById('accessEmail').value.trim().toLowerCase();
+  const role=document.getElementById('accessRole').value;
+  msg.textContent='';msg.className='pm2v-access-msg';
+  if(!fullName||!email||!role){msg.textContent='Please complete all fields.';return}
+  btn.disabled=true;btn.textContent='Submitting…';
+  try{
+    await addDoc(collection(db,'applicants'),{name:fullName,fullName,email,roleRequested:role,status:'pending',submittedAt:serverTimestamp()});
+    msg.textContent='Application submitted successfully. Please wait for owner approval.';msg.className='pm2v-access-msg success';
+    document.getElementById('accessForm').reset();
+    setTimeout(closeAccessModal,1800);
+  }catch(err){
+    console.error('Access application failed:',err);
+    msg.textContent=(err?.code==='permission-denied')?'Application submission is blocked by Firestore rules.':'Could not submit your application. Please try again.';
+  }finally{btn.disabled=false;btn.textContent='Submit Application'}
+});
+
+document.getElementById('loginForm')?.addEventListener('submit',async e=>{
+  e.preventDefault();
+  const btn=document.getElementById('loginBtn'),msg=document.getElementById('loginMessage');
+  btn.disabled=true;btn.textContent='Signing In…';msg.textContent='';msg.className='login-message';
+  try{await signInWithEmailAndPassword(auth,document.getElementById('loginEmail').value.trim(),document.getElementById('loginPassword').value);}
+  catch(err){msg.textContent=friendlyLoginError(err);}
+  finally{btn.disabled=false;btn.textContent='Sign In →';}
+});
+document.getElementById('forgotBtn')?.addEventListener('click',async()=>{
+  const email=document.getElementById('loginEmail').value.trim(),msg=document.getElementById('loginMessage');
+  if(!email){msg.textContent='Enter your email first.';return}
+  try{await sendPasswordResetEmail(auth,email);msg.textContent='Password reset email sent.';msg.className='login-message success'}
+  catch(e){msg.textContent=friendlyLoginError(e)}
+});
+document.querySelector('.logout a')?.addEventListener('click',async e=>{
+  e.preventDefault(); await signOut(auth); document.body.classList.add('auth-pending'); document.getElementById('loginScreen').style.display='flex'; showPage('dashboard');
+});
+onAuthStateChanged(auth,async user=>{
+  if(!user){
+    document.getElementById('loginScreen').style.display='flex';
+    document.body.classList.remove('auth-pending');
+    document.getElementById('authLoading')?.remove();
+    return;
+  }
+  try{await initPM2V(user)}
+  catch(e){console.error(e);await signOut(auth).catch(()=>{});const msg=document.getElementById('loginMessage');msg.textContent=e.message||'Unable to verify your PM2V account.';document.getElementById('loginScreen').style.display='flex';document.body.classList.remove('auth-pending');document.getElementById('authLoading')?.remove();}
+});
+
+const links=document.querySelectorAll('.nav a[data-page]');
+const pages=document.querySelectorAll('.page');
+function showPage(id){
+  if(PM2V_PROFILE && !canAccessPage(id,String(PM2V_PROFILE.role||'').toLowerCase())) id='dashboard';
+  pages.forEach(p=>p.classList.toggle('active',p.id===id));
+  links.forEach(a=>a.classList.toggle('active',a.dataset.page===id));
+  history.replaceState(null,'','#'+id); window.scrollTo(0,0);
+}
+links.forEach(link=>link.addEventListener('click',e=>{e.preventDefault();showPage(link.dataset.page)}));
+
+// Physical Inventory: Save Item button
+// The handler was missing in the latest single-file build, so the button could
+// appear normally but clicking it did nothing. Wire it directly to saveInventory().
+document.getElementById('saveInventoryBtn')?.addEventListener('click', async e=>{
+  e.preventDefault();
+  const b=e.currentTarget;
+  if(b.dataset.editId) await updateInventory(); else await saveInventory();
+});
+document.getElementById('cancelInventoryEditBtn')?.addEventListener('click',cancelInventoryEdit);
+
+document.getElementById('inventoryTableBody')?.addEventListener('click',async e=>{
+  const button=e.target.closest('button[data-inventory-action]');
+  if(!button)return;
+  e.preventDefault();
+  e.stopPropagation();
+
+  const action=button.dataset.inventoryAction;
+  const rawId=button.dataset.inventoryId||'';
+  let id=rawId;
+  try{id=decodeURIComponent(rawId)}catch(_){/* keep raw id */}
+
+  if(!id)return;
+
+  // Prevent duplicate writes/deletes from rapid double-clicks.
+  if(button.disabled)return;
+  button.disabled=true;
+
+  try{
+    if(action==='edit'){
+      await editInventory(id);
+    }else if(action==='delete'){
+      await deleteInventory(id);
+    }
+  }catch(err){
+    console.error('Inventory action failed:',err);
+    toast('Inventory action failed. Please try again.','error');
+  }finally{
+    button.disabled=false;
+  }
+});
+
+document.querySelector('[data-dashboard-inventory]')?.addEventListener('click',e=>{e.preventDefault();showPage('inventory')});
+
+document.querySelectorAll('.filters .filter').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.filters .filter').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const category=btn.textContent.trim();
+    const rows=document.querySelectorAll('#inventory .table-wrap table tbody tr');
+    rows.forEach(row=>{
+      const cell=row.children[1];
+      row.style.display=(!cell || category==='All' || cell.textContent.trim()===category)?'':'none';
+    });
+  });
+});
+
+
+async function loadTransactions(){
+  const body=document.getElementById('txBody'); if(!body)return;
+  try{
+    const snap=await getDocs(collection(db,'transactions'));
+    const rows=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(valueDate(b.createdAt)?.getTime()||0)-(valueDate(a.createdAt)?.getTime()||0));
+    body.innerHTML=rows.length?rows.map(x=>`<tr><td>${esc(fmtDateTime(x.createdAt))}</td><td>${esc(x.type||'—')}</td><td>${esc(x.itemName||x.material||'—')}</td><td>${esc(x.category||'—')}</td><td>${Number(x.weight||0).toLocaleString(undefined,{maximumFractionDigits:2})} kg</td><td>${esc(x.buyerName||x.supplierName||x.party||'—')}</td><td>₱${Number(x.amount||0).toLocaleString(undefined,{maximumFractionDigits:2})}</td><td>${esc(x.status||'Recorded')}</td></tr>`).join(''):'<tr><td colspan="8" class="empty-role">No transactions found.</td></tr>';
+    document.getElementById('rTransactions')?.replaceChildren(document.createTextNode(String(rows.length)));
+  }catch(e){console.error(e);body.innerHTML='<tr><td colspan="8" class="empty-role">Could not load transactions. Check Firestore rules.</td></tr>'}
+}
+async function saveTransaction(){
+  const item=document.getElementById('txItem').value.trim(),type=document.getElementById('txType').value,category=document.getElementById('txCategory').value.trim(),weight=Number(document.getElementById('txWeight').value),party=document.getElementById('txParty').value.trim(),amount=Number(document.getElementById('txAmount').value||0),notes=document.getElementById('txNotes').value.trim();
+  if(!item||!Number.isFinite(weight)||weight<=0){toast('Enter an item and a valid weight.','error');return}
+  try{
+    await addDoc(collection(db,'transactions'),{type,itemName:item,category:category||'Uncategorized',weight,buyerName:type==='sale'?party:'',supplierName:type==='collection'?party:'',amount,notes,status:'Recorded',createdBy:PM2V_USER?.email||'PM2V User',createdAt:serverTimestamp()});
+    ['txItem','txCategory','txWeight','txParty','txAmount','txNotes'].forEach(id=>document.getElementById(id).value='');
+    await loadTransactions(); await loadReports(); toast('Transaction saved to Firebase.');
+  }catch(e){console.error(e);toast('Could not save the transaction. Check Firestore rules.','error')}
+}
+async function loadReports(){
+  try{
+    const invSnap=await getDocs(collection(db,'inventory'));
+    const inv=invSnap.docs.map(d=>d.data());
+    const txSnap=await getDocs(collection(db,'transactions'));
+    const tx=txSnap.docs.map(d=>d.data());
+    document.getElementById('rTotal')?.replaceChildren(document.createTextNode(String(inv.length)));
+    document.getElementById('rAvailable')?.replaceChildren(document.createTextNode(String(inv.filter(x=>String(x.status||'Active').toLowerCase()!=='inactive').length)));
+    document.getElementById('rTransactions')?.replaceChildren(document.createTextNode(String(tx.length)));
+    document.getElementById('rWeight')?.replaceChildren(document.createTextNode(inv.reduce((a,x)=>a+Number(x.weight||0),0).toLocaleString(undefined,{maximumFractionDigits:2})+' kg'));
+    const map={};inv.forEach(x=>{const c=x.category||'Uncategorized';if(!map[c])map[c]={count:0,weight:0};map[c].count++;map[c].weight+=Number(x.weight||0)});
+    const body=document.getElementById('categoryReportBody');
+    if(body)body.innerHTML=Object.entries(map).map(([c,v])=>`<tr><td>${esc(c)}</td><td>${v.count}</td><td>${v.weight.toLocaleString(undefined,{maximumFractionDigits:2})} kg</td></tr>`).join('')||'<tr><td colspan="3" class="empty-role">No inventory data.</td></tr>';
+  }catch(e){console.error(e);toast('Could not load reports. Check Firestore rules.','error')}
+}
+async function loadApplicants(){
+  const body=document.getElementById('applicantBody');if(!body)return;
+  try{
+    const snap=await getDocs(collection(db,'applicants'));
+    const rows=snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>String(x.status||'pending').toLowerCase()==='pending');
+    body.innerHTML=rows.length?rows.map(x=>`<tr><td>${esc(x.name||x.fullName||'—')}</td><td>${esc(x.email||'—')}</td><td>${esc(x.roleRequested||'—')}</td><td>${esc(x.status||'pending')}</td><td><button class="role-btn primary" data-approve="${x.id}">Approve</button></td></tr>`).join(''):'<tr><td colspan="5" class="empty-role">No pending applicants.</td></tr>';
+  }catch(e){console.error(e);body.innerHTML='<tr><td colspan="5" class="empty-role">Could not load applicants.</td></tr>'}
+}
+async function loadUsers(){
+  const body=document.getElementById('usersBody');if(!body)return;
+  try{
+    const snap=await getDocs(collection(db,'users'));
+    const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
+    body.innerHTML=rows.length?rows.map(x=>`<tr><td>${esc(x.fullName||x.name||'—')}</td><td>${esc(x.email||'—')}</td><td>${esc(x.role||'—')}</td><td>${esc(x.status||'—')}</td></tr>`).join(''):'<tr><td colspan="4" class="empty-role">No users found.</td></tr>';
+  }catch(e){console.error(e);body.innerHTML='<tr><td colspan="4" class="empty-role">Could not load users.</td></tr>'}
+}
+document.getElementById('txSave')?.addEventListener('click',saveTransaction);
+document.getElementById('txRefresh')?.addEventListener('click',loadTransactions);
+function ensureApprovalModal(){
+  let modal=document.getElementById('pm2vApprovalModal');
+  if(modal)return modal;
+  modal=document.createElement('div');
+  modal.id='pm2vApprovalModal';
+  modal.innerHTML=`<div class="pm2v-approval-backdrop"></div><div class="pm2v-approval-card" role="dialog" aria-modal="true" aria-labelledby="pm2vApprovalTitle">
+    <div class="pm2v-approval-head"><div><div class="pm2v-approval-eyebrow">USER MANAGEMENT</div><h2 id="pm2vApprovalTitle">Create PM2V Account</h2></div><button type="button" class="pm2v-approval-close" id="pm2vApprovalClose" aria-label="Close">×</button></div>
+    <div class="pm2v-approval-person" id="pm2vApprovalPerson"></div>
+    <div class="pm2v-approval-grid">
+      <label>Email<input id="pm2vApprovalEmail" type="email" readonly></label>
+      <label>Role<select id="pm2vApprovalRole"><option value="staff">Staff</option><option value="secretary">Secretary</option><option value="owner">Owner</option></select></label>
+    </div>
+    <label class="pm2v-approval-password-label">Temporary Password<input id="pm2vApprovalPassword" type="password" minlength="6" autocomplete="new-password" placeholder="At least 6 characters"></label>
+    <div class="pm2v-approval-note">The account will be created in Firebase Authentication and linked to the applicant. The owner remains signed in.</div>
+    <div class="pm2v-approval-error" id="pm2vApprovalError"></div>
+    <div class="pm2v-approval-actions"><button type="button" class="pm2v-approval-cancel" id="pm2vApprovalCancel">Cancel</button><button type="button" class="pm2v-approval-confirm" id="pm2vApprovalConfirm">Approve & Create Account</button></div>
+  </div>`;
+  document.body.appendChild(modal);
+  const close=()=>{modal.classList.remove('open');modal._resolve?.(null);modal._resolve=null};
+  modal.querySelector('#pm2vApprovalClose').addEventListener('click',close);
+  modal.querySelector('#pm2vApprovalCancel').addEventListener('click',close);
+  modal.querySelector('.pm2v-approval-backdrop').addEventListener('click',close);
+  return modal;
+}
+function requestApprovalDetails(applicant){
+  return new Promise(resolve=>{
+    const modal=ensureApprovalModal();
+    modal._resolve=resolve;
+    const name=applicant.fullName||applicant.name||'Applicant';
+    const email=String(applicant.email||'').trim();
+    const requested=String(applicant.roleRequested||applicant.role||'staff').trim().toLowerCase();
+    const role=['staff','secretary','owner'].includes(requested)?requested:'staff';
+    modal.querySelector('#pm2vApprovalPerson').textContent=`Approve ${name} and create their PM2V login account.`;
+    modal.querySelector('#pm2vApprovalEmail').value=email;
+    modal.querySelector('#pm2vApprovalRole').value=role;
+    modal.querySelector('#pm2vApprovalPassword').value='';
+    modal.querySelector('#pm2vApprovalError').textContent='';
+    modal.classList.add('open');
+    setTimeout(()=>modal.querySelector('#pm2vApprovalPassword')?.focus(),50);
+    modal.querySelector('#pm2vApprovalConfirm').onclick=()=>{
+      const password=modal.querySelector('#pm2vApprovalPassword').value;
+      if(password.length<6){modal.querySelector('#pm2vApprovalError').textContent='Temporary password must be at least 6 characters.';return}
+      if(!email){modal.querySelector('#pm2vApprovalError').textContent='This applicant has no email address.';return}
+      modal.classList.remove('open');resolve({password,role:modal.querySelector('#pm2vApprovalRole').value});
+    };
+  });
+}
+async function approveApplicant(applicantId,button){
+  const role=String(PM2V_PROFILE?.role||'').trim().toLowerCase();
+  if(role!=='owner'){toast('Only the owner can approve applicants.','error');return}
+  if(button?.disabled)return;
+  if(button)button.disabled=true;
+  let createdAuthUser=null;
+  try{
+    const applicantRef=doc(db,'applicants',applicantId);
+    const applicantSnap=await getDoc(applicantRef);
+    if(!applicantSnap.exists()){toast('Applicant no longer exists.','error');await loadApplicants();return}
+    const applicant=applicantSnap.data();
+    const existingUid=String(applicant.uid||applicant.userId||applicant.authUid||'').trim();
+    const details=await requestApprovalDetails(applicant);
+    if(!details)return;
+    const assignedRole=details.role;
+
+    if(existingUid){
+      await setDoc(doc(db,'users',existingUid),{fullName:applicant.fullName||applicant.name||'',email:applicant.email||'',role:assignedRole,status:'active',memberSince:serverTimestamp(),approvedAt:serverTimestamp(),approvedBy:PM2V_USER?.email||''},{merge:true});
+      await updateDoc(applicantRef,{status:'approved',reviewedAt:serverTimestamp(),reviewedBy:PM2V_USER?.email||''});
+    }else{
+      try{
+        const cred=await createUserWithEmailAndPassword(provisionAuth,String(applicant.email||'').trim(),details.password);
+        createdAuthUser=cred.user;
+        await setDoc(doc(db,'users',cred.user.uid),{fullName:applicant.fullName||applicant.name||'',email:applicant.email||cred.user.email||'',role:assignedRole,status:'active',memberSince:serverTimestamp(),approvedAt:serverTimestamp(),approvedBy:PM2V_USER?.email||''});
+        await updateDoc(applicantRef,{uid:cred.user.uid,status:'approved',reviewedAt:serverTimestamp(),reviewedBy:PM2V_USER?.email||''});
+      }catch(err){
+        console.error('Account provisioning failed:',err);
+        if(createdAuthUser){try{await deleteUser(createdAuthUser)}catch(cleanErr){console.error('Could not roll back created Auth user:',cleanErr)}}
+        if(err?.code==='auth/email-already-in-use')throw new Error('An Authentication account already exists for this email. Add that user UID to the applicant record, then approve again.');
+        if(err?.code==='permission-denied')throw new Error('Firestore denied the users/{uid} or applicants update. Publish the owner rules for both collections.');
+        throw err;
+      }
+    }
+    await loadApplicants();await loadUsers();
+    toast(`Applicant approved. ${applicant.fullName||applicant.name||'User'} can now sign in.`);
+  }catch(err){
+    console.error('Applicant approval failed:',err);
+    const code=err?.code||'';
+    toast(code==='permission-denied'?'Approval was blocked by Firestore rules. Check owner update access for applicants and users.':(err?.message||'Could not approve applicant.'),'error');
+  }finally{if(button)button.disabled=false;}
+}
+document.getElementById('applicantBody')?.addEventListener('click',async e=>{const b=e.target.closest('[data-approve]');if(!b)return;await approveApplicant(b.dataset.approve,b);});
+window.approveApplicant=approveApplicant;
+function updateRoleClocks(){const d=new Date(),text=d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})+' | '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});['transactionsDate','reportsDate','usersDate'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=text})}
+setInterval(updateRoleClocks,1000);updateRoleClocks();
+
+/* =========================
+   PM2V AI SCRAP SCANNER
+   Integrated from ScrapScan_v8
+   ========================= */
+const AI_CONFIG={
+  workflowUrl:'https://serverless.roboflow.com/jhave-larios/workflows/muse-spark-1-1-classification',
+  workspace:'jhave-larios',
+  workflowId:'muse-spark-1-1-classification',
+  apiKey:'rqZaHINUp5l3lCE8DnGQ',
+  proxyUrl:'/api/roboflow',
+  directFallback:true
+};
+const TARGET_CLASSES=[
+  'Metal Scrap','Wooden Pallet','Plastic Bottle','Cardboard Box','Paper Scrap',
+  'Glass Bottle','Wooden Scrap','Plastic Scrap','Rubber Tire','Electronics / E-Waste',
+  'Textile / Fabric','Mixed Scrap','Not a scrap'
+];
+
+const ai={
+  file:document.getElementById('aiFileInput'),
+  upload:document.getElementById('aiUploadBtn'),
+  camera:document.getElementById('aiCameraBtn'),
+  scan:document.getElementById('aiScanBtn'),
+  video:document.getElementById('aiVideo'),
+  preview:document.getElementById('aiPreview'),
+  placeholder:document.getElementById('aiPlaceholder'),
+  stage:document.getElementById('aiStage'),
+  status:document.getElementById('aiStatus'),
+  cameraStatus:document.getElementById('aiCameraStatus'),
+  mode:document.getElementById('aiMode'),
+  modeText:document.getElementById('aiModeText'),
+  result:document.getElementById('aiResult'),
+  material:document.getElementById('aiMaterial'),
+  confidence:document.getElementById('aiConfidence'),
+  confidenceBar:document.getElementById('aiConfidenceBar'),
+  description:document.getElementById('aiDescription'),
+  isScrap:document.getElementById('aiIsScrap'),
+  condition:document.getElementById('aiCondition'),
+  altsBox:document.getElementById('aiAlternativesBox'),
+  alts:document.getElementById('aiAlternatives'),
+  error:document.getElementById('aiError'),
+  apply:document.getElementById('aiApplyBtn')
+};
+let aiStream=null, aiBlob=null, aiObjectUrl=null, aiCameraActive=false, aiBusy=false, aiLastResult=null;
+
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
+function setAIMode(text,state='ready'){
+  ai.mode.classList.toggle('busy',state==='busy');
+  ai.mode.classList.toggle('error',state==='error');
+  ai.modeText.textContent=text;
+}
+function stopAICamera(){
+  if(aiStream){aiStream.getTracks().forEach(t=>t.stop());aiStream=null;}
+  aiCameraActive=false;
+}
+function revokeAIUrl(){
+  if(aiObjectUrl){URL.revokeObjectURL(aiObjectUrl);aiObjectUrl=null;}
+}
+function resetAIResult(){
+  ai.result.style.display='none';
+  ai.error.style.display='none';
+  ai.altsBox.style.display='none';
+  ai.alts.innerHTML='';
+  ai.description.textContent='';
+  aiLastResult=null;
+}
+function setAIImage(blob,url,name='Scrap image'){
+  if(!blob||!url)return;
+  stopAICamera(); revokeAIUrl();
+  aiBlob=blob; aiObjectUrl=url;
+  ai.video.style.display='none';
+  ai.preview.style.display='block';
+  ai.preview.src=url;
+  ai.placeholder.style.display='none';
+  ai.status.style.display='flex';
+  ai.cameraStatus.textContent='Image ready';
+  ai.camera.textContent='Retake Photo';
+  ai.scan.disabled=false;
+  resetAIResult();
+  setAIMode('Ready to scan');
+}
+async function startAICamera(){
+  if(!navigator.mediaDevices?.getUserMedia){
+    showAIError('Camera is not supported in this browser. Use Upload Image instead.');
+    return;
+  }
+  try{
+    stopAICamera();
+    aiStream=await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:1600}},
+      audio:false
+    });
+    ai.video.srcObject=aiStream;
+    ai.video.muted=true;
+    await ai.video.play();
+    ai.video.style.display='block';
+    ai.preview.style.display='none';
+    ai.placeholder.style.display='none';
+    ai.status.style.display='flex';
+    aiCameraActive=true;
+    ai.cameraStatus.textContent='Camera active';
+    ai.camera.textContent='Capture Photo';
+    ai.scan.disabled=true;
+    resetAIResult();
+    setAIMode('Camera active');
+  }catch(e){
+    stopAICamera();
+    ai.cameraStatus.textContent='Camera unavailable';
+    showAIError(`Camera could not be started. ${e.message||'Check browser permissions or use Upload Image.'}`);
+  }
+}
+function captureAIFrame(){
+  if(!aiCameraActive){startAICamera();return;}
+  if(!ai.video.videoWidth||!ai.video.videoHeight){
+    showAIError('Camera is still starting. Please try again.');
+    return;
+  }
+  const canvas=document.createElement('canvas');
+  const scale=Math.min(1,1600/ai.video.videoWidth);
+  canvas.width=Math.max(1,Math.round(ai.video.videoWidth*scale));
+  canvas.height=Math.max(1,Math.round(ai.video.videoHeight*scale));
+  canvas.getContext('2d',{alpha:false}).drawImage(ai.video,0,0,canvas.width,canvas.height);
+  canvas.toBlob(b=>{
+    if(b)setAIImage(b,URL.createObjectURL(b),'Camera capture');
+    else showAIError('Could not process the camera image.');
+  },'image/jpeg',.88);
+}
+ai.camera.addEventListener('click',captureAIFrame);
+ai.file.addEventListener('change',e=>{
+  const file=e.target.files?.[0];
+  if(!file)return;
+  if(!file.type.startsWith('image/')){
+    showAIError('Please choose an image file.');
+    e.target.value='';
+    return;
+  }
+  const u=URL.createObjectURL(file), img=new Image();
+  img.onload=()=>{
+    const max=1600;
+    const scale=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));
+    const c=document.createElement('canvas');
+    c.width=Math.max(1,Math.round(img.naturalWidth*scale));
+    c.height=Math.max(1,Math.round(img.naturalHeight*scale));
+    c.getContext('2d',{alpha:false}).drawImage(img,0,0,c.width,c.height);
+    c.toBlob(b=>{
+      URL.revokeObjectURL(u);
+      if(b)setAIImage(b,URL.createObjectURL(b),file.name);
+      else showAIError('Could not process the image.');
+    },'image/jpeg',.88);
+  };
+  img.onerror=()=>{URL.revokeObjectURL(u);showAIError('Could not read the image.');};
+  img.src=u;
+  e.target.value='';
+});
+
+function blobToBase64(blob){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>{
+      const result=String(reader.result||'');
+      resolve(result.includes(',')?result.split(',')[1]:result);
+    };
+    reader.onerror=()=>reject(new Error('Could not encode the image.'));
+    reader.readAsDataURL(blob);
+  });
+}
+function buildWorkflowUrl(){
+  return AI_CONFIG.workflowUrl || `https://serverless.roboflow.com/${encodeURIComponent(AI_CONFIG.workspace)}/workflows/${encodeURIComponent(AI_CONFIG.workflowId)}`;
+}
+async function parseResponse(response,label){
+  const text=await response.text();
+  let data;
+  try{data=JSON.parse(text);}
+  catch{throw new Error(`${label} returned non-JSON (HTTP ${response.status}).`);}
+  if(!response.ok){
+    const msg=data?.error||data?.message||text.slice(0,300);
+    throw new Error(`${label} HTTP ${response.status}: ${msg}`);
+  }
+  return data;
+}
+async function callAIWorkflow(){
+  if(!aiBlob)throw new Error('Capture or upload a scrap image first.');
+  const base64=await blobToBase64(aiBlob);
+  const payload={
+    workflowUrl:buildWorkflowUrl(),
+    inputs:{image:{type:'base64',value:base64},classes:TARGET_CLASSES}
+  };
+
+  // First use the same local proxy architecture as ScrapScan.
+  try{
+    const r=await fetch(AI_CONFIG.proxyUrl,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
+    });
+    if(r.ok)return await parseResponse(r,'ScrapScan proxy');
+    // If the local proxy returns an error such as HTTP 502, continue to the
+    // direct workflow when directFallback is enabled.
+    if(!AI_CONFIG.directFallback){
+      return await parseResponse(r,'ScrapScan proxy');
+    }
+  }catch(e){
+    if(!AI_CONFIG.directFallback){
+      throw new Error(`Could not reach the local ScrapScan proxy. ${e.message||'network error'}`);
+    }
+  }
+
+  if(!AI_CONFIG.directFallback){
+    throw new Error('Could not reach /api/roboflow. Start the ScrapScan local proxy and try again.');
+  }
+
+  // Direct fallback keeps the standalone HTML usable in Live Server.
+  const directPayload={api_key:AI_CONFIG.apiKey,inputs:payload.inputs};
+  try{
+    const direct=await fetch(buildWorkflowUrl(),{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify(directPayload)
+    });
+    return await parseResponse(direct,'Roboflow Workflow');
+  }catch(e){
+    throw new Error(`Roboflow direct fallback failed. ${e.message||'network error'}`);
+  }
+}
+
+function extractStructured(data){
+  const objects=[], seen=new Set(), entries=[];
+  function walk(x,depth=0){
+    if(x==null||depth>14)return;
+    if(typeof x==='string'){
+      const text=x.trim(); if(!text)return;
+      const cleaned=text.replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'').trim();
+      if((cleaned.startsWith('{')&&cleaned.endsWith('}'))||(cleaned.startsWith('[')&&cleaned.endsWith(']'))){
+        try{walk(JSON.parse(cleaned),depth+1)}catch{}
+      }
+      return;
+    }
+    if(typeof x!=='object'||seen.has(x))return;
+    seen.add(x);
+    if(Array.isArray(x)){x.forEach(v=>walk(v,depth+1));return;}
+    objects.push(x);
+    Object.values(x).forEach(v=>walk(v,depth+1));
+  }
+  walk(data);
+  const num=v=>{const n=Number(v);return Number.isFinite(n)?n:null};
+  const confidenceOf=v=>{const n=num(v);return n==null?0:(n>1?n/100:n)};
+  const cleanName=v=>v==null?'':String(v).trim().replace(/^['"`]+|['"`]+$/g,'');
+  const addEntry=(name,value,source='')=>{
+    const n=cleanName(name);
+    if(!n||/^(unknown|null|undefined|image|predictions|predicted_classes|inference_id|parent_id|person|success|ok|true|false)$/i.test(n))return;
+    if(n.length>100)return;
+    let conf=0;
+    if(value&&typeof value==='object')conf=confidenceOf(value.confidence??value.score??value.probability??value.confidenceScore);
+    else conf=confidenceOf(value);
+    entries.push({name:n,confidence:conf,source});
+  };
+
+  // Explicit classification structures.
+  for(const c of objects){
+    const cls=c.classifications??c.classification_predictions??c.classificationPredictions;
+    if(Array.isArray(cls)){
+      for(const p of cls){
+        if(typeof p==='string')addEntry(p,0,'classification');
+        else if(p&&typeof p==='object')addEntry(
+          p.class_name??p.className??p.class??p.label??p.predicted_class??p.predicted_label??p.name,
+          p,'classification'
+        );
+      }
+    }else if(cls&&typeof cls==='object'){
+      const pred=cls.predictions??cls.classes??cls.results??cls;
+      if(pred&&typeof pred==='object'&&!Array.isArray(pred)){
+        for(const [name,value] of Object.entries(pred))addEntry(name,value,'classification');
+      }
+    }
+
+    const pred=c.predictions;
+    if(Array.isArray(pred)){
+      for(const p of pred){
+        if(typeof p==='string')addEntry(p,0,'prediction');
+        else if(p&&typeof p==='object')addEntry(
+          p.class_name??p.className??p.class??p.label??p.predicted_class??p.predicted_label,
+          p,'prediction'
+        );
+      }
+    }else if(pred&&typeof pred==='object'){
+      const values=Object.values(pred);
+      const looksLikeClassMap=values.some(v=>v&&typeof v==='object'&&(
+        'confidence' in v||'score' in v||'probability' in v||'class_name' in v||'label' in v
+      ));
+      if(looksLikeClassMap){
+        for(const [name,value] of Object.entries(pred))addEntry(name,value,'prediction');
+      }
+    }
+
+    const directName=c.material??c.primary_material??c.material_type??c.scrap_type??
+      c.predicted_material??c.predicted_class??c.predicted_label??c.class_name??c.className??
+      c.classification??c.category;
+    if(directName&&typeof directName!=='object'){
+      addEntry(directName,c.confidence??c.score??c.probability??c.top_confidence??c.topConfidence??0,'direct');
+    }
+    if(Array.isArray(c.predicted_classes)){
+      c.predicted_classes.forEach((x,i)=>addEntry(
+        x,Array.isArray(c.confidences)?c.confidences[i]:c.confidence??0,'predicted_classes'
+      ));
+    }
+  }
+
+  if(entries.length){
+    const map=new Map();
+    for(const e of entries){
+      const key=e.name.toLowerCase();
+      const old=map.get(key);
+      if(!old||e.confidence>old.confidence)map.set(key,e);
+    }
+    const ranked=[...map.values()].sort((a,b)=>b.confidence-a.confidence);
+    const top=ranked[0];
+    return{
+      material:top.name,confidence:top.confidence,is_scrap:!/^unknown$/i.test(top.name),
+      condition:'Detected',
+      description:`Muse Spark 1.1 classified this image as ${top.name}.`,
+      evidence:ranked.slice(0,6).map(x=>`${x.name}: ${(x.confidence*100).toFixed(1)}%`),
+      alternatives:ranked.slice(1,6),_raw:data
+    };
+  }
+
+  // Structured text output fallback.
+  for(const c of objects){
+    for(const key of ['structured_output','output','raw_output','text','caption','llama_result','answer']){
+      const value=c?.[key];
+      if(typeof value!=='string')continue;
+      const cleaned=value.replace(/^```json\s*/i,'').replace(/\s*```$/,'').trim();
+      try{
+        const parsed=JSON.parse(cleaned);
+        const nested=extractStructured(parsed);
+        if(nested.material&&nested.material!=='Unknown')return {...nested,_raw:data};
+      }catch{}
+    }
+  }
+  return{material:'Unknown',confidence:0,is_scrap:undefined,condition:'Unknown',description:'The workflow returned a response, but no supported material classification was found.',evidence:[],alternatives:[],_raw:data};
+}
+
+function normalizeResult(data){
+  const r=(data&&(data.material||data.primary_material||data.label||data.class))?data:extractStructured(data);
+  let raw=Number(r.confidence??r.score??0); if(raw>1)raw/=100;
+  let material=String(r.material||r.primary_material||r.label||r.class||'').trim();
+  const unidentifiable=!material||/^(unknown|unidentified|unidentifiable|null|undefined|n\/a)$/i.test(material);
+  if(unidentifiable)material='Not a scrap';
+  return{
+    material,
+    confidence:Math.max(0,Math.min(1,raw)),
+    evidence:Array.isArray(r.evidence)?r.evidence:[],
+    alternatives:Array.isArray(r.alternatives)?r.alternatives:[],
+    description:unidentifiable?'The scanned image could not be identified as a supported scrap material.':(r.description||r.caption||''),
+    isScrap:unidentifiable?false:r.is_scrap,
+    condition:unidentifiable?'Unidentifiable':(r.condition||'Detected'),
+    raw:r._raw||data
+  };
+}
+function renderAIResult(result){
+  aiLastResult=result;
+  const pct=Math.round(result.confidence*100);
+  ai.material.textContent=result.material;
+  ai.confidence.textContent=`${pct}%`;
+  ai.confidenceBar.style.width=`${pct}%`;
+  ai.description.textContent=result.description||'Classification completed.';
+  ai.isScrap.textContent=result.isScrap===undefined?'—':(result.isScrap?'Yes':'No');
+  ai.condition.textContent=result.condition||'Detected';
+  if(result.alternatives.length){
+    ai.altsBox.style.display='block';
+    ai.alts.innerHTML=result.alternatives.slice(0,5).map(x=>{
+      let q=Number(x.confidence??x.score??0);if(q>1)q/=100;
+      return `<div class="scanner-alt-row"><span>${esc(x.name||x.label||'Unknown')}</span><strong>${Math.round(q*100)}%</strong></div>`;
+    }).join('');
+  }else{
+    ai.altsBox.style.display='none';ai.alts.innerHTML='';
+  }
+  ai.result.style.display='block';
+  ai.error.style.display='none';
+}
+function showAIError(message){
+  ai.error.textContent=message;
+  ai.error.style.display='block';
+  setAIMode('Connection error','error');
+}
+async function runAIScan(){
+  if(aiBusy)return;
+  if(!aiBlob){showAIError('Capture or upload an image first.');return;}
+  aiBusy=true;
+  ai.scan.disabled=true;
+  ai.result.style.display='none';
+  ai.error.style.display='none';
+  setAIMode('Analyzing…','busy');
+  try{
+    const data=await callAIWorkflow();
+    const result=normalizeResult(data);
+    renderAIResult(result);
+    setAIMode('AI result ready');
+  }catch(e){
+    showAIError(e.message||'Could not complete the AI scan.');
+  }finally{
+    aiBusy=false;
+    ai.scan.disabled=!aiBlob;
+  }
+}
+ai.scan.addEventListener('click',runAIScan);
+
+function categoryFromMaterial(material){
+  const m=String(material||'').toLowerCase();
+  if(/metal|steel|iron|aluminum|aluminium|copper|electronic|e-waste/.test(m))return'Metal';
+  if(/wood|pallet|lumber|timber/.test(m))return'Wood';
+  if(/plastic|bottle|poly/.test(m))return'Plastic';
+  if(/paper|cardboard|carton|box/.test(m))return'Paper';
+  if(/fiber|fabric|textile|sack|rubber|tire/.test(m))return'Fiber';
+  return'Paper';
+}
+ai.apply.addEventListener('click',()=>{
+  if(!aiLastResult)return;
+  const name=document.getElementById('inventoryItemName');
+  const category=document.getElementById('inventoryCategory');
+  const condition=document.getElementById('inventoryCondition');
+  if(name && (!name.value||name.value==='')){
+    name.value=aiLastResult.material;
+  }
+  if(category)category.value=categoryFromMaterial(aiLastResult.material);
+  if(condition && /detected/i.test(aiLastResult.condition||''))condition.value='Good';
+  document.getElementById('inventoryItemName')?.focus();
+  setAIMode('Result applied');
+});
+
+window.addEventListener('beforeunload',()=>{stopAICamera();revokeAIUrl();});
+</script>
+</body>
+</html>
