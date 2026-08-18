@@ -1928,470 +1928,225 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 </style>
 
 
-/* PM2V(34) — DESKTOP SINGLE-VIEW LOGIN
-   Keep the complete login experience inside one viewport.
-   Mobile login rules below remain unchanged.
-*/
-@media (min-width: 601px) {
-  html, body {
-    height: 100%;
-    overflow: hidden;
+
+<style id="pm2v-login-no-scroll-final">
+
+/* PM2V(37) — TRUE SINGLE-VIEW / NO DOCUMENT SCROLL */
+html:has(body.auth-pending),
+body.auth-pending{
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  max-height:100%!important;
+  margin:0!important;
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
+}
+
+body.auth-pending > .app{
+  display:none!important;
+}
+
+body.auth-pending #loginScreen.login-screen{
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100dvh!important;
+  min-height:0!important;
+  max-height:100dvh!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  display:flex!important;
+  flex-direction:column!important;
+  box-sizing:border-box!important;
+}
+
+@media (min-width:601px){
+  body.auth-pending #loginScreen .login-header{
+    flex:0 0 60px!important;
+    height:60px!important;
+    min-height:60px!important;
+    box-sizing:border-box!important;
   }
 
-  .login-screen {
-    height: 100dvh;
-    min-height: 0;
-    overflow: hidden;
+  body.auth-pending #loginScreen .login-shell{
+    flex:0 0 auto!important;
+    width:min(1180px,calc(100vw - 48px))!important;
+    height:calc(100dvh - 68px)!important;
+    min-height:0!important;
+    max-height:calc(100dvh - 68px)!important;
+    margin:4px auto!important;
+    align-self:center!important;
+    overflow:hidden!important;
+    box-sizing:border-box!important;
   }
 
-  .login-header {
-    height: 64px;
-    flex: 0 0 64px;
-    padding: 0 clamp(22px, 4vw, 58px);
+  body.auth-pending #loginScreen .login-company,
+  body.auth-pending #loginScreen .login-panel{
+    min-height:0!important;
+    height:100%!important;
+    overflow:hidden!important;
+    box-sizing:border-box!important;
   }
 
-  .login-header-brand {
-    font-size: 16px;
+  body.auth-pending #loginScreen .login-company{
+    padding:clamp(12px,2.5vh,28px) clamp(26px,4vw,46px)!important;
   }
 
-  .login-header-brand img {
-    width: 34px;
-    height: 34px;
+  body.auth-pending #loginScreen .login-company-logo{
+    width:clamp(78px,12vh,112px)!important;
+    height:clamp(78px,12vh,112px)!important;
+    margin-bottom:clamp(6px,1.4vh,14px)!important;
   }
 
-  .login-header-nav {
-    gap: 24px;
+  body.auth-pending #loginScreen .login-company h2{
+    font-size:clamp(17px,2.7vh,22px)!important;
+    margin-bottom:clamp(5px,1vh,10px)!important;
   }
 
-  .login-header-nav a {
-    font-size: 13px;
+  body.auth-pending #loginScreen .login-company-divider{
+    margin-bottom:clamp(6px,1.4vh,14px)!important;
   }
 
-  .login-shell {
-    width: min(1180px, calc(100% - 56px));
-    height: min(650px, calc(100dvh - 96px));
-    min-height: 0;
-    margin: 16px auto;
-    align-self: center;
-    grid-template-columns: 1.02fr .98fr;
-    border-radius: 24px;
+  body.auth-pending #loginScreen .login-company-copy{
+    font-size:clamp(11px,1.7vh,14px)!important;
+    line-height:1.4!important;
+    margin-bottom:clamp(6px,1.5vh,15px)!important;
   }
 
-  .login-company {
-    min-height: 0;
-    padding: 30px 48px;
+  body.auth-pending #loginScreen .login-company-stats{
+    padding:clamp(6px,1.2vh,10px) 0!important;
+    margin-bottom:clamp(6px,1.3vh,11px)!important;
   }
 
-  .login-company-logo {
-    width: 118px;
-    height: 118px;
-    margin-bottom: 16px;
+  body.auth-pending #loginScreen .login-company-stats strong{
+    font-size:clamp(15px,2.4vh,19px)!important;
   }
 
-  .login-company h2 {
-    font-size: 22px;
-    margin-bottom: 11px;
+  body.auth-pending #loginScreen .login-company-stats span{
+    font-size:clamp(7px,1vh,8px)!important;
   }
 
-  .login-company-divider {
-    width: 52px;
-    height: 4px;
-    margin-bottom: 15px;
+  body.auth-pending #loginScreen .login-materials{gap:6px!important}
+
+  body.auth-pending #loginScreen .login-material{
+    padding:clamp(4px,.9vh,8px) 8px!important;
+    font-size:clamp(8px,1.35vh,11px)!important;
   }
 
-  .login-company-copy {
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 17px;
-    max-width: 430px;
+  body.auth-pending #loginScreen .login-panel{
+    padding:clamp(14px,3vh,30px) clamp(28px,4vw,52px)!important;
+    justify-content:center!important;
   }
 
-  .login-company-stats {
-    padding: 11px 0;
-    margin-bottom: 12px;
+  body.auth-pending #loginScreen .login-panel h1{
+    font-size:clamp(24px,3.8vh,32px)!important;
+    margin-bottom:5px!important;
   }
 
-  .login-company-stats strong {
-    font-size: 19px;
+  body.auth-pending #loginScreen .login-panel-subtitle{
+    font-size:clamp(12px,1.8vh,15px)!important;
+    margin-bottom:clamp(9px,2vh,18px)!important;
   }
 
-  .login-company-stats span {
-    font-size: 8px;
+  body.auth-pending #loginScreen .login-form{
+    gap:clamp(6px,1vh,9px)!important;
   }
 
-  .login-materials {
-    gap: 7px;
+  body.auth-pending #loginScreen .login-field input,
+  body.auth-pending #loginScreen .login-submit{
+    height:clamp(42px,6.2vh,52px)!important;
+    min-height:42px!important;
+    box-sizing:border-box!important;
   }
 
-  .login-material {
-    padding: 8px 9px;
-    font-size: 11px;
+  body.auth-pending #loginScreen .login-protected{
+    margin:clamp(5px,1.3vh,11px) 0 clamp(6px,1.5vh,13px)!important;
   }
 
-  .login-panel {
-    padding: 34px 54px 28px;
-    min-height: 0;
-    justify-content: center;
-    overflow: hidden;
+  body.auth-pending #loginScreen .login-apply{
+    margin-bottom:clamp(5px,1.4vh,12px)!important;
   }
 
-  .login-panel h1 {
-    font-size: 32px;
-    margin-bottom: 7px;
-  }
-
-  .login-panel-subtitle {
-    font-size: 15px;
-    margin-bottom: 20px;
-  }
-
-  .login-form {
-    gap: 9px;
-  }
-
-  .login-field input {
-    height: 52px;
-    border-radius: 12px;
-  }
-
-  .login-forgot {
-    margin: 2px auto 3px;
-  }
-
-  .login-submit {
-    height: 52px;
-    border-radius: 12px;
-  }
-
-  .login-message {
-    min-height: 17px;
-    font-size: 12px;
-  }
-
-  .login-protected {
-    margin: 12px 0 14px;
-    font-size: 11px;
-  }
-
-  .login-protected .lock {
-    font-size: 16px;
-    margin-right: 5px;
-  }
-
-  .login-apply {
-    margin-bottom: 14px;
-    font-size: 12px;
-  }
-
-  .login-apply button {
-    font-size: 14px;
-  }
-
-  .login-legal {
-    padding-top: 12px;
-    font-size: 9px;
-    line-height: 1.4;
+  body.auth-pending #loginScreen .login-legal{
+    padding-top:clamp(5px,1.2vh,10px)!important;
   }
 }
 
-/* Short desktop/laptop view: compress the composition further rather than
-   allowing the login page itself to scroll. */
-@media (min-width: 601px) and (max-height: 760px) {
-  .login-header {
-    height: 60px;
-    flex-basis: 60px;
+@media (min-width:601px) and (max-height:680px){
+  body.auth-pending #loginScreen .login-header{
+    flex-basis:54px!important;
+    height:54px!important;
+    min-height:54px!important;
   }
 
-  .login-shell {
-    height: calc(100dvh - 76px);
-    margin: 8px auto;
+  body.auth-pending #loginScreen .login-shell{
+    width:min(1160px,calc(100vw - 32px))!important;
+    height:calc(100dvh - 60px)!important;
+    max-height:calc(100dvh - 60px)!important;
+    margin:3px auto!important;
+    border-radius:20px!important;
   }
 
-  .login-company {
-    padding: 22px 40px;
+  body.auth-pending #loginScreen .login-company{padding:9px 24px!important}
+  body.auth-pending #loginScreen .login-company-logo{
+    width:72px!important;height:72px!important;margin-bottom:5px!important;
   }
-
-  .login-company-logo {
-    width: 104px;
-    height: 104px;
-    margin-bottom: 11px;
+  body.auth-pending #loginScreen .login-company h2{
+    font-size:17px!important;margin-bottom:5px!important;
   }
-
-  .login-company h2 {
-    font-size: 20px;
-    margin-bottom: 8px;
+  body.auth-pending #loginScreen .login-company-copy{
+    font-size:10px!important;margin-bottom:6px!important;
   }
-
-  .login-company-divider {
-    margin-bottom: 10px;
+  body.auth-pending #loginScreen .login-company-stats{
+    padding:5px 0!important;margin-bottom:5px!important;
   }
-
-  .login-company-copy {
-    font-size: 13px;
-    line-height: 1.4;
-    margin-bottom: 12px;
+  body.auth-pending #loginScreen .login-material{
+    padding:4px 7px!important;font-size:8px!important;
   }
-
-  .login-company-stats {
-    padding: 8px 0;
-    margin-bottom: 9px;
+  body.auth-pending #loginScreen .login-panel{padding:10px 30px!important}
+  body.auth-pending #loginScreen .login-panel h1{font-size:24px!important}
+  body.auth-pending #loginScreen .login-panel-subtitle{margin-bottom:8px!important}
+  body.auth-pending #loginScreen .login-field input,
+  body.auth-pending #loginScreen .login-submit{
+    height:40px!important;min-height:40px!important;
   }
-
-  .login-material {
-    padding: 6px 8px;
+  body.auth-pending #loginScreen .login-protected{
+    margin:4px 0 5px!important;font-size:10px!important;
   }
-
-  .login-panel {
-    padding: 24px 46px 20px;
+  body.auth-pending #loginScreen .login-apply{
+    margin-bottom:5px!important;font-size:10px!important;
   }
-
-  .login-panel h1 {
-    font-size: 29px;
-  }
-
-  .login-panel-subtitle {
-    margin-bottom: 14px;
-  }
-
-  .login-field input {
-    height: 48px;
-  }
-
-  .login-submit {
-    height: 48px;
-  }
-
-  .login-protected {
-    margin: 9px 0 10px;
-  }
-
-  .login-apply {
-    margin-bottom: 10px;
-  }
-
-  .login-legal {
-    padding-top: 9px;
+  body.auth-pending #loginScreen .login-legal{
+    padding-top:4px!important;font-size:8px!important;
   }
 }
 
-
-/* PM2V(35) — TRUE VIEWPORT FIT
-   The browser viewport excludes browser chrome, so the login shell must
-   calculate its height from the actual available viewport rather than
-   reserving a fixed 650px minimum.
-*/
-@media (min-width: 601px) {
-  html, body {
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-    overflow: hidden !important;
+@media (max-width:600px){
+  html:has(body.auth-pending),
+  body.auth-pending{
+    position:static!important;
+    height:auto!important;
+    min-height:100%!important;
+    max-height:none!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
   }
 
-  .login-screen {
-    width: 100%;
-    height: 100dvh !important;
-    min-height: 0 !important;
-    max-height: 100dvh;
-    overflow: hidden !important;
-  }
+  body.auth-pending > .app{display:none!important}
 
-  .login-header {
-    height: 60px !important;
-    min-height: 60px !important;
-    flex: 0 0 60px !important;
-  }
-
-  .login-shell {
-    width: min(1180px, calc(100% - 48px)) !important;
-    height: calc(100dvh - 76px) !important;
-    min-height: 0 !important;
-    max-height: calc(100dvh - 76px);
-    margin: 8px auto !important;
-    overflow: hidden !important;
-  }
-
-  .login-company,
-  .login-panel {
-    min-height: 0 !important;
-    height: 100%;
-    overflow: hidden !important;
-    box-sizing: border-box;
-  }
-
-  .login-company {
-    padding: clamp(16px, 3.2vh, 28px) clamp(28px, 4vw, 46px);
-  }
-
-  .login-company-logo {
-    width: clamp(82px, 13vh, 112px);
-    height: clamp(82px, 13vh, 112px);
-    margin-bottom: clamp(7px, 1.5vh, 14px);
-  }
-
-  .login-company h2 {
-    font-size: clamp(18px, 2.8vh, 22px);
-    margin-bottom: clamp(6px, 1vh, 10px);
-  }
-
-  .login-company-divider {
-    margin-bottom: clamp(8px, 1.4vh, 13px);
-  }
-
-  .login-company-copy {
-    font-size: clamp(12px, 1.9vh, 14px);
-    line-height: 1.4;
-    margin-bottom: clamp(9px, 1.8vh, 16px);
-  }
-
-  .login-company-stats {
-    padding: clamp(7px, 1.3vh, 11px) 0;
-    margin-bottom: clamp(7px, 1.4vh, 12px);
-  }
-
-  .login-company-stats strong {
-    font-size: clamp(16px, 2.8vh, 19px);
-  }
-
-  .login-material {
-    padding: clamp(5px, 1vh, 8px) 9px;
-  }
-
-  .login-panel {
-    padding: clamp(18px, 4vh, 32px) clamp(34px, 4.5vw, 54px) clamp(14px, 3vh, 24px);
-    justify-content: center;
-  }
-
-  .login-panel h1 {
-    font-size: clamp(26px, 4.2vh, 32px);
-    margin-bottom: clamp(4px, .9vh, 7px);
-  }
-
-  .login-panel-subtitle {
-    font-size: clamp(13px, 2vh, 15px);
-    margin-bottom: clamp(12px, 2.4vh, 20px);
-  }
-
-  .login-form {
-    gap: clamp(6px, 1.2vh, 9px);
-  }
-
-  .login-field input {
-    height: clamp(44px, 6.5vh, 52px);
-  }
-
-  .login-forgot {
-    margin: 1px auto 2px;
-  }
-
-  .login-submit {
-    height: clamp(44px, 6.5vh, 52px);
-  }
-
-  .login-protected {
-    margin: clamp(7px, 1.5vh, 12px) 0 clamp(8px, 1.8vh, 14px);
-  }
-
-  .login-apply {
-    margin-bottom: clamp(7px, 1.5vh, 12px);
-  }
-
-  .login-legal {
-    padding-top: clamp(7px, 1.4vh, 11px);
+  body.auth-pending #loginScreen.login-screen{
+    position:relative!important;
+    width:100%!important;
+    min-height:100dvh!important;
+    height:auto!important;
+    max-height:none!important;
+    overflow:visible!important;
   }
 }
 
-/* At very short desktop heights, use a compact two-column shell. */
-@media (min-width: 601px) and (max-height: 680px) {
-  .login-header {
-    height: 54px !important;
-    min-height: 54px !important;
-    flex-basis: 54px !important;
-  }
-
-  .login-shell {
-    height: calc(100dvh - 62px) !important;
-    max-height: calc(100dvh - 62px);
-    margin: 4px auto !important;
-  }
-
-  .login-company {
-    padding: 12px 28px;
-  }
-
-  .login-company-logo {
-    width: 72px;
-    height: 72px;
-    margin-bottom: 5px;
-  }
-
-  .login-company h2 {
-    font-size: 17px;
-    margin-bottom: 5px;
-  }
-
-  .login-company-divider {
-    height: 3px;
-    margin-bottom: 7px;
-  }
-
-  .login-company-copy {
-    font-size: 11px;
-    margin-bottom: 7px;
-  }
-
-  .login-company-stats {
-    padding: 5px 0;
-    margin-bottom: 6px;
-  }
-
-  .login-company-stats strong {
-    font-size: 15px;
-  }
-
-  .login-company-stats span {
-    font-size: 7px;
-  }
-
-  .login-material {
-    padding: 4px 7px;
-    font-size: 10px;
-  }
-
-  .login-panel {
-    padding: 12px 32px 10px;
-  }
-
-  .login-panel h1 {
-    font-size: 24px;
-  }
-
-  .login-panel-subtitle {
-    font-size: 12px;
-    margin-bottom: 9px;
-  }
-
-  .login-field input,
-  .login-submit {
-    height: 40px;
-  }
-
-  .login-protected {
-    margin: 5px 0 6px;
-    font-size: 10px;
-  }
-
-  .login-apply {
-    margin-bottom: 6px;
-    font-size: 10px;
-  }
-
-  .login-legal {
-    padding-top: 5px;
-    font-size: 8px;
-  }
-}
-
+</style>
 </head>
 <body class="auth-pending">
 <div id="loginScreen" class="login-screen">
@@ -3174,12 +2929,12 @@ document.querySelector('.logout a')?.addEventListener('click',async e=>{
 onAuthStateChanged(auth,async user=>{
   if(!user){
     document.getElementById('loginScreen').style.display='flex';
-    document.body.classList.remove('auth-pending');
+    document.body.classList.add('auth-pending');
     document.getElementById('authLoading')?.remove();
     return;
   }
   try{await initPM2V(user)}
-  catch(e){console.error(e);await signOut(auth).catch(()=>{});const msg=document.getElementById('loginMessage');msg.textContent=e.message||'Unable to verify your PM2V account.';document.getElementById('loginScreen').style.display='flex';document.body.classList.remove('auth-pending');document.getElementById('authLoading')?.remove();}
+  catch(e){console.error(e);await signOut(auth).catch(()=>{});const msg=document.getElementById('loginMessage');msg.textContent=e.message||'Unable to verify your PM2V account.';document.getElementById('loginScreen').style.display='flex';document.body.classList.add('auth-pending');document.getElementById('authLoading')?.remove();}
 });
 
 const links=document.querySelectorAll('.nav a[data-page]');
@@ -3958,222 +3713,4 @@ window.addEventListener('beforeunload',()=>{stopAICamera();revokeAIUrl();});
 })();
 </script>
 </body>
-
-<style id="pm2v-reports-progress-overflow-fix">
-/* Prevent the mobile category progress track/fill from escaping the report card. */
-@media (max-width:760px){
-  #reports #categoryReport{
-    width:100%!important;
-    max-width:100%!important;
-    overflow:hidden!important;
-    box-sizing:border-box!important;
-  }
-  #reports #categoryReport .role-table,
-  #reports #categoryReport .role-table tbody{
-    width:100%!important;
-    max-width:100%!important;
-    box-sizing:border-box!important;
-    overflow:hidden!important;
-  }
-  #reports #categoryReport .role-table tr{
-    width:100%!important;
-    max-width:100%!important;
-    box-sizing:border-box!important;
-    overflow:hidden!important;
-  }
-  #reports #categoryReport .role-table td:nth-child(3){
-    width:100%!important;
-    max-width:100%!important;
-    min-width:0!important;
-    box-sizing:border-box!important;
-    overflow:hidden!important;
-  }
-  #reports #categoryReport .role-table td:nth-child(3)::before,
-  #reports #categoryReport .role-table td:nth-child(3)::after{
-    max-width:100%!important;
-    box-sizing:border-box!important;
-  }
-}
-</style>
-
 </html>
-<style id="pm2v-reports-rendered-density-fix">
-/* Final rendered-mobile polish: make every category a compact analytical row. */
-@media (max-width:760px){
-  #reports .report-grid .role-card{
-    min-height:82px!important;
-    height:82px!important;
-    padding:11px 12px!important;
-  }
-  #reports .report-grid .role-card h3{
-    font-size:9.5px!important;
-    margin-bottom:4px!important;
-  }
-  #reports .report-grid .role-card .big{font-size:24px!important}
-  #reports .report-grid .role-card .muted{font-size:8.5px!important}
-
-  #reports .report-category-card{
-    padding:14px 10px 5px!important;
-  }
-  #reports .report-category-head{
-    padding:0 3px 6px!important;
-  }
-  #reports .report-category-head .card-title{
-    font-size:16px!important;
-    line-height:1.15!important;
-    margin:0 0 2px!important;
-  }
-  #reports .report-category-subtitle{
-    font-size:9px!important;
-    line-height:1.25!important;
-  }
-
-  #reports #categoryReport .role-table tr{
-    position:relative!important;
-    display:grid!important;
-    grid-template-columns:minmax(0,1fr) auto auto!important;
-    grid-template-areas:"category count weight"!important;
-    align-items:center!important;
-    column-gap:7px!important;
-    min-height:0!important;
-    height:38px!important;
-    padding:5px 9px 8px!important;
-    border-bottom:1px solid #edf1ee!important;
-    box-sizing:border-box!important;
-  }
-  #reports #categoryReport .role-table tr:last-child{border-bottom:0!important}
-
-  #reports #categoryReport .role-table td{
-    padding:0!important;
-    border:0!important;
-    line-height:1.15!important;
-    min-width:0!important;
-    align-self:center!important;
-  }
-  #reports #categoryReport .role-table td:nth-child(1){
-    grid-area:category!important;
-    color:#17335a!important;
-    font-size:11.5px!important;
-    font-weight:900!important;
-    white-space:nowrap!important;
-    overflow:hidden!important;
-    text-overflow:ellipsis!important;
-  }
-  #reports #categoryReport .role-table td:nth-child(2){
-    grid-area:count!important;
-    color:#60776b!important;
-    font-size:9px!important;
-    font-weight:800!important;
-    text-align:right!important;
-    white-space:nowrap!important;
-  }
-  #reports #categoryReport .role-table td:nth-child(2)::after{
-    content:' items'!important;
-    font-size:8px!important;
-    font-weight:700!important;
-    color:#8a9891!important;
-  }
-  #reports #categoryReport .role-table td:nth-child(3){
-    grid-area:weight!important;
-    position:static!important;
-    color:#173f29!important;
-    font-size:9px!important;
-    font-weight:900!important;
-    text-align:right!important;
-    white-space:nowrap!important;
-    padding:0!important;
-  }
-  #reports #categoryReport .role-table td:nth-child(3)::before,
-  #reports #categoryReport .role-table td:nth-child(3)::after{
-    content:none!important;
-    display:none!important;
-  }
-  #reports #categoryReport .report-category-percent{
-    display:inline-block!important;
-    margin-left:4px!important;
-    font-size:7.5px!important;
-    line-height:1!important;
-    color:#8b9a92!important;
-    font-weight:800!important;
-  }
-  #reports #categoryReport .role-table tr::after{
-    content:''!important;
-    position:absolute!important;
-    left:9px!important;
-    right:9px!important;
-    bottom:2px!important;
-    height:3px!important;
-    border-radius:999px!important;
-    background:linear-gradient(to right,#168342 0%,#168342 var(--pct,0%),#edf2ee var(--pct,0%),#edf2ee 100%)!important;
-    pointer-events:none!important;
-  }
-  #reports #categoryReport .role-table tr[data-weight="0"] td:nth-child(1),
-  #reports #categoryReport .role-table tr[data-weight="0"] td:nth-child(2),
-  #reports #categoryReport .role-table tr[data-weight="0"] td:nth-child(3){
-    color:#9aa59f!important;
-  }
-  #reports #categoryReport .role-table tr[data-weight="0"]::after{
-    background:#f1f4f2!important;
-  }
-  #reports #categoryReport .role-table .empty-role{
-    display:block!important;
-    min-height:46px!important;
-    height:auto!important;
-    padding:14px 8px!important;
-  }
-}
-@media (max-width:360px){
-  #reports .report-grid .role-card{height:78px!important;min-height:78px!important;padding:10px!important}
-  #reports #categoryReport .role-table tr{height:37px!important;padding-left:7px!important;padding-right:7px!important}
-  #reports #categoryReport .role-table tr::after{left:7px!important;right:7px!important}
-  #reports #categoryReport .role-table td:nth-child(2),
-  #reports #categoryReport .role-table td:nth-child(3){font-size:8.5px!important}
-}
-
-/* DESKTOP UI POLISH — PM2V(25)
-   Keeps mobile styling intact; improves desktop proportion, navigation hierarchy,
-   and dashboard information density for the functional management app. */
-@media (min-width:901px){
-  .sidebar{width:270px;padding:22px 24px 24px;background:#146b35}
-  .logo-wrap{height:138px;justify-content:flex-start;padding-left:14px}
-  .logo{width:112px;height:112px}
-  .user-card{height:72px;padding:10px 14px;margin:0 0 28px;border-radius:14px}
-  .avatar{width:44px;height:44px;font-size:18px}
-  .user-text{margin-left:12px}
-  .user-name{font-size:15px;margin-bottom:4px}
-  .user-role{font-size:12px}
-  .nav{gap:4px}
-  .nav-group-label{padding:0 17px;margin:2px 0 6px;color:rgba(214,244,221,.66);font-size:10px;font-weight:800;letter-spacing:1.15px;text-transform:uppercase}
-  .nav-group-label.account-label{margin-top:20px}
-  .nav a{height:48px;padding:0 15px;border-radius:10px;gap:13px;font-size:15px;color:#d2ead8}
-  .nav a.active{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.10);box-shadow:inset 3px 0 0 #fff}
-  .nav a:hover{background:rgba(255,255,255,.09);color:#fff}
-  .nav-icon,.nav-icon svg{width:19px;height:19px}
-  .logout{left:24px;right:24px;bottom:22px;padding-top:17px}
-  .logout a{height:42px;padding-left:15px;border-radius:10px;gap:12px;font-size:14px;color:#ffb0a9}
-  .logout a:hover{background:rgba(255,255,255,.08);color:#ffd0cb}
-
-  .main{margin-left:270px;width:calc(100% - 270px);padding:34px 42px 64px}
-  .topbar{margin-bottom:28px}
-  h1{font-size:30px}
-  .subtitle{font-size:15px}
-  .date{font-size:13px;padding:0 18px;height:46px;box-shadow:0 2px 6px rgba(23,57,40,.05)}
-  .dashboard-topbar{margin-bottom:27px}
-  .dashboard-stats{gap:18px;margin-bottom:30px}
-  .dashboard-stat{height:108px;padding:22px 25px;border-radius:16px}
-  .dashboard-stat-icon{width:48px;height:48px;margin-right:16px}
-  .dashboard-stat-label{font-size:10px;letter-spacing:.85px;margin-bottom:6px}
-  .dashboard-stat-value{font-size:27px}
-  .dashboard-card{border-radius:18px;margin-bottom:27px}
-  .dashboard-card-head{height:74px;padding:0 27px}
-  .dashboard-card-title{font-size:18px}
-  .dashboard-table th{height:48px;padding:0 25px;font-size:10px}
-  .dashboard-table td{height:58px;padding:0 25px;font-size:14px}
-  .dashboard-view-all{font-size:13px}
-  .dashboard-activity .activity-row{padding:17px 27px}
-}
-
-@media (max-width:900px){
-  .nav-group-label{display:none}
-}
-</style>
