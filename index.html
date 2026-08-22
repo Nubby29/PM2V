@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>PM2V Scrap Trading</title>
 <style>
 *{box-sizing:border-box}
@@ -77,7 +78,7 @@ h1{margin:0;font-size:31px;line-height:1.1;color:#071c3b;letter-spacing:-.8px}
 .scanner-error{display:none;margin-top:14px;padding:13px 15px;border-radius:12px;background:#fff1f1;border:1px solid #ffd7d7;color:#a72c2c;font-size:13px;line-height:1.5}
 .scanner-apply{margin-top:15px;border:0;background:#146f37;color:#fff;height:46px;border-radius:10px;padding:0 17px;font-size:13px;font-weight:800;cursor:pointer}
 .scanner-note{margin-top:12px;color:#7c8ea3;font-size:11px;line-height:1.5}
-
+.ai-class-manager-launch{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 14px;padding:13px 15px;border:1px solid #dce8df;background:#f8fcf9;border-radius:14px}.ai-class-manager-launch strong{display:block;color:#17335a;font-size:13px}.ai-class-manager-launch span{display:block;color:#7b8e82;font-size:10px;margin-top:3px}.ai-class-manager-btn-large{height:40px!important;padding:0 16px!important;font-size:12px!important;white-space:nowrap;background:#146f37!important;color:#fff!important;border-color:#146f37!important}.ai-class-manager-btn-large:hover{background:#105d2e!important}@media(max-width:760px){.ai-class-manager-launch{align-items:flex-start;flex-direction:column}.ai-class-manager-btn-large{width:100%}}
 .ai-scanner-tools{display:flex;align-items:center;gap:8px;justify-content:flex-end;flex-wrap:wrap}.ai-class-manager-btn{height:34px;border:1px solid #d7e3dc;background:#fff;color:#146f37;border-radius:9px;padding:0 11px;font-size:11px;font-weight:800;cursor:pointer}.ai-class-manager-btn:hover{background:#f3faf5}.ai-class-manager{margin:-4px 0 20px;border:1px solid #dce8df;background:#f9fcfa;border-radius:15px;padding:16px}.ai-class-manager[hidden]{display:none}.ai-class-manager-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;margin-bottom:12px}.ai-class-manager-head strong{display:block;color:#17335a;font-size:13px}.ai-class-manager-head span:not(.ai-class-count){display:block;color:#7b8e82;font-size:10px;margin-top:4px;line-height:1.4}.ai-class-count{white-space:nowrap;color:#146f37;background:#e5f5e8;border-radius:12px;padding:5px 8px;font-size:10px;font-weight:800}.ai-class-add{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:10px}.ai-class-add input{height:42px;margin:0}.ai-class-add button,.ai-class-save,.ai-class-delete{border:0;border-radius:9px;height:42px;padding:0 12px;font-size:11px;font-weight:800;cursor:pointer}.ai-class-add button{background:#146f37;color:#fff}.ai-class-list{display:grid;gap:7px;max-height:310px;overflow:auto;padding-right:2px}.ai-class-row{display:grid;grid-template-columns:1fr auto auto;gap:7px;align-items:center}.ai-class-edit{height:38px;font-size:12px}.ai-class-save{height:38px;background:#edf7ef;color:#146f37;border:1px solid #cfe4d4}.ai-class-delete{height:38px;background:#fff1f1;color:#b52e2e;border:1px solid #f0cccc}.ai-class-delete:disabled{opacity:.45;cursor:not-allowed}.ai-class-manager-note{margin-top:10px;color:#839285;font-size:10px;line-height:1.45}.scanner-alt-row{border-bottom:1px solid #eef2f4}.scanner-alt-row:last-child{border-bottom:0}@media(max-width:760px){.ai-scanner-tools{width:100%;justify-content:space-between}.ai-class-manager-head{flex-direction:column;gap:7px}.ai-class-add{grid-template-columns:1fr}.ai-class-add button{width:100%}.ai-class-row{grid-template-columns:1fr auto auto}.ai-class-save,.ai-class-delete{padding:0 9px}}
 
 @media(max-width:760px){
@@ -403,7 +404,6 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   }
 }
 </style>
-
 <style id="pm2v-logo-fix">
   .logo,
   .sidebar-logo,
@@ -418,7 +418,6 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
     overflow: hidden;
   }
 </style>
-
 <style id="pm2v-approval-modal-css">
 #pm2vApprovalModal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}.pm2v-approval-backdrop{position:absolute;inset:0;background:rgba(7,28,59,.48);backdrop-filter:blur(3px)}#pm2vApprovalModal.open{display:flex}.pm2v-approval-card{position:relative;width:min(520px,100%);background:#fff;border-radius:20px;padding:26px;box-shadow:0 22px 70px rgba(7,28,59,.24);z-index:1}.pm2v-approval-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}.pm2v-approval-eyebrow{font-size:10px;letter-spacing:1px;font-weight:800;color:#146f37;margin-bottom:6px}.pm2v-approval-head h2{margin:0;color:#071c3b;font-size:24px}.pm2v-approval-close{border:0;background:#f2f5f7;color:#52677e;border-radius:10px;width:36px;height:36px;font-size:24px;cursor:pointer}.pm2v-approval-person{padding:13px 15px;background:#f4faf5;border:1px solid #dceee0;border-radius:12px;color:#28513a;font-size:13px;font-weight:700;margin-bottom:17px}.pm2v-approval-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.pm2v-approval-card label{display:block;color:#46627e;font-size:12px;font-weight:800}.pm2v-approval-card input,.pm2v-approval-card select{width:100%;height:44px;margin-top:7px;border:1px solid #d8e1e9;border-radius:10px;padding:0 12px;background:#fff;color:#17335a;outline:none}.pm2v-approval-password-label{margin-top:13px}.pm2v-approval-note{margin-top:12px;color:#71849b;font-size:11px;line-height:1.5}.pm2v-approval-error{min-height:18px;margin-top:10px;color:#b42318;font-size:12px;font-weight:700}.pm2v-approval-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:12px}.pm2v-approval-actions button{height:44px;border-radius:10px;padding:0 16px;font-weight:800;cursor:pointer}.pm2v-approval-cancel{border:1px solid #d8e1e9;background:#fff;color:#49617e}.pm2v-approval-confirm{border:0;background:#146f37;color:#fff}@media(max-width:600px){.pm2v-approval-grid{grid-template-columns:1fr}.pm2v-approval-card{padding:20px}}
 
@@ -640,8 +639,6 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   .mobile-menu-item.menu-pos-2-of-2{right:17% !important}
 }
 </style>
-
-
 <style id="pm2v-icon-only-menu">
 @media (max-width:760px){
   .mobile-menu-item{
@@ -666,8 +663,6 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   }
 }
 </style>
-
-
 <style id="pm2v-mobile-menu-polish">
 @media (max-width:760px){
   /* Keep the dashboard present while the menu is open. */
@@ -796,7 +791,6 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   .mobile-menu-item.menu-pos-2-of-2{right:14% !important}
 }
 </style>
-
 <style id="pm2v-bottom-nav-dynamic">
 @media (max-width:760px){
   /* Dynamic role-aware bottom navigation. No center menu button. */
@@ -831,7 +825,6 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   .mobile-nav-btn svg{width:21px !important;height:21px !important}
 }
 </style>
-
 <style id="pm2v-dashboard-stats-compact">
 /* Compact mobile dashboard stats: use the full row instead of leaving a large empty area. */
 @media (max-width:760px){
@@ -879,7 +872,6 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   .dashboard-stat-value{font-size:19px !important}
 }
 </style>
-
 <style id="pm2v-records-mobile-refinement">
 /* Records / Reports mobile refinement: compact summary + denser category breakdown. */
 @media (max-width:760px){
@@ -996,7 +988,6 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   #reports > .role-card{padding-left:11px !important;padding-right:11px !important}
 }
 </style>
-
 <style id="pm2v-reports-10x">
 /* =========================================================
    PM2V REPORTS — MOBILE 10/10 REFINEMENT
@@ -1047,7 +1038,6 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   #reports #categoryReport .role-table tr{padding-left:8px!important;padding-right:8px!important}
 }
 </style>
-
 <style id="pm2v-reports-category-final">
 /* PM2V Reports — final mobile category density + orientation polish */
 @media (max-width:760px){
@@ -1128,7 +1118,6 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   #reports #categoryReport .role-table tr{padding-left:7px!important;padding-right:7px!important}
 }
 </style>
-
 <style id="pm2v-inventory-10x">
 .inventory-summary{display:flex;align-items:center;width:min(430px,100%);margin:-10px 0 18px;background:#fff;border:1px solid #e2ebe5;border-radius:16px;padding:11px 16px;box-shadow:0 3px 12px rgba(23,57,40,.045)}
 .inventory-summary-item{display:flex;align-items:center;justify-content:space-between;gap:18px;flex:1}.inventory-summary-item span{font-size:11px;text-transform:uppercase;letter-spacing:.8px;font-weight:800;color:#789083}.inventory-summary-item strong{font-size:18px;color:#123f27}.inventory-summary-divider{width:1px;height:28px;background:#e6eee8;margin:0 16px}
@@ -1139,7 +1128,6 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 }
 @media(max-width:360px){.ai-workflow span{padding:4px 5px;font-size:8px}.scanner-btn{font-size:11px!important}.scanner-stage{height:195px!important;min-height:195px!important}.scanner-stage video,.scanner-stage img{height:195px!important}}
 </style>
-
 <style id="pm2v-inventory-edit-actions-mobile">
 /* =========================================================
    PM2V INVENTORY EDIT — MOBILE ACTION ROW
@@ -1160,7 +1148,6 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   #inventory .inventory-inline-edit-cell .inventory-write-section{width:100%!important;box-sizing:border-box!important;margin:0!important}
 }
 </style>
-
 <style id="pm2v-transaction-mobile-10x">
 /* =========================================================
    PM2V TRANSACTION HISTORY — MOBILE 10/10 REFINEMENT
@@ -1228,7 +1215,6 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   .tx-mobile-meta{font-size:9.5px}
 }
 </style>
-
 <style id="pm2v26-desktop-refinement">
 /* PM2V(26) — desktop proportion refinement. Mobile remains untouched. */
 @media (min-width:901px){
@@ -1275,7 +1261,6 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   .dashboard-activity .activity-category,.dashboard-activity .activity-status,.dashboard-activity .activity-weight{font-size:11px}
 }
 </style>
-
 <style id="pm2v-staff-inventory-desktop-polish">
 /* Staff desktop Inventory: compact entry workflow + stronger record hierarchy. */
 @media(min-width:761px){
@@ -1317,530 +1302,454 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 </style>
 </head>
 <body class="auth-pending">
-<div id="loginScreen" class="login-screen">
-  <header class="login-header">
-    <div class="login-header-brand"><img src="pm2v-logo.png" alt="PM2V Scrap Trading logo"><span>PM2V Scrap Trading</span></div>
-    <nav class="login-header-nav" aria-label="Public navigation">
-      <a href="#about" data-login-info="about">About Us</a>
-      <a href="#faqs" data-login-info="faqs">FAQs</a>
-      <a href="#privacy" data-login-info="privacy">Privacy</a>
-      <a href="#terms" data-login-info="terms">Terms</a>
-    </nav>
-  </header>
-
-  <div class="login-shell">
-    <section class="login-company">
-      <img class="login-company-logo" src="pm2v-logo.png" alt="PM2V Scrap Trading">
-      <h2>Smart Inventory. Sustainable Future.</h2>
-      <div class="login-company-divider"></div>
-      <p class="login-company-copy">Founded in 2007, we are a trusted partner in waste management in Los Baños, Laguna. Specializing in metal, wood, plastic, and carton scraps.</p>
-      <div class="login-materials" aria-label="Materials handled">
-        <span class="login-material"><i></i>Metal</span>
-        <span class="login-material"><i></i>Plastic</span>
-        <span class="login-material"><i></i>Wood</span>
-        <span class="login-material"><i></i>Paper</span>
-      </div>
-    </section>
-
-    <section class="login-panel">
-      <h1>Welcome Back</h1>
-      <div class="login-panel-subtitle">Sign in to manage your inventory</div>
-      <form id="loginForm" class="login-form">
-        <div class="login-field">
-          <span class="login-field-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <input id="loginEmail" type="email" autocomplete="username" placeholder="Email Address" aria-label="Email Address" required>
-        </div>
-        <div class="login-field">
-          <span class="login-field-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-          <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password" aria-label="Password" required>
-          <button type="button" class="login-password-toggle" id="loginPasswordToggle" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.6" stroke="currentColor" stroke-width="1.8"/></svg></button>
-        </div>
-        <button id="forgotBtn" type="button" class="login-forgot">Forgot password?</button>
-        <button id="loginBtn" class="login-submit" type="submit">Sign In &nbsp;→</button>
-        <div id="loginMessage" class="login-message"></div>
-      </form>
-      <div class="login-protected"><span class="lock">♧</span>Protected by encrypted connection</div>
-      <div class="login-apply">Don't have an account? <button type="button" id="openAccessBtn">Apply for Access</button></div>
-      <div class="login-legal">By signing in, you agree to our <a href="#privacy" data-login-info="privacy">Privacy Policy</a> and <a href="#terms" data-login-info="terms">Terms of Service.</a></div>
-    </section>
-  </div>
+<div class="login-screen" id="loginScreen">
+<div class="pm2v-landing-wrap" id="pm2vLandingWrap">
+<header class="pm2v-landing-header">
+<a aria-label="PM2V Scrap Trading home" class="pm2v-landing-brand" data-landing-target="pm2v-home" href="#pm2v-home"><img alt="PM2V Scrap Trading logo" src="pm2v-logo.png"/><span>PM2V Scrap Trading</span></a>
+<nav aria-label="Public navigation" class="pm2v-landing-nav"><a data-landing-target="pm2v-about" href="#pm2v-about">About</a><a data-landing-target="pm2v-services" href="#pm2v-services">What We Do</a><a data-landing-target="pm2v-materials" href="#pm2v-materials">Materials</a><button class="pm2v-landing-login" id="pm2vOpenLogin" type="button">Login</button></nav>
+</header>
+<main>
+<section class="pm2v-landing-hero" id="pm2v-home"><div><span class="pm2v-landing-eyebrow"><i></i> Smart Scrap Management</span><h1>Smart Inventory.<br/><strong>Sustainable Future.</strong></h1><p>PM2V Scrap Trading combines practical scrap management with a smarter digital inventory system—helping teams track materials, organize physical inventory, and make better day-to-day decisions.</p><div class="pm2v-landing-actions"><button class="pm2v-landing-primary" id="pm2vHeroLogin" type="button">Access PM2V →</button><a class="pm2v-landing-secondary" data-landing-target="pm2v-about" href="#pm2v-about">Learn More</a></div></div><div class="pm2v-landing-visual"><div class="pm2v-landing-visual-card"><img alt="PM2V logo" class="pm2v-landing-logo-large" src="pm2v-logo.png"/><h3>One workspace for scrap inventory</h3><p>Keep material records, physical inventory, and AI-assisted identification connected in one secure portal.</p><div class="pm2v-landing-mini-grid"><div class="pm2v-landing-mini"><b>Inventory</b><span>Track current stock</span></div><div class="pm2v-landing-mini"><b>AI Scanner</b><span>Identify materials</span></div><div class="pm2v-landing-mini"><b>Records</b><span>Keep activity organized</span></div><div class="pm2v-landing-mini"><b>Access</b><span>Role-based workspace</span></div></div></div></div></section>
+<section class="pm2v-landing-section" id="pm2v-about"><div class="pm2v-landing-section-head"><div class="pm2v-landing-kicker">About PM2V</div><h2>Built around real-world scrap operations</h2><p>PM2V Scrap Trading is designed around the practical needs of managing scrap materials—from physical inventory to organized digital records.</p></div><div class="pm2v-landing-cards"><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">01</div><h3>Smart Inventory</h3><p>Keep a clear view of materials currently recorded in your physical inventory.</p></article><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">02</div><h3>Organized Records</h3><p>Bring inventory activity and operational records into one structured workspace.</p></article><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">03</div><h3>AI-Assisted Scanning</h3><p>Use the integrated ScrapScan workflow to help identify materials from photos.</p></article><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">04</div><h3>Controlled Access</h3><p>Role-based accounts keep workspace functions appropriate to each team member.</p></article></div></section>
+<section class="pm2v-landing-section alt" id="pm2v-services"><div class="pm2v-landing-section-head"><div class="pm2v-landing-kicker">What We Do</div><h2>From scrap on the ground to data on screen</h2><p>The public experience introduces PM2V. The secure portal takes your team into the operational tools behind it.</p></div><div class="pm2v-landing-cards"><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">▦</div><h3>Physical Inventory</h3><p>Record, review, and manage the materials currently in your inventory.</p></article><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">✦</div><h3>AI Scrap Scanner</h3><p>Capture or upload a photo and use the configured AI workflow for material identification.</p></article><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">↗</div><h3>Transactions &amp; Reports</h3><p>Authorized team members can work with operational records and reporting tools.</p></article><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">✓</div><h3>Team Access</h3><p>Secure sign-in and role-based access keep internal tools protected.</p></article></div></section>
+<section class="pm2v-landing-section" id="pm2v-materials"><div class="pm2v-landing-section-head"><div class="pm2v-landing-kicker">Materials</div><h2>Designed for the materials you handle</h2><p>Start with broad material categories, then manage the scanner classes from inside the PM2V portal as your operation evolves.</p></div><div class="pm2v-landing-materials"><div class="pm2v-landing-material"><b>Metal</b><span>Steel, aluminum, copper and more</span></div><div class="pm2v-landing-material"><b>Plastic</b><span>Plastic materials and recyclable grades</span></div><div class="pm2v-landing-material"><b>Paper &amp; Cardboard</b><span>Paper-based recyclable materials</span></div><div class="pm2v-landing-material"><b>Wood &amp; Other</b><span>Wood, textiles, e-waste and mixed scrap</span></div></div></section>
+<section class="pm2v-landing-cta"><div><h2>Ready to enter the PM2V workspace?</h2><p>Sign in to access your inventory and authorized operational tools.</p></div><button class="pm2v-landing-primary" id="pm2vCtaLogin" type="button">Login to PM2V →</button></section>
+</main><footer class="pm2v-landing-footer"><span><strong>PM2V Scrap Trading</strong> · Smart Inventory. Sustainable Future.</span><span>© 2026 PM2V Scrap Trading</span></footer>
 </div>
-
-<div id="pm2vAccessModal" aria-hidden="true">
-  <div class="pm2v-access-card" role="dialog" aria-modal="true" aria-labelledby="pm2vAccessTitle">
-    <div class="pm2v-access-head">
-      <div><h2 id="pm2vAccessTitle">Apply for Access</h2><p class="pm2v-access-sub">Submit your application for review</p></div>
-      <button type="button" class="pm2v-access-close" id="closeAccessBtn" aria-label="Close">×</button>
-    </div>
-    <form id="accessForm" class="pm2v-access-form">
-      <label>FULL NAME<input id="accessFullName" type="text" placeholder="Enter your full name" required></label>
-      <label>EMAIL ADDRESS<input id="accessEmail" type="email" placeholder="Enter your email" required></label>
-      <label>REQUESTED ROLE<select id="accessRole" required><option value="" selected disabled>Select a role</option><option value="staff">Staff</option><option value="secretary">Secretary</option></select></label>
-      <div class="pm2v-role-info"><strong>Staff</strong> — Manage daily collection logs and view physical inventory.<br><br><strong>Secretary</strong> — Handle transactions, generate reports, and manage inventory records.</div>
-      <div id="accessMessage" class="pm2v-access-msg"></div>
-      <button type="submit" class="pm2v-access-submit" id="accessSubmitBtn">Submit Application</button>
-    </form>
-  </div>
+<div aria-hidden="true" class="pm2v-login-modal" id="pm2vLoginModal"><div aria-labelledby="pm2vLoginTitle" aria-modal="true" class="pm2v-login-modal-card" role="dialog"><button aria-label="Close login" class="pm2v-login-modal-close" id="pm2vCloseLogin" type="button">×</button><section class="login-panel"><h1 id="pm2vLoginTitle">Welcome Back</h1><div class="login-panel-subtitle">Sign in to manage your inventory</div><form class="login-form" id="loginForm"><div class="login-field"><span aria-hidden="true" class="login-field-icon"><svg fill="none" viewbox="0 0 24 24"><rect height="14" rx="2" stroke="currentColor" stroke-width="1.8" width="18" x="3" y="5"></rect><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg></span><input aria-label="Email Address" autocomplete="username" id="loginEmail" placeholder="Email Address" required="" type="email"/></div><div class="login-field"><span aria-hidden="true" class="login-field-icon"><svg fill="none" viewbox="0 0 24 24"><rect height="10" rx="2" stroke="currentColor" stroke-width="1.8" width="14" x="5" y="10"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"></path></svg></span><input aria-label="Password" autocomplete="current-password" id="loginPassword" placeholder="Password" required="" type="password"/><button aria-label="Show password" class="login-password-toggle" id="loginPasswordToggle" type="button"><svg fill="none" viewbox="0 0 24 24"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" stroke="currentColor" stroke-width="1.8"></path><circle cx="12" cy="12" r="2.6" stroke="currentColor" stroke-width="1.8"></circle></svg></button></div><button class="login-forgot" id="forgotBtn" type="button">Forgot password?</button><button class="login-submit" id="loginBtn" type="submit">Sign In →</button><div class="login-message" id="loginMessage"></div></form><div class="login-protected"><span class="lock">♧</span> Protected by encrypted connection</div><div class="login-apply">Don't have an account? <button id="openAccessBtn" type="button">Apply for Access</button></div><div class="login-legal">By signing in, you agree to your organization's access policies.</div></section></div></div>
 </div>
-
+<div aria-hidden="true" id="pm2vAccessModal">
+<div aria-labelledby="pm2vAccessTitle" aria-modal="true" class="pm2v-access-card" role="dialog">
+<div class="pm2v-access-head">
+<div><h2 id="pm2vAccessTitle">Apply for Access</h2><p class="pm2v-access-sub">Submit your application for review</p></div>
+<button aria-label="Close" class="pm2v-access-close" id="closeAccessBtn" type="button">×</button>
+</div>
+<form class="pm2v-access-form" id="accessForm">
+<label>FULL NAME<input id="accessFullName" placeholder="Enter your full name" required="" type="text"/></label>
+<label>EMAIL ADDRESS<input id="accessEmail" placeholder="Enter your email" required="" type="email"/></label>
+<label>REQUESTED ROLE<select id="accessRole" required=""><option disabled="" selected="" value="">Select a role</option><option value="staff">Staff</option><option value="secretary">Secretary</option></select></label>
+<div class="pm2v-role-info"><strong>Staff</strong> — Manage daily collection logs and view physical inventory.<br/><br/><strong>Secretary</strong> — Handle transactions, generate reports, and manage inventory records.</div>
+<div class="pm2v-access-msg" id="accessMessage"></div>
+<button class="pm2v-access-submit" id="accessSubmitBtn" type="submit">Submit Application</button>
+</form>
+</div>
+</div>
 <div class="auth-loading" id="authLoading"><div class="auth-loading-card"><div class="auth-loading-spinner"></div><strong>Checking your PM2V account…</strong></div></div>
 <div class="app">
-
 <aside class="sidebar">
-  <div class="logo-wrap"><img src="pm2v-logo.png" class="logo" alt="PM2V Scrap Trading"></div>
-
-  <div class="user-card">
-    <div class="avatar">N</div>
-    <div class="user-text"><div class="user-name">Nando Reyes</div><div class="user-role">Staff</div></div>
-  </div>
-
-  <nav class="nav">
-    <div class="nav-group-label">Workspace</div>
-    <a href="#" data-page="dashboard"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/></svg></span>Dashboard</a>
-    <a href="#" data-page="inventory"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 20 7.5v9L12 21l-8-4.5v-9L12 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m4.5 7.5 7.5 4.25 7.5-4.25M12 11.75V21" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>Physical Inventory</a>
-    <a href="#" data-page="transactions" class="role-secretary-owner"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3h9l3 3v15H6V3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M15 3v4h4M9 11h6M9 15h6M9 19h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>Transactions</a>
-    <a href="#" data-page="reports" class="role-secretary-owner"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="m4 8 6-4 6 5 6-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Reports</a>
-    <a href="#" data-page="users" class="role-only role-owner"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="2"/><path d="M3 20c.7-3.1 2.7-5 6-5s5.3 1.9 6 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="9" r="2.3" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.2c2.5.3 4.1 1.9 4.5 4.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>User Management</a>
-    <div class="nav-group-label account-label">Account</div>
-    <a href="#" data-page="profile"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="2"/><path d="M4.5 21c.8-4.1 3.2-6.5 7.5-6.5s6.7 2.4 7.5 6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>Profile</a>
-  </nav>
-
-  <div class="logout"><a href="#"><span>↪</span>Logout</a></div>
-</aside>
-
-<main class="main">
-<div class="mobile-app-header" aria-label="PM2V mobile header">
-  <div class="mobile-header-brand">
-    <img src="pm2v-logo.png" class="mobile-header-logo" alt="PM2V">
-    <div class="mobile-header-copy">
-      <div class="mobile-header-kicker">PM2V Scrap Trading</div>
-      <div class="mobile-header-title" id="mobilePageTitle">Dashboard</div>
-    </div>
-  </div>
+<div class="logo-wrap"><img alt="PM2V Scrap Trading" class="logo" src="pm2v-logo.png"/></div>
+<div class="user-card">
+<div class="avatar">N</div>
+<div class="user-text"><div class="user-name">Nando Reyes</div><div class="user-role">Staff</div></div>
 </div>
-
-
+<nav class="nav">
+<div class="nav-group-label">Workspace</div>
+<a data-page="dashboard" href="#"><span aria-hidden="true" class="nav-icon"><svg fill="none" viewbox="0 0 24 24"><rect height="7" rx="1.5" stroke="currentColor" stroke-width="2" width="7" x="3" y="3"></rect><rect height="7" rx="1.5" stroke="currentColor" stroke-width="2" width="7" x="14" y="3"></rect><rect height="7" rx="1.5" stroke="currentColor" stroke-width="2" width="7" x="3" y="14"></rect><rect height="7" rx="1.5" stroke="currentColor" stroke-width="2" width="7" x="14" y="14"></rect></svg></span>Dashboard</a>
+<a data-page="inventory" href="#"><span aria-hidden="true" class="nav-icon"><svg fill="none" viewbox="0 0 24 24"><path d="M12 3 20 7.5v9L12 21l-8-4.5v-9L12 3Z" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path><path d="m4.5 7.5 7.5 4.25 7.5-4.25M12 11.75V21" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg></span>Physical Inventory</a>
+<a class="role-secretary-owner" data-page="transactions" href="#"><span aria-hidden="true" class="nav-icon"><svg fill="none" viewbox="0 0 24 24"><path d="M6 3h9l3 3v15H6V3Z" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path><path d="M15 3v4h4M9 11h6M9 15h6M9 19h4" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg></span>Transactions</a>
+<a class="role-secretary-owner" data-page="reports" href="#"><span aria-hidden="true" class="nav-icon"><svg fill="none" viewbox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path><path d="m4 8 6-4 6 5 6-5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></span>Reports</a>
+<a class="role-only role-owner" data-page="users" href="#"><span aria-hidden="true" class="nav-icon"><svg fill="none" viewbox="0 0 24 24"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="2"></circle><path d="M3 20c.7-3.1 2.7-5 6-5s5.3 1.9 6 5" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path><circle cx="17" cy="9" r="2.3" stroke="currentColor" stroke-width="2"></circle><path d="M15.5 15.2c2.5.3 4.1 1.9 4.5 4.8" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg></span>User Management</a>
+<div class="nav-group-label account-label">Account</div>
+<a data-page="profile" href="#"><span aria-hidden="true" class="nav-icon"><svg fill="none" viewbox="0 0 24 24"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="2"></circle><path d="M4.5 21c.8-4.1 3.2-6.5 7.5-6.5s6.7 2.4 7.5 6.5" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg></span>Profile</a>
+</nav>
+<div class="logout"><a href="#"><span>↪</span>Logout</a></div>
+</aside>
+<main class="main">
+<div aria-label="PM2V mobile header" class="mobile-app-header">
+<div class="mobile-header-brand">
+<img alt="PM2V" class="mobile-header-logo" src="pm2v-logo.png"/>
+<div class="mobile-header-copy">
+<div class="mobile-header-kicker">PM2V Scrap Trading</div>
+<div class="mobile-header-title" id="mobilePageTitle">Dashboard</div>
+</div>
+</div>
+</div>
 <!-- DASHBOARD -->
-<section id="dashboard" class="page active">
-  <div class="topbar dashboard-topbar">
-    <div>
-      <h1>Dashboard</h1>
-      <div class="subtitle">Welcome back! Here's your inventory overview.</div>
-    </div>
-    <div class="date">▣ &nbsp; Tuesday, August 18, 2026 <span class="sep">|</span> ◷ &nbsp;05:26 PM</div>
-  </div>
-
-  <section class="dashboard-stats">
-    <div class="dashboard-stat">
-      <div class="dashboard-stat-icon">⬡</div>
-      <div>
-        <div class="dashboard-stat-label">Total Items</div>
-        <div class="dashboard-stat-value" id="dashTotalItems">0</div>
-      </div>
-    </div>
-    <div class="dashboard-stat">
-      <div class="dashboard-stat-icon">☷</div>
-      <div>
-        <div class="dashboard-stat-label">Categories</div>
-        <div class="dashboard-stat-value" id="dashCategories">0</div>
-      </div>
-    </div>
-    <div class="dashboard-stat">
-      <div class="dashboard-stat-icon">✓</div>
-      <div>
-        <div class="dashboard-stat-label">Active Items</div>
-        <div class="dashboard-stat-value" id="dashActiveItems">0</div>
-      </div>
-    </div>
-  </section>
-
-  <section class="dashboard-card">
-    <div class="dashboard-card-head">
-      <div class="dashboard-card-title">
-        <span class="dashboard-card-icon">▣</span>
+<section class="page active" id="dashboard">
+<div class="topbar dashboard-topbar">
+<div>
+<h1>Dashboard</h1>
+<div class="subtitle">Welcome back! Here's your inventory overview.</div>
+</div>
+<div class="date">▣   Tuesday, August 18, 2026 <span class="sep">|</span> ◷  05:26 PM</div>
+</div>
+<section class="dashboard-stats">
+<div class="dashboard-stat">
+<div class="dashboard-stat-icon">⬡</div>
+<div>
+<div class="dashboard-stat-label">Total Items</div>
+<div class="dashboard-stat-value" id="dashTotalItems">0</div>
+</div>
+</div>
+<div class="dashboard-stat">
+<div class="dashboard-stat-icon">☷</div>
+<div>
+<div class="dashboard-stat-label">Categories</div>
+<div class="dashboard-stat-value" id="dashCategories">0</div>
+</div>
+</div>
+<div class="dashboard-stat">
+<div class="dashboard-stat-icon">✓</div>
+<div>
+<div class="dashboard-stat-label">Active Items</div>
+<div class="dashboard-stat-value" id="dashActiveItems">0</div>
+</div>
+</div>
+</section>
+<section class="dashboard-card">
+<div class="dashboard-card-head">
+<div class="dashboard-card-title">
+<span class="dashboard-card-icon">▣</span>
         Current Inventory
       </div>
-      <a href="#inventory" class="dashboard-view-all" data-dashboard-inventory>View All <span class="arrow">›</span></a>
-    </div>
-
-    <div class="dashboard-table-wrap">
-      <table class="dashboard-table">
-        <thead>
-          <tr>
-            <th>ITEM NAME</th>
-            <th>CATEGORY</th>
-            <th>WEIGHT (KG)</th>
-            <th>STATUS</th>
-            <th>LAST UPDATED</th>
-          </tr>
-        </thead>
-        <tbody id="dashboardInventoryBody"><tr><td colspan="5" style="text-align:center;color:#98a8ba">Loading inventory…</td></tr></tbody>
-      </table>
-    </div>
-  </section>
-
-  <section class="dashboard-card dashboard-activity">
-    <div class="dashboard-card-head">
-      <div class="dashboard-card-title">
-        <span class="dashboard-card-icon">◷</span>
+<a class="dashboard-view-all" data-dashboard-inventory="" href="#inventory">View All <span class="arrow">›</span></a>
+</div>
+<div class="dashboard-table-wrap">
+<table class="dashboard-table">
+<thead>
+<tr>
+<th>ITEM NAME</th>
+<th>CATEGORY</th>
+<th>WEIGHT (KG)</th>
+<th>STATUS</th>
+<th>LAST UPDATED</th>
+</tr>
+</thead>
+<tbody id="dashboardInventoryBody"><tr><td colspan="5" style="text-align:center;color:#98a8ba">Loading inventory…</td></tr></tbody>
+</table>
+</div>
+</section>
+<section class="dashboard-card dashboard-activity">
+<div class="dashboard-card-head">
+<div class="dashboard-card-title">
+<span class="dashboard-card-icon">◷</span>
         Recent Activity
       </div>
-    </div>
-
-    <div class="activity-row">
-      <div>
-        <div class="activity-name">Panggatong</div>
-        <div class="activity-category">Wood</div>
-      </div>
-      <div class="activity-right">
-        <span class="activity-weight">0 kg</span>
-        <span class="activity-status">Updated</span>
-      </div>
-    </div>
-
-    <div class="activity-row">
-      <div>
-        <div class="activity-name">Wooden Pallets</div>
-        <div class="activity-category">Wood</div>
-      </div>
-      <div class="activity-right">
-        <span class="activity-weight">10 kg</span>
-        <span class="activity-status">Updated</span>
-      </div>
-    </div>
-
-    <div class="activity-row">
-      <div>
-        <div class="activity-name">Wooden Pallets</div>
-        <div class="activity-category">Wood</div>
-      </div>
-      <div class="activity-right">
-        <span class="activity-weight">0 kg</span>
-        <span class="activity-status">Updated</span>
-      </div>
-    </div>
-  </section>
+</div>
+<div class="activity-row">
+<div>
+<div class="activity-name">Panggatong</div>
+<div class="activity-category">Wood</div>
+</div>
+<div class="activity-right">
+<span class="activity-weight">0 kg</span>
+<span class="activity-status">Updated</span>
+</div>
+</div>
+<div class="activity-row">
+<div>
+<div class="activity-name">Wooden Pallets</div>
+<div class="activity-category">Wood</div>
+</div>
+<div class="activity-right">
+<span class="activity-weight">10 kg</span>
+<span class="activity-status">Updated</span>
+</div>
+</div>
+<div class="activity-row">
+<div>
+<div class="activity-name">Wooden Pallets</div>
+<div class="activity-category">Wood</div>
+</div>
+<div class="activity-right">
+<span class="activity-weight">0 kg</span>
+<span class="activity-status">Updated</span>
+</div>
+</div>
 </section>
-
+</section>
 <!-- PHYSICAL INVENTORY -->
-<section id="inventory" class="page">
-  <div class="topbar">
-    <div><h1>Physical Inventory</h1><div class="subtitle">Scan scrap, confirm the result, and add it to inventory.</div></div>
-    <div class="date">Tuesday, August 18, 2026 <span class="sep">|</span> 05:11:45 PM</div>
-  </div>
-
-  <div class="inventory-summary" aria-label="Inventory summary">
-    <div class="inventory-summary-item"><span>Items</span><strong id="inventorySummaryCount">0</strong></div>
-    <div class="inventory-summary-divider"></div>
-    <div class="inventory-summary-item"><span>Total Weight</span><strong id="inventorySummaryWeight">0 kg</strong></div>
-  </div>
-
-  <div class="filters">
-    <button class="filter active">All</button><button class="filter">Metal</button><button class="filter">Wood</button>
-    <button class="filter">Plastic</button><button class="filter">Paper</button><button class="filter">Fiber</button>
-  </div>
-
-  <section class="ai-scanner" id="aiScannerSection">
-    <div class="ai-scanner-head">
-      <div>
-        <h2 class="section-title">AI Scrap Classifier <span class="badge">MUSE SPARK 1.1</span></h2>
-        <div class="subtitle" style="margin-top:8px;font-size:13px">Upload or capture a scrap image, then let the ScrapScan workflow classify the material.</div>
-      </div>
-      <div class="ai-scanner-head-right">
-        <div class="ai-workflow"><span class="ai-workflow-step active">1 Scan</span><span>2 Confirm</span><span>3 Save</span></div>
-        <div class="ai-scanner-tools">
-          <button type="button" class="ai-class-manager-btn" id="aiClassManagerBtn" aria-expanded="false">Manage Classes</button>
-          <div class="ai-mode" id="aiMode"><span class="ai-mode-dot"></span><span id="aiModeText">Ready</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="scanner-guidance"><span class="scanner-guidance-icon">✦</span><div><strong>Start with a clear photo</strong><span>Center the scrap in the frame for a better classification.</span></div></div>
-
-    <div class="ai-class-manager" id="aiClassManager">
-      <div class="ai-class-manager-head">
-        <div><strong>Scanner Classes</strong><span>Add, edit, or delete the classes the AI scanner is allowed to identify.</span></div>
-        <span class="ai-class-count" id="aiClassCount">0 classes</span>
-      </div>
-      <div class="ai-class-add">
-        <input id="aiClassInput" type="text" maxlength="80" placeholder="e.g. Copper Wire">
-        <button type="button" id="aiAddClassBtn">Add Class</button>
-      </div>
-      <div class="ai-class-list" id="aiClassList"></div>
-      <div class="ai-class-manager-note">Changes are saved in this browser and used on the next AI scan. They are also sent to the Roboflow workflow as the current class list.</div>
-    </div>
-
-    <div class="scanner-actions">
-      <button type="button" class="scanner-btn scanner-upload" id="aiUploadBtn">
+<section class="page" id="inventory">
+<div class="topbar">
+<div><h1>Physical Inventory</h1><div class="subtitle">Scan scrap, confirm the result, and add it to inventory.</div></div>
+<div class="date">Tuesday, August 18, 2026 <span class="sep">|</span> 05:11:45 PM</div>
+</div>
+<div aria-label="Inventory summary" class="inventory-summary">
+<div class="inventory-summary-item"><span>Items</span><strong id="inventorySummaryCount">0</strong></div>
+<div class="inventory-summary-divider"></div>
+<div class="inventory-summary-item"><span>Total Weight</span><strong id="inventorySummaryWeight">0 kg</strong></div>
+</div>
+<div class="filters">
+<button class="filter active">All</button><button class="filter">Metal</button><button class="filter">Wood</button>
+<button class="filter">Plastic</button><button class="filter">Paper</button><button class="filter">Fiber</button>
+</div>
+<section class="ai-scanner" id="aiScannerSection">
+<div class="ai-scanner-head">
+<div>
+<h2 class="section-title">AI Scrap Classifier <span class="badge">MUSE SPARK 1.1</span></h2>
+<div class="subtitle" style="margin-top:8px;font-size:13px">Upload or capture a scrap image, then let the ScrapScan workflow classify the material.</div>
+</div>
+<div class="ai-scanner-head-right">
+<div class="ai-workflow"><span class="ai-workflow-step active">1 Scan</span><span>2 Confirm</span><span>3 Save</span></div>
+<div class="ai-scanner-tools">
+<button aria-expanded="false" class="ai-class-manager-btn" id="aiClassManagerBtn" type="button">Manage Classes</button>
+<div class="ai-mode" id="aiMode"><span class="ai-mode-dot"></span><span id="aiModeText">Ready</span></div>
+</div>
+</div>
+</div>
+<div class="scanner-guidance"><span class="scanner-guidance-icon">✦</span><div><strong>Start with a clear photo</strong><span>Center the scrap in the frame for a better classification.</span></div></div>
+<div class="ai-class-manager" id="aiClassManager">
+<div class="ai-class-manager-head">
+<div><strong>Scanner Classes</strong><span>Add, edit, or delete the classes the AI scanner is allowed to identify.</span></div>
+<span class="ai-class-count" id="aiClassCount">0 classes</span>
+</div>
+<div class="ai-class-add">
+<input id="aiClassInput" maxlength="80" placeholder="e.g. Copper Wire" type="text"/>
+<button id="aiAddClassBtn" type="button">Add Class</button>
+</div>
+<div class="ai-class-list" id="aiClassList"></div>
+<div class="ai-class-manager-note">Changes are saved in this browser and used on the next AI scan. They are also sent to the Roboflow workflow as the current class list.</div>
+</div>
+<div class="scanner-actions">
+<button class="scanner-btn scanner-upload" id="aiUploadBtn" type="button">
         Upload Image
-        <input id="aiFileInput" class="scanner-file" type="file" accept="image/*" capture="environment">
-      </button>
-      <button type="button" class="scanner-btn scanner-camera" id="aiCameraBtn">Take Photo</button>
-      <button type="button" class="scanner-btn scanner-scan" id="aiScanBtn" disabled>Classify with AI</button>
-    </div>
-
-    <div class="scanner-stage" id="aiStage">
-      <video id="aiVideo" autoplay playsinline muted></video>
-      <img id="aiPreview" alt="Selected scrap image">
-      <div class="scanner-placeholder" id="aiPlaceholder">
-        <div class="scanner-placeholder-icon">▣</div>
-        <strong>Camera or image ready</strong>
-        <span>Choose Upload Image or Take Photo to begin.</span>
-      </div>
-      <div class="scanner-status" id="aiStatus">
-        <span class="scanner-status-pill" id="aiCameraStatus">Image ready</span>
-        <span class="scanner-status-pill">Keep the scrap inside the frame</span>
-      </div>
-    </div>
-
-    <div class="scanner-result" id="aiResult">
-      <div class="scanner-result-top">
-        <div>
-          <div class="scanner-result-label">Detected material</div>
-          <div class="scanner-material" id="aiMaterial">Unknown</div>
-        </div>
-        <div class="scanner-confidence" id="aiConfidence">0%</div>
-      </div>
-      <div class="scanner-bar"><i id="aiConfidenceBar"></i></div>
-      <div class="scanner-description" id="aiDescription"></div>
-      <div class="scanner-meta">
-        <div class="scanner-meta-box"><span>Scrap</span><strong id="aiIsScrap">—</strong></div>
-        <div class="scanner-meta-box"><span>Condition</span><strong id="aiCondition">Detected</strong></div>
-      </div>
-      <div class="scanner-alts" id="aiAlternativesBox" style="display:none">
-        <div class="scanner-alts-title">Other classifications</div>
-        <div id="aiAlternatives"></div>
-      </div>
-      <button type="button" class="scanner-apply" id="aiApplyBtn">Use Result in Inventory Form</button>
-    </div>
-
-    <div class="scanner-error" id="aiError"></div>
-    <div class="scanner-note">
+        <input accept="image/*" capture="environment" class="scanner-file" id="aiFileInput" type="file"/>
+</button>
+<button class="scanner-btn scanner-camera" id="aiCameraBtn" type="button">Take Photo</button>
+<button class="scanner-btn scanner-scan" disabled="" id="aiScanBtn" type="button">Classify with AI</button>
+</div>
+<div class="scanner-stage" id="aiStage">
+<video autoplay="" id="aiVideo" muted="" playsinline=""></video>
+<img alt="Selected scrap image" id="aiPreview"/>
+<div class="scanner-placeholder" id="aiPlaceholder">
+<div class="scanner-placeholder-icon">▣</div>
+<strong>Camera or image ready</strong>
+<span>Choose Upload Image or Take Photo to begin.</span>
+</div>
+<div class="scanner-status" id="aiStatus">
+<span class="scanner-status-pill" id="aiCameraStatus">Image ready</span>
+<span class="scanner-status-pill">Keep the scrap inside the frame</span>
+</div>
+</div>
+<div class="scanner-result" id="aiResult">
+<div class="scanner-result-top">
+<div>
+<div class="scanner-result-label">Detected material</div>
+<div class="scanner-material" id="aiMaterial">Unknown</div>
+</div>
+<div class="scanner-confidence" id="aiConfidence">0%</div>
+</div>
+<div class="scanner-bar"><i id="aiConfidenceBar"></i></div>
+<div class="scanner-description" id="aiDescription"></div>
+<div class="scanner-meta">
+<div class="scanner-meta-box"><span>Scrap</span><strong id="aiIsScrap">—</strong></div>
+<div class="scanner-meta-box"><span>Condition</span><strong id="aiCondition">Detected</strong></div>
+</div>
+<div class="scanner-alts" id="aiAlternativesBox" style="display:none">
+<div class="scanner-alts-title">Other classifications</div>
+<div id="aiAlternatives"></div>
+</div>
+<button class="scanner-apply" id="aiApplyBtn" type="button">Use Result in Inventory Form</button>
+</div>
+<div class="scanner-error" id="aiError"></div>
+<div class="scanner-note">
       AI classification uses the ScrapScan Muse Spark 1.1 workflow. The app first tries the local <b>/api/roboflow</b> proxy used by ScrapScan; if it is unavailable, it can use the configured Roboflow workflow directly.
     </div>
-  </section>
-
-  <button type="button" class="manual-entry-toggle role-staff-only" id="manualEntryToggle" aria-expanded="false">
-    <span><b>Manual Entry</b><small>Use this if AI classification is unavailable.</small></span><span class="manual-entry-chevron">⌄</span>
-  </button>
-
-  <section id="inventoryWriteSection" class="inventory-write-section manual-entry-collapsed">
-    <div class="manual-entry-head">
-      <div><h2 class="add-title" id="inventoryFormTitle">Add Inventory Item</h2><p>Review the AI result or enter the item manually.</p></div>
-    </div>
-    <div class="form-grid-inventory">
-      <div><label>Item Name</label><input id="inventoryItemName" placeholder="e.g. Aluminum Cans"></div>
-      <div><label>Category</label><select id="inventoryCategory"><option>Metal</option><option>Wood</option><option>Plastic</option><option>Paper</option><option>Fiber</option></select></div>
-      <div><label>Weight (kg)</label><input id="inventoryWeight" placeholder="0.00" type="number" step="0.01"></div>
-      <div><label>Condition</label><select id="inventoryCondition"><option>Good</option><option>Fair</option><option>Poor</option></select></div>
-    </div>
-    <div class="inventory-form-actions">
-      <button type="button" class="inventory-cancel" id="cancelInventoryEditBtn" style="display:none">Cancel</button>
-      <button type="button" class="save" id="saveInventoryBtn">Save Item to Inventory</button>
-    </div>
-  </section>
-
-  <div class="current-inventory-heading"><div><h2>Current Inventory</h2><p>Saved inventory records and their latest details.</p></div><span id="inventoryRecordCount">0 records</span></div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>ITEM NAME</th><th>CATEGORY</th><th>WEIGHT</th><th>CONDITION</th><th>LAST UPDATED</th><th id="inventoryActionsHeader" style="display:none">ACTIONS</th></tr></thead>
-      <tbody id="inventoryTableBody"><tr><td colspan="6" class="empty">Loading inventory…</td></tr></tbody>
-    </table>
-  </div>
 </section>
-
+<button aria-expanded="false" class="manual-entry-toggle role-staff-only" id="manualEntryToggle" type="button">
+<span><b>Manual Entry</b><small>Use this if AI classification is unavailable.</small></span><span class="manual-entry-chevron">⌄</span>
+</button>
+<section class="inventory-write-section manual-entry-collapsed" id="inventoryWriteSection">
+<div class="manual-entry-head">
+<div><h2 class="add-title" id="inventoryFormTitle">Add Inventory Item</h2><p>Review the AI result or enter the item manually.</p></div>
+</div>
+<div class="form-grid-inventory">
+<div><label>Item Name</label><input id="inventoryItemName" placeholder="e.g. Aluminum Cans"/></div>
+<div><label>Category</label><select id="inventoryCategory"><option>Metal</option><option>Wood</option><option>Plastic</option><option>Paper</option><option>Fiber</option></select></div>
+<div><label>Weight (kg)</label><input id="inventoryWeight" placeholder="0.00" step="0.01" type="number"/></div>
+<div><label>Condition</label><select id="inventoryCondition"><option>Good</option><option>Fair</option><option>Poor</option></select></div>
+</div>
+<div class="inventory-form-actions">
+<button class="inventory-cancel" id="cancelInventoryEditBtn" style="display:none" type="button">Cancel</button>
+<button class="save" id="saveInventoryBtn" type="button">Save Item to Inventory</button>
+</div>
+</section>
+<div class="current-inventory-heading"><div><h2>Current Inventory</h2><p>Saved inventory records and their latest details.</p></div><span id="inventoryRecordCount">0 records</span></div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>ITEM NAME</th><th>CATEGORY</th><th>WEIGHT</th><th>CONDITION</th><th>LAST UPDATED</th><th id="inventoryActionsHeader" style="display:none">ACTIONS</th></tr></thead>
+<tbody id="inventoryTableBody"><tr><td class="empty" colspan="6">Loading inventory…</td></tr></tbody>
+</table>
+</div>
+</section>
 <!-- TRANSACTIONS: SECRETARY + OWNER -->
-<section id="transactions" class="page role-secretary-owner">
-  <div class="topbar">
-    <div><h1>Transactions</h1><div class="subtitle">Record and review scrap trading transactions.</div></div>
-    <div class="date" id="transactionsDate"></div>
-  </div>
-  <section class="role-card" style="margin-bottom:18px">
-    <h2 class="card-title">Record Transaction</h2>
-    <div class="role-form">
-      <input id="txItem" placeholder="Item / Material">
-      <select id="txType"><option value="sale">Sale</option><option value="collection">Collection</option></select>
-      <input id="txCategory" placeholder="Category">
-      <input id="txWeight" type="number" step="0.01" placeholder="Weight (kg)">
-      <input id="txParty" placeholder="Buyer / Supplier">
-      <input id="txAmount" type="number" step="0.01" placeholder="Amount">
-      <input id="txNotes" placeholder="Notes">
-      <button id="txSave">Save Transaction</button>
-    </div>
-  </section>
-  <section class="role-card tx-history-card">
-    <div class="dashboard-card-head tx-history-head">
-      <div>
-        <div class="dashboard-card-title">Transaction History</div>
-        <div class="tx-history-count" id="txHistoryCount">0 recorded transactions</div>
-      </div>
-      <button class="role-btn primary tx-refresh-btn" id="txRefresh" type="button">↻ Refresh</button>
-    </div>
-
-    <div class="tx-history-tools">
-      <label class="tx-search-wrap" aria-label="Search transactions">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.2 16.2 4.2 4.2"/></svg>
-        <input id="txSearch" type="search" placeholder="Search transactions..." autocomplete="off">
-      </label>
-      <div class="tx-filter-row" role="group" aria-label="Transaction type filter">
-        <button type="button" class="tx-filter active" data-tx-filter="all">All</button>
-        <button type="button" class="tx-filter" data-tx-filter="sale">Sale</button>
-        <button type="button" class="tx-filter" data-tx-filter="collection">Collection</button>
-      </div>
-    </div>
-
-    <div class="tx-mobile-list" id="txMobileList" aria-live="polite">
-      <div class="tx-empty-state">Loading transactions…</div>
-    </div>
-
-    <div class="tx-desktop-table" style="overflow:auto">
-      <table class="role-table"><thead><tr><th>DATE</th><th>TYPE</th><th>ITEM</th><th>CATEGORY</th><th>WEIGHT</th><th>PARTY</th><th>AMOUNT</th><th>STATUS</th></tr></thead>
-      <tbody id="txBody"><tr><td colspan="8" class="empty-role">Loading transactions…</td></tr></tbody></table>
-    </div>
-  </section>
+<section class="page role-secretary-owner" id="transactions">
+<div class="topbar">
+<div><h1>Transactions</h1><div class="subtitle">Record and review scrap trading transactions.</div></div>
+<div class="date" id="transactionsDate"></div>
+</div>
+<section class="role-card" style="margin-bottom:18px">
+<h2 class="card-title">Record Transaction</h2>
+<div class="role-form">
+<input id="txItem" placeholder="Item / Material"/>
+<select id="txType"><option value="sale">Sale</option><option value="collection">Collection</option></select>
+<input id="txCategory" placeholder="Category"/>
+<input id="txWeight" placeholder="Weight (kg)" step="0.01" type="number"/>
+<input id="txParty" placeholder="Buyer / Supplier"/>
+<input id="txAmount" placeholder="Amount" step="0.01" type="number"/>
+<input id="txNotes" placeholder="Notes"/>
+<button id="txSave">Save Transaction</button>
+</div>
 </section>
-
+<section class="role-card tx-history-card">
+<div class="dashboard-card-head tx-history-head">
+<div>
+<div class="dashboard-card-title">Transaction History</div>
+<div class="tx-history-count" id="txHistoryCount">0 recorded transactions</div>
+</div>
+<button class="role-btn primary tx-refresh-btn" id="txRefresh" type="button">↻ Refresh</button>
+</div>
+<div class="tx-history-tools">
+<label aria-label="Search transactions" class="tx-search-wrap">
+<svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m16.2 16.2 4.2 4.2"></path></svg>
+<input autocomplete="off" id="txSearch" placeholder="Search transactions..." type="search"/>
+</label>
+<div aria-label="Transaction type filter" class="tx-filter-row" role="group">
+<button class="tx-filter active" data-tx-filter="all" type="button">All</button>
+<button class="tx-filter" data-tx-filter="sale" type="button">Sale</button>
+<button class="tx-filter" data-tx-filter="collection" type="button">Collection</button>
+</div>
+</div>
+<div aria-live="polite" class="tx-mobile-list" id="txMobileList">
+<div class="tx-empty-state">Loading transactions…</div>
+</div>
+<div class="tx-desktop-table" style="overflow:auto">
+<table class="role-table"><thead><tr><th>DATE</th><th>TYPE</th><th>ITEM</th><th>CATEGORY</th><th>WEIGHT</th><th>PARTY</th><th>AMOUNT</th><th>STATUS</th></tr></thead>
+<tbody id="txBody"><tr><td class="empty-role" colspan="8">Loading transactions…</td></tr></tbody></table>
+</div>
+</section>
+</section>
 <!-- REPORTS: SECRETARY + OWNER -->
-<section id="reports" class="page role-secretary-owner">
-  <div class="topbar">
-    <div><h1>Reports</h1><div class="subtitle">Inventory and transaction overview.</div></div>
-    <div class="date" id="reportsDate"></div>
-  </div>
-  <div class="report-grid">
-    <div class="role-card"><h3>Total Items</h3><div class="big" id="rTotal">0</div><div class="muted">Inventory records</div></div>
-    <div class="role-card"><h3>Available</h3><div class="big" id="rAvailable">0</div><div class="muted">Active inventory</div></div>
-    <div class="role-card"><h3>Transactions</h3><div class="big" id="rTransactions">0</div><div class="muted">Recorded transactions</div></div>
-    <div class="role-card"><h3>Total Weight</h3><div class="big" id="rWeight">0 kg</div><div class="muted">Current inventory weight</div></div>
-  </div>
-  <section class="role-card report-category-card" style="margin-top:18px">
-    <div class="report-category-head">
-      <div>
-        <h2 class="card-title">Category Breakdown</h2>
-        <div class="report-category-subtitle">Inventory mix by item count and weight.</div>
-      </div>
-    </div>
-    <div id="categoryReport" class="role-table-wrap"><table class="role-table"><thead><tr><th>CATEGORY</th><th>ITEMS</th><th>WEIGHT</th></tr></thead><tbody id="categoryReportBody"></tbody></table></div>
-  </section>
+<section class="page role-secretary-owner" id="reports">
+<div class="topbar">
+<div><h1>Reports</h1><div class="subtitle">Inventory and transaction overview.</div></div>
+<div class="date" id="reportsDate"></div>
+</div>
+<div class="report-grid">
+<div class="role-card"><h3>Total Items</h3><div class="big" id="rTotal">0</div><div class="muted">Inventory records</div></div>
+<div class="role-card"><h3>Available</h3><div class="big" id="rAvailable">0</div><div class="muted">Active inventory</div></div>
+<div class="role-card"><h3>Transactions</h3><div class="big" id="rTransactions">0</div><div class="muted">Recorded transactions</div></div>
+<div class="role-card"><h3>Total Weight</h3><div class="big" id="rWeight">0 kg</div><div class="muted">Current inventory weight</div></div>
+</div>
+<section class="role-card report-category-card" style="margin-top:18px">
+<div class="report-category-head">
+<div>
+<h2 class="card-title">Category Breakdown</h2>
+<div class="report-category-subtitle">Inventory mix by item count and weight.</div>
+</div>
+</div>
+<div class="role-table-wrap" id="categoryReport"><table class="role-table"><thead><tr><th>CATEGORY</th><th>ITEMS</th><th>WEIGHT</th></tr></thead><tbody id="categoryReportBody"></tbody></table></div>
 </section>
-
+</section>
 <!-- USER MANAGEMENT: OWNER ONLY -->
-<section id="users" class="page role-only role-owner">
-  <div class="topbar">
-    <div><h1>User Management</h1><div class="subtitle">Review applications and manage PM2V user records.</div></div>
-    <div class="date" id="usersDate"></div>
-  </div>
-  <section class="role-card" style="margin-bottom:18px">
-    <h2 class="card-title">Pending Applicants</h2>
-    <div style="overflow:auto"><table class="role-table"><thead><tr><th>NAME</th><th>EMAIL</th><th>ROLE REQUESTED</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="applicantBody"><tr><td colspan="5" class="empty-role">Loading applicants…</td></tr></tbody></table></div>
-  </section>
-  <section class="role-card">
-    <h2 class="card-title">Current Users</h2>
-    <div style="overflow:auto"><table class="role-table"><thead><tr><th>NAME</th><th>EMAIL</th><th>ROLE</th><th>STATUS</th></tr></thead><tbody id="usersBody"><tr><td colspan="4" class="empty-role">Loading users…</td></tr></tbody></table></div>
-  </section>
+<section class="page role-only role-owner" id="users">
+<div class="topbar">
+<div><h1>User Management</h1><div class="subtitle">Review applications and manage PM2V user records.</div></div>
+<div class="date" id="usersDate"></div>
+</div>
+<section class="role-card" style="margin-bottom:18px">
+<h2 class="card-title">Pending Applicants</h2>
+<div style="overflow:auto"><table class="role-table"><thead><tr><th>NAME</th><th>EMAIL</th><th>ROLE REQUESTED</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="applicantBody"><tr><td class="empty-role" colspan="5">Loading applicants…</td></tr></tbody></table></div>
 </section>
-
+<section class="role-card">
+<h2 class="card-title">Current Users</h2>
+<div style="overflow:auto"><table class="role-table"><thead><tr><th>NAME</th><th>EMAIL</th><th>ROLE</th><th>STATUS</th></tr></thead><tbody id="usersBody"><tr><td class="empty-role" colspan="4">Loading users…</td></tr></tbody></table></div>
+</section>
+</section>
 <!-- PROFILE -->
-<section id="profile" class="page">
-  <div class="topbar">
-    <div>
-      <h1>Profile</h1>
-      <div class="subtitle">Manage your account information and settings.</div>
-    </div>
-    <div class="date">▣ &nbsp; Tuesday, August 18, 2026 <span class="sep">|</span> ◷ &nbsp;05:30:22 PM</div>
-  </div>
-
-  <section class="profile-hero">
-    <div class="profile-avatar-large" id="profileAvatar">N</div>
-    <div>
-      <div class="profile-name" id="profileName">Nando Reyes</div>
-      <div class="profile-badges">
-        <span class="profile-badge" id="profileRoleBadge">Staff</span>
-        <span class="profile-badge" id="profileStatusBadge">Active</span>
-      </div>
-      <div class="profile-email" id="profileEmail">staff@pm2v.com</div>
-    </div>
-  </section>
-
-  <section class="profile-card profile-personal-card">
-    <div class="profile-card-title">
-      <span class="profile-card-icon">♙</span>
+<section class="page" id="profile">
+<div class="topbar">
+<div>
+<h1>Profile</h1>
+<div class="subtitle">Manage your account information and settings.</div>
+</div>
+<div class="date">▣   Tuesday, August 18, 2026 <span class="sep">|</span> ◷  05:30:22 PM</div>
+</div>
+<section class="profile-hero">
+<div class="profile-avatar-large" id="profileAvatar">N</div>
+<div>
+<div class="profile-name" id="profileName">Nando Reyes</div>
+<div class="profile-badges">
+<span class="profile-badge" id="profileRoleBadge">Staff</span>
+<span class="profile-badge" id="profileStatusBadge">Active</span>
+</div>
+<div class="profile-email" id="profileEmail">staff@pm2v.com</div>
+</div>
+</section>
+<section class="profile-card profile-personal-card">
+<div class="profile-card-title">
+<span class="profile-card-icon">♙</span>
       PERSONAL INFORMATION
     </div>
-    <div>
-      <div class="profile-field-label">Full Name</div>
-      <div class="profile-field-value" id="profileFullName">Nando Reyes</div>
-    </div>
-  </section>
-
-  <section class="profile-card">
-    <div class="profile-card-title">
-      <span class="profile-card-icon">✉</span>
+<div>
+<div class="profile-field-label">Full Name</div>
+<div class="profile-field-value" id="profileFullName">Nando Reyes</div>
+</div>
+</section>
+<section class="profile-card">
+<div class="profile-card-title">
+<span class="profile-card-icon">✉</span>
       ACCOUNT INFORMATION
     </div>
-    <div class="profile-account-grid">
-      <div class="profile-account-item">
-        <div class="profile-field-label">Email</div>
-        <div class="profile-field-value" id="profileAccountEmail">staff@pm2v.com</div>
-      </div>
-      <div class="profile-account-item">
-        <div class="profile-field-label">Role</div>
-        <div class="profile-field-value" id="profileRole">Staff</div>
-      </div>
-      <div class="profile-account-item">
-        <div class="profile-field-label">Status</div>
-        <div class="profile-field-value" id="profileStatus">Active</div>
-      </div>
-    </div>
-  </section>
-
-  <section class="profile-card">
-    <div class="profile-card-title">
-      <span class="profile-card-icon">◷</span>
+<div class="profile-account-grid">
+<div class="profile-account-item">
+<div class="profile-field-label">Email</div>
+<div class="profile-field-value" id="profileAccountEmail">staff@pm2v.com</div>
+</div>
+<div class="profile-account-item">
+<div class="profile-field-label">Role</div>
+<div class="profile-field-value" id="profileRole">Staff</div>
+</div>
+<div class="profile-account-item">
+<div class="profile-field-label">Status</div>
+<div class="profile-field-value" id="profileStatus">Active</div>
+</div>
+</div>
+</section>
+<section class="profile-card">
+<div class="profile-card-title">
+<span class="profile-card-icon">◷</span>
       ACTIVITY INFORMATION
     </div>
-    <div>
-      <div class="profile-field-label">Member Since</div>
-      <div class="profile-field-value" id="profileMemberSince" style="color:#58708d">—</div>
-    </div>
-  </section>
-
-  <div class="profile-actions">
-    <button class="profile-action profile-edit">♧ &nbsp; Edit Profile</button>
-    <button class="profile-action profile-password" id="changePasswordBtn">♧ &nbsp; Change Password</button>
-    <button class="profile-action profile-password" id="mobileProfileLogoutBtn" type="button">↪ &nbsp; Log Out</button>
-  </div>
+<div>
+<div class="profile-field-label">Member Since</div>
+<div class="profile-field-value" id="profileMemberSince" style="color:#58708d">—</div>
+</div>
 </section>
-
-
-<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
-  <button type="button" class="mobile-nav-btn" id="mobileHomeBtn" data-mobile-page="dashboard" aria-label="Dashboard">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V10Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-    <span class="mobile-nav-label">Dashboard</span>
-  </button>
-  <button type="button" class="mobile-nav-btn" data-mobile-page="inventory" aria-label="Inventory">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 20 7.5v9L12 21l-8-4.5v-9L12 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m4.5 7.5 7.5 4.25 7.5-4.25M12 11.75V21" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-    <span class="mobile-nav-label">Inventory</span>
-  </button>
-  <button type="button" class="mobile-nav-btn role-secretary-owner" data-mobile-page="transactions" aria-label="Transactions">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 3h9l3 3v15H6V3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M15 3v4h4M9 11h6M9 15h6M9 19h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-    <span class="mobile-nav-label">Transactions</span>
-  </button>
-  <button type="button" class="mobile-nav-btn role-secretary-owner" data-mobile-page="reports" aria-label="Reports">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="m4 8 6-4 6 5 6-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <span class="mobile-nav-label">Reports</span>
-  </button>
-  <button type="button" class="mobile-nav-btn role-only role-owner" data-mobile-page="users" aria-label="Users">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="2"/><path d="M3 20c.7-3.1 2.7-5 6-5s5.3 1.9 6 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="9" r="2.3" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.2c2.5.3 4.1 1.9 4.5 4.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-    <span class="mobile-nav-label">Users</span>
-  </button>
-  <button type="button" class="mobile-nav-btn" id="mobileProfileNavBtn" data-mobile-page="profile" aria-label="Profile">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="2"/><path d="M4.5 21c.8-4.1 3.2-6.5 7.5-6.5s6.7 2.4 7.5 6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-    <span class="mobile-nav-label">Profile</span>
-  </button>
+<div class="profile-actions">
+<button class="profile-action profile-edit">♧   Edit Profile</button>
+<button class="profile-action profile-password" id="changePasswordBtn">♧   Change Password</button>
+<button class="profile-action profile-password" id="mobileProfileLogoutBtn" type="button">↪   Log Out</button>
+</div>
+</section>
+<nav aria-label="Mobile navigation" class="mobile-bottom-nav">
+<button aria-label="Dashboard" class="mobile-nav-btn" data-mobile-page="dashboard" id="mobileHomeBtn" type="button">
+<svg aria-hidden="true" fill="none" viewbox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V10Z" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="mobile-nav-label">Dashboard</span>
+</button>
+<button aria-label="Inventory" class="mobile-nav-btn" data-mobile-page="inventory" type="button">
+<svg aria-hidden="true" fill="none" viewbox="0 0 24 24"><path d="M12 3 20 7.5v9L12 21l-8-4.5v-9L12 3Z" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path><path d="m4.5 7.5 7.5 4.25 7.5-4.25M12 11.75V21" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="mobile-nav-label">Inventory</span>
+</button>
+<button aria-label="Transactions" class="mobile-nav-btn role-secretary-owner" data-mobile-page="transactions" type="button">
+<svg aria-hidden="true" fill="none" viewbox="0 0 24 24"><path d="M6 3h9l3 3v15H6V3Z" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path><path d="M15 3v4h4M9 11h6M9 15h6M9 19h4" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg>
+<span class="mobile-nav-label">Transactions</span>
+</button>
+<button aria-label="Reports" class="mobile-nav-btn role-secretary-owner" data-mobile-page="reports" type="button">
+<svg aria-hidden="true" fill="none" viewbox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path><path d="m4 8 6-4 6 5 6-5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="mobile-nav-label">Reports</span>
+</button>
+<button aria-label="Users" class="mobile-nav-btn role-only role-owner" data-mobile-page="users" type="button">
+<svg aria-hidden="true" fill="none" viewbox="0 0 24 24"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="2"></circle><path d="M3 20c.7-3.1 2.7-5 6-5s5.3 1.9 6 5" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path><circle cx="17" cy="9" r="2.3" stroke="currentColor" stroke-width="2"></circle><path d="M15.5 15.2c2.5.3 4.1 1.9 4.5 4.8" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg>
+<span class="mobile-nav-label">Users</span>
+</button>
+<button aria-label="Profile" class="mobile-nav-btn" data-mobile-page="profile" id="mobileProfileNavBtn" type="button">
+<svg aria-hidden="true" fill="none" viewbox="0 0 24 24"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="2"></circle><path d="M4.5 21c.8-4.1 3.2-6.5 7.5-6.5s6.7 2.4 7.5 6.5" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg>
+<span class="mobile-nav-label">Profile</span>
+</button>
 </nav>
 </main>
 </div>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, createUserWithEmailAndPassword, deleteUser } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -2005,6 +1914,7 @@ async function initPM2V(user){
   document.body.classList.remove('auth-pending');
   document.getElementById('authLoading')?.remove();
   document.getElementById('loginScreen').style.display='none';
+  closePM2VLogin();
   const initial=location.hash.replace('#','');
   const allowed=(initial && document.getElementById(initial) && canAccessPage(initial,role))?initial:'dashboard';
   showPage(allowed);
@@ -2061,6 +1971,11 @@ document.getElementById('loginPasswordToggle')?.addEventListener('click',()=>{
   const input=document.getElementById('loginPassword'),btn=document.getElementById('loginPasswordToggle');
   if(!input)return; const show=input.type==='password'; input.type=show?'text':'password'; btn.setAttribute('aria-label',show?'Hide password':'Show password');
 });
+/* PM2V public landing navigation + login modal — scoped to landing controls */
+const pm2vLoginModal=document.getElementById('pm2vLoginModal');
+function openPM2VLogin(){if(!pm2vLoginModal)return;pm2vLoginModal.classList.add('open');pm2vLoginModal.setAttribute('aria-hidden','false');setTimeout(()=>document.getElementById('loginEmail')?.focus(),80)}
+function closePM2VLogin(){if(!pm2vLoginModal)return;pm2vLoginModal.classList.remove('open');pm2vLoginModal.setAttribute('aria-hidden','true')}
+document.getElementById('pm2vOpenLogin')?.addEventListener('click',openPM2VLogin);document.getElementById('pm2vHeroLogin')?.addEventListener('click',openPM2VLogin);document.getElementById('pm2vCtaLogin')?.addEventListener('click',openPM2VLogin);document.getElementById('pm2vCloseLogin')?.addEventListener('click',closePM2VLogin);pm2vLoginModal?.addEventListener('click',e=>{if(e.target===pm2vLoginModal)closePM2VLogin()});document.querySelectorAll('[data-landing-target]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.getElementById(a.dataset.landingTarget)?.scrollIntoView({behavior:'smooth',block:'start'})}));
 document.querySelectorAll('[data-login-info]').forEach(a=>a.addEventListener('click',e=>{
   e.preventDefault();
   const key=a.dataset.loginInfo;
@@ -2102,7 +2017,7 @@ document.getElementById('forgotBtn')?.addEventListener('click',async()=>{
   catch(e){msg.textContent=friendlyLoginError(e)}
 });
 document.querySelector('.logout a')?.addEventListener('click',async e=>{
-  e.preventDefault(); await signOut(auth); document.body.classList.add('auth-pending'); document.getElementById('loginScreen').style.display='flex'; showPage('dashboard');
+  e.preventDefault(); await signOut(auth); document.body.classList.add('auth-pending'); document.getElementById('loginScreen').style.display='flex'; closePM2VLogin(); showPage('dashboard');
 });
 onAuthStateChanged(auth,async user=>{
   if(!user){
@@ -2494,7 +2409,7 @@ function initAIClassManager(){
   const add=document.getElementById('aiAddClassBtn');
   if(!toggle||!panel||!input||!add)return;
   renderAIClassManager();
-  // Keep the scanner compact by hiding class management until the staff member opens it.
+  // Keep the scanner compact; open the class manager only when requested.
   panel.hidden=true;
   toggle.setAttribute('aria-expanded','false');
   const togglePanel=()=>{
@@ -2953,7 +2868,6 @@ ai.apply.addEventListener('click',()=>{
 window.addEventListener('beforeunload',()=>{stopAICamera();revokeAIUrl();});
 </script>
 </body>
-
 <style id="pm2v-reports-progress-overflow-fix">
 /* Prevent the mobile category progress track/fill from escaping the report card. */
 @media (max-width:760px){
@@ -2990,7 +2904,6 @@ window.addEventListener('beforeunload',()=>{stopAICamera();revokeAIUrl();});
   }
 }
 </style>
-
 </html>
 <style id="pm2v-reports-rendered-density-fix">
 /* Final rendered-mobile polish: make every category a compact analytical row. */
@@ -3171,4 +3084,25 @@ window.addEventListener('beforeunload',()=>{stopAICamera();revokeAIUrl();});
 @media (max-width:900px){
   .nav-group-label{display:none}
 }
+
+/* PM2V PUBLIC LANDING PAGE — fully scoped */
+.pm2v-landing-wrap{position:absolute;inset:0;overflow:auto;background:#f5faf6;color:#17335a;font-family:inherit}
+.pm2v-landing-header{position:sticky;top:0;z-index:20;height:76px;background:rgba(6,60,32,.97);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(22px,5vw,72px);box-shadow:0 2px 16px rgba(3,50,27,.16)}
+.pm2v-landing-brand{display:flex;align-items:center;gap:11px;color:#fff;text-decoration:none;font-weight:900;font-size:18px}.pm2v-landing-brand img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #000;background:#25d36d}
+.pm2v-landing-nav{display:flex;align-items:center;gap:28px}.pm2v-landing-nav a{color:#dceee3;text-decoration:none;font-size:13px;font-weight:800;transition:.2s}.pm2v-landing-nav a:hover{color:#fff}
+.pm2v-landing-login{border:1px solid rgba(255,255,255,.38);background:#fff;color:#075e2e;border-radius:10px;padding:11px 19px;font-weight:900;cursor:pointer;font-size:13px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.pm2v-landing-hero{min-height:590px;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:42px;padding:72px clamp(24px,7vw,100px);background:linear-gradient(135deg,#eff9f1 0%,#fff 52%,#e4f4e8 100%);position:relative;overflow:hidden}.pm2v-landing-hero:before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;right:-120px;top:-140px;background:rgba(37,211,109,.09);pointer-events:none}
+.pm2v-landing-eyebrow{display:inline-flex;align-items:center;gap:8px;background:#dcf5e3;color:#096b35;border-radius:999px;padding:8px 13px;font-size:11px;font-weight:900;letter-spacing:.7px;text-transform:uppercase;margin-bottom:18px}.pm2v-landing-eyebrow i{width:7px;height:7px;border-radius:50%;background:#18a957;display:block}
+.pm2v-landing-hero h1{font-size:clamp(40px,5.2vw,70px);line-height:1.02;letter-spacing:-2.8px;margin:0 0 20px;color:#12395d;max-width:700px}.pm2v-landing-hero h1 strong{color:#087a3b}.pm2v-landing-hero p{font-size:17px;line-height:1.75;color:#60758b;max-width:620px;margin:0 0 30px}
+.pm2v-landing-actions{display:flex;gap:12px;flex-wrap:wrap}.pm2v-landing-primary,.pm2v-landing-secondary{border-radius:12px;padding:14px 21px;font-size:14px;font-weight:900;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.pm2v-landing-primary{background:#11763a;color:#fff;border:1px solid #11763a;box-shadow:0 10px 24px rgba(17,118,58,.18)}.pm2v-landing-secondary{background:#fff;color:#174267;border:1px solid #d7e4dc}
+.pm2v-landing-visual{min-height:410px;border-radius:28px;background:linear-gradient(145deg,#0a5d30,#158343);padding:22px;box-shadow:0 28px 70px rgba(14,86,44,.2);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}.pm2v-landing-visual:before,.pm2v-landing-visual:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.08)}.pm2v-landing-visual:before{width:300px;height:300px;right:-90px;top:-100px}.pm2v-landing-visual:after{width:240px;height:240px;left:-120px;bottom:-100px}
+.pm2v-landing-visual-card{width:min(430px,90%);background:#fff;border-radius:22px;padding:28px;position:relative;z-index:1;box-shadow:0 18px 45px rgba(0,0,0,.18)}.pm2v-landing-logo-large{width:86px;height:86px;border-radius:50%;object-fit:cover;border:4px solid #111;background:#25d36d;display:block;margin:0 auto 18px}.pm2v-landing-visual-card h3{text-align:center;color:#12395d;font-size:22px;margin:0 0 8px}.pm2v-landing-visual-card>p{text-align:center;color:#71859a;font-size:13px;line-height:1.55;margin:0 0 22px}.pm2v-landing-mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.pm2v-landing-mini{border:1px solid #e3ebe6;border-radius:12px;padding:14px;background:#f8fbf9}.pm2v-landing-mini b{display:block;color:#12395d;font-size:13px;margin-bottom:3px}.pm2v-landing-mini span{color:#7890a0;font-size:11px}
+.pm2v-landing-section{padding:76px clamp(24px,7vw,100px);background:#fff}.pm2v-landing-section.alt{background:#f5faf6}.pm2v-landing-section-head{max-width:700px;margin:0 auto 38px;text-align:center}.pm2v-landing-kicker{color:#0a7639;font-weight:900;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}.pm2v-landing-section h2{font-size:clamp(30px,4vw,45px);line-height:1.08;letter-spacing:-1.5px;color:#12395d;margin:0 0 13px}.pm2v-landing-section-head p{color:#6b8094;line-height:1.7;margin:0}
+.pm2v-landing-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1180px;margin:auto}.pm2v-landing-card{background:#fff;border:1px solid #dfebe2;border-radius:18px;padding:23px;box-shadow:0 8px 25px rgba(17,67,39,.05)}.pm2v-landing-card-icon{width:42px;height:42px;border-radius:12px;background:#e4f6e9;color:#08763a;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:900;margin-bottom:15px}.pm2v-landing-card h3{margin:0 0 7px;color:#173f62;font-size:16px}.pm2v-landing-card p{margin:0;color:#74889b;font-size:13px;line-height:1.6}
+.pm2v-landing-materials{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:1050px;margin:auto}.pm2v-landing-material{min-height:145px;border-radius:18px;padding:22px;background:linear-gradient(145deg,#0b6333,#168444);color:#fff;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:0 10px 25px rgba(11,99,51,.12)}.pm2v-landing-material b{font-size:18px}.pm2v-landing-material span{font-size:12px;color:#d7f1df;margin-top:4px}
+.pm2v-landing-cta{margin:0 clamp(18px,5vw,70px) 60px;border-radius:25px;padding:50px clamp(25px,6vw,70px);background:#083e21;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:30px}.pm2v-landing-cta h2{margin:0 0 8px;font-size:32px;letter-spacing:-1px}.pm2v-landing-cta p{margin:0;color:#c8e2d1;line-height:1.6}.pm2v-landing-cta .pm2v-landing-primary{background:#fff;color:#096b35;border-color:#fff;white-space:nowrap}
+.pm2v-landing-footer{padding:28px clamp(24px,7vw,100px);background:#062e19;color:#b9d4c2;display:flex;justify-content:space-between;gap:20px;font-size:12px}.pm2v-landing-footer strong{color:#fff}
+.pm2v-login-modal{position:absolute;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(3,25,14,.62);backdrop-filter:blur(7px);overflow:auto}.pm2v-login-modal.open{display:flex}.pm2v-login-modal-card{width:min(520px,100%);max-height:calc(100% - 24px);overflow:auto;background:#fff;border-radius:22px;box-shadow:0 30px 90px rgba(0,0,0,.28);position:relative}.pm2v-login-modal-close{position:absolute;right:15px;top:14px;width:36px;height:36px;border:0;border-radius:50%;background:#edf5ef;color:#164c30;font-size:22px;cursor:pointer;z-index:2}.pm2v-login-modal .login-panel{padding:48px 48px 38px}.pm2v-login-modal .login-panel h1{font-size:30px}.pm2v-login-modal .login-panel-subtitle{margin-bottom:27px}
+@media(max-width:900px){.pm2v-landing-hero{grid-template-columns:1fr;padding-top:55px}.pm2v-landing-visual{min-height:340px}.pm2v-landing-cards{grid-template-columns:repeat(2,1fr)}.pm2v-landing-materials{grid-template-columns:repeat(2,1fr)}.pm2v-landing-nav{gap:13px}.pm2v-landing-nav a{display:none}.pm2v-landing-cta{flex-direction:column;align-items:flex-start}}
+@media(max-width:600px){.pm2v-landing-header{height:64px;padding:0 15px}.pm2v-landing-brand{font-size:14px}.pm2v-landing-brand img{width:38px;height:38px}.pm2v-landing-login{padding:9px 13px}.pm2v-landing-hero{padding:45px 20px 55px;min-height:0}.pm2v-landing-hero h1{letter-spacing:-1.8px;font-size:42px}.pm2v-landing-hero p{font-size:15px}.pm2v-landing-section{padding:55px 20px}.pm2v-landing-cards,.pm2v-landing-materials{grid-template-columns:1fr}.pm2v-landing-cta{margin:0 15px 35px;padding:35px 25px}.pm2v-landing-cta h2{font-size:26px}.pm2v-login-modal{padding:12px}.pm2v-login-modal .login-panel{padding:42px 22px 28px}}
 </style>
