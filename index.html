@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — UPDATED: Transaction receipt PDF preview and download for Secretary and Owner. This file is the current baseline for future updates. -->
+<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — UPDATED: Professional real-style transaction receipt PDF for Secretary and Owner. This file is the current baseline for future updates. -->
 
 <html lang="en">
 <head>
@@ -2174,49 +2174,146 @@ function pm2vReceiptDate(value){
   const d=valueDate(value);
   return d?d.toLocaleString():'—';
 }
+function pm2vPdfWrap(value,maxChars=44){
+  const words=String(value??'—').trim().split(/\s+/).filter(Boolean);
+  if(!words.length)return ['—'];
+  const lines=[];let line='';
+  words.forEach(word=>{
+    const candidate=line?line+' '+word:word;
+    if(candidate.length>maxChars&&line){lines.push(line);line=word;}
+    else line=candidate;
+  });
+  if(line)lines.push(line);
+  return lines;
+}
+function pm2vReceiptSafeId(value){
+  const id=String(value||'').replace(/[^a-zA-Z0-9]/g,'').toUpperCase();
+  return id ? id.slice(-12) : 'PENDING';
+}
 function pm2vBuildReceiptPdf(tx){
   const type=txTypeLabel(tx.type);
   const item=tx.itemName||tx.material||'—';
   const category=tx.category||'Uncategorized';
   const weight=Number(tx.weight||0).toLocaleString(undefined,{maximumFractionDigits:2})+' kg';
   const party=tx.buyerName||tx.supplierName||tx.party||'—';
-  const amount='PHP '+Number(tx.amount||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+  const amountValue=Number(tx.amount||0);
+  const amount='PHP '+amountValue.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
   const status=tx.status||'Recorded';
-  const receiptNo='PM2V-'+String(tx.id||'').slice(-10).toUpperCase();
-  const lines=[
-    'PM2V SCRAP TRADING',
-    'TRANSACTION RECEIPT',
-    '',
-    'Receipt No: '+receiptNo,
-    'Date: '+pm2vReceiptDate(tx.createdAt),
-    '',
-    'Transaction Type: '+type,
-    'Item: '+item,
-    'Category: '+category,
-    'Weight: '+weight,
-    'Party: '+party,
-    'Amount: '+amount,
-    'Status: '+status,
-    '',
-    'Notes: '+(tx.notes||'None'),
-    'Recorded by: '+(tx.createdBy||'PM2V User')
+  const receiptNo='PM2V-'+pm2vReceiptSafeId(tx.id);
+  const transactionId=String(tx.id||'—');
+  const createdDate=pm2vReceiptDate(tx.createdAt);
+  const recordedBy=tx.createdBy||tx.createdByName||'PM2V User';
+  const notes=tx.notes||'No additional notes.';
+
+  // Compact receipt-size page (4 x 8.5 inches) for a more authentic transaction receipt.
+  const W=288,H=612, M=22;
+  const c=[];
+  const esc=pm2vPdfText;
+
+  const text=(x,y,size,value,font='F1')=>{
+    c.push('BT',`/${font} ${size} Tf`,`1 0 0 1 ${x} ${y} Tm`,`(${esc(value)}) Tj`,'ET');
+  };
+  const line=(x1,y1,x2,y2,width=.7)=>{
+    c.push(`${width} w`,`${x1} ${y1} m`,`${x2} ${y2} l`,'S');
+  };
+  const fillRect=(x,y,w,h,r,g,b)=>{
+    c.push(`${r} ${g} ${b} rg`,`${x} ${y} ${w} ${h} re`,'f','0 0 0 rg');
+  };
+  const section=(label,y)=>{
+    c.push('0.12 0.42 0.24 rg');
+    text(M,y,8,label,'F2');
+    c.push('0 0 0 rg');
+    line(M,y-6,W-M,y-6,.55);
+  };
+
+  // Header
+  fillRect(0,H-94,W,94,.12,.42,.24);
+  c.push('1 1 1 rg');
+  text(M,H-36,18,'PM2V','F2');
+  text(M+57,H-34,8,'SCRAP TRADING');
+  text(M,H-54,7,'SMART INVENTORY • SUSTAINABLE FUTURE');
+  text(W-M-94,H-35,7,'OFFICIAL');
+  text(W-M-94,H-48,7,'RECEIPT');
+  c.push('0 0 0 rg');
+
+  let y=H-118;
+  text(M,y,7,'TRANSACTION RECEIPT','F2');
+  y-=17;
+  text(M,y,7,'Receipt No.'); text(104,y,7,receiptNo,'F2');
+  y-=13;
+  text(M,y,7,'Date & Time'); text(104,y,7,createdDate);
+  y-=13;
+  text(M,y,7,'Status'); text(104,y,7,status,'F2');
+
+  y-=24;
+  section('TRANSACTION DETAILS',y);
+  y-=22;
+
+  const detailRows=[
+    ['Transaction Type',type],
+    ['Item / Material',item],
+    ['Category',category],
+    ['Weight',weight],
+    ['Buyer / Supplier',party]
   ];
-  const content=['BT','/F1 18 Tf','72 760 Td','('+pm2vPdfText(lines[0])+') Tj','/F1 12 Tf'];
-  let y=730;
-  lines.slice(1).forEach((line,i)=>{
-    content.push(`72 ${y} Td (${pm2vPdfText(line)}) Tj`);
-    y-=i===1?20:22;
-    content.push(`72 ${y} Td`);
+
+  detailRows.forEach(([label,value])=>{
+    const wrapped=pm2vPdfWrap(value,28);
+    text(M,y,7,label);
+    text(110,y,7,wrapped[0]);
+    wrapped.slice(1).forEach(extra=>{y-=10;text(110,y,7,extra);});
+    y-=16;
   });
-  content.push('ET');
-  const stream=content.join('\n');
+
+  y-=3;
+  fillRect(M,y-45,W-(M*2),45,.94,.97,.95);
+  text(M+10,y-15,7,'TOTAL AMOUNT');
+  text(M+10,y-34,16,amount,'F2');
+  y-=61;
+
+  section('RECORD INFORMATION',y);
+  y-=22;
+  text(M,y,7,'Transaction ID');
+  pm2vPdfWrap(transactionId,28).forEach((part,i)=>{
+    text(110,y-(i*10),6,part);
+  });
+  y-=22;
+  text(M,y,7,'Recorded By');
+  pm2vPdfWrap(recordedBy,28).forEach((part,i)=>{
+    text(110,y-(i*10),7,part);
+  });
+  y-=25;
+
+  section('NOTES',y);
+  y-=18;
+  pm2vPdfWrap(notes,42).slice(0,5).forEach(part=>{
+    text(M,y,7,part);
+    y-=11;
+  });
+
+  y-=8;
+  line(M,y,W-M,y,.7);
+  y-=24;
+  line(M,y,112,y,.5);
+  line(176,y,W-M,y,.5);
+  text(M,y-11,6,'Authorized Signature');
+  text(176,y-11,6,'Received By');
+
+  // Footer
+  text(M,30,6,'This receipt is generated from the PM2V Scrap Trading system.');
+  text(M,18,6,'Keep this document for your transaction records.');
+  text(W-M-54,18,6,'PM2V');
+
+  const stream=c.join('\n');
   const objects=[
     '<< /Type /Catalog /Pages 2 0 R >>',
     '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
-    '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>',
+    `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${W} ${H}] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>`,
     '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>',
     `<< /Length ${new TextEncoder().encode(stream).length} >>\nstream\n${stream}\nendstream`
   ];
+
   let pdf='%PDF-1.4\n';
   const offsets=[0];
   objects.forEach((obj,i)=>{offsets.push(pdf.length);pdf+=`${i+1} 0 obj\n${obj}\nendobj\n`;});
@@ -2226,6 +2323,7 @@ function pm2vBuildReceiptPdf(tx){
   pdf+=`trailer\n<< /Size ${objects.length+1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`;
   return new Blob([pdf],{type:'application/pdf'});
 }
+
 function pm2vOpenReceipt(tx){
   if(!tx)return;
   const modal=document.getElementById('pm2vReceiptModal');
@@ -2997,7 +3095,7 @@ window.addEventListener('beforeunload',()=>{stopAICamera();revokeAIUrl();});
 <div class="pm2v-receipt-modal" id="pm2vReceiptModal" aria-hidden="true">
   <div class="pm2v-receipt-card" role="dialog" aria-modal="true" aria-labelledby="pm2vReceiptTitle">
     <div class="pm2v-receipt-head">
-      <h2 id="pm2vReceiptTitle">Transaction Receipt</h2>
+      <h2 id="pm2vReceiptTitle">Official Transaction Receipt</h2>
       <div class="pm2v-receipt-actions">
         <button class="pm2v-receipt-download" id="pm2vReceiptDownload" type="button">Download PDF</button>
         <button class="pm2v-receipt-close" id="pm2vReceiptClose" type="button" aria-label="Close receipt preview">×</button>
