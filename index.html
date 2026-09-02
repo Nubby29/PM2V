@@ -2361,8 +2361,10 @@ const AI_CONFIG={
   workspace:'jhave-larios',
   workflowId:'muse-spark-1-1-classification',
   apiKey:'rqZaHINUp5l3lCE8DnGQ',
-  proxyUrl:'/api/roboflow',
-  directFallback:true
+  // PM2V Scrap Trading v1.0.1 — CURRENT BASELINE / SOURCE OF TRUTH.
+  // Live GitHub Pages frontend must use the deployed Render proxy, not a relative local API path.
+  proxyUrl:'https://pm2v-scrapscan.onrender.com/api/roboflow',
+  directFallback:false
 };
 const DEFAULT_AI_CLASSES=[
   'Cardboard','Paper','Newspaper','Mixed Paper','Plastic','PET Plastic','HDPE Plastic',
