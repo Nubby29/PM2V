@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — VERSION V14: Reports PDF business intelligence polish. Current baseline/source of truth. Preserves V13 pagination and data consistency while improving inventory status detail, adaptive transaction activity presentation, priority action guidance, page balance, and footer-safe spacing. -->
+<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — VERSION V15: Reports PDF business intelligence refinement. Current baseline/source of truth. Preserves V14 pagination and data consistency while improving page-3 spacing, replacing generic priority actions with item-level inventory alerts, and tightening low-activity report layout. -->
 
 <html lang="en">
 <head>
@@ -2964,8 +2964,70 @@ async function pm2vExportReportsPdf(){
     y=doc.lastAutoTable.finalY+12;const activitySubtitle=`Daily collection and sale counts for the selected period · ${tx.length.toLocaleString()} transaction${tx.length===1?'':'s'}`;y=pm2vPdfSectionTitle(doc,'Transaction Activity',activitySubtitle,y);
     const now=new Date();now.setHours(23,59,59,999);let dates;if(snap.days===0){const dated=tx.map(x=>pm2vReportDate(x.createdAt)).filter(Boolean);const min=dated.length?new Date(Math.min(...dated.map(d=>d.getTime()))):new Date(now.getTime()-6*86400000);const span=Math.min(30,Math.max(7,Math.ceil((now-min)/86400000)+1));dates=Array.from({length:span},(_,i)=>{const d=new Date(now);d.setDate(d.getDate()-(span-1-i));d.setHours(0,0,0,0);return d})}else dates=Array.from({length:snap.days},(_,i)=>{const d=new Date(now);d.setDate(d.getDate()-(snap.days-1-i));d.setHours(0,0,0,0);return d});const rows=dates.map(d=>{const next=new Date(d);next.setDate(next.getDate()+1);const a=tx.filter(x=>{const dt=pm2vReportDate(x.createdAt);return dt&&dt>=d&&dt<next&&String(x.type||'').toLowerCase()==='collection'}).length;const b=tx.filter(x=>{const dt=pm2vReportDate(x.createdAt);return dt&&dt>=d&&dt<next&&String(x.type||'').toLowerCase()==='sale'}).length;return {d,a,b}});const totalCollections=rows.reduce((a,r)=>a+r.a,0),totalSales=rows.reduce((a,r)=>a+r.b,0),activityTotal=totalCollections+totalSales;const chartX=20,chartY=y+3,chartW=170,chartH=activityTotal===0?22:activityTotal<=2?24:activityTotal<=5?32:44,maxTx=Math.max(1,...rows.map(r=>r.a+r.b));if(activityTotal===0){doc.setFillColor(246,250,247);doc.setDrawColor(223,232,226);doc.roundedRect(20,chartY,170,24,3,3,'FD');pm2vReportPdfText(doc,'No transaction activity recorded for the selected period.',30,chartY+10,8,'bold',[82,106,96]);pm2vReportPdfText(doc,'Collection: 0  ·  Sale: 0',30,chartY+17,7,'normal',[123,141,130])}else{doc.setDrawColor(232,238,234);doc.line(chartX,chartY+chartH,chartX+chartW,chartY+chartH);const barSlot=chartW/Math.max(1,rows.length);rows.forEach((r,i)=>{const x=chartX+i*barSlot+barSlot*.2;const bw=Math.max(1.2,barSlot*.28);const hb=chartH*(r.a/maxTx),hs=chartH*(r.b/maxTx);if(r.a){doc.setFillColor(22,131,66);doc.rect(x,chartY+chartH-hb,bw,hb,'F')}if(r.b){doc.setFillColor(23,63,104);doc.rect(x+bw+1,chartY+chartH-hs,bw,hs,'F')}if(i===0||i===rows.length-1||rows.length<=10)pm2vReportPdfText(doc,pm2vReportFmtShortDate(r.d),x,chartY+chartH+7,5.5,'normal',[123,141,130])});pm2vReportPdfText(doc,`Collection: ${totalCollections}`,125,chartY+chartH+12,7,'bold',[22,131,66]);pm2vReportPdfText(doc,`Sale: ${totalSales}`,165,chartY+chartH+12,7,'bold',[23,63,104])}pm2vPdfFooter(doc);
     // Page 3 — insights + category detail
-    doc.addPage();doc.setFillColor(22,131,66);doc.rect(0,0,210,9,'F');y=23;y=pm2vPdfSectionTitle(doc,'Inventory Insights','Key observations generated from the active report data.',y);const low=(statusCounts['Low Stock']||0)+(statusCounts['Out of Stock']||0),over=statusCounts['Overstock']||0,top=entries[0],topShare=top&&totalWeight?Math.round(top[1].weight/totalWeight*100):0;const insights=[];insights.push(low?`${low} inventory record${low===1?' needs':'s need'} stock attention. Review replenishment or stock availability.`:`All ${inv.length} inventory records are above the minimum stock threshold.`);insights.push(over?`${over} inventory record${over===1?' is':'s are'} above the maximum stock threshold. Review incoming supply levels.`:'No inventory is currently above the maximum stock threshold.');if(top)insights.push(`${top[0]} represents ${topShare}% of current inventory weight (${pm2vReportFmtWeight(top[1].weight)}).`);else insights.push('No category weight data is available for the selected filters.');if(tx.length)insights.push(`${tx.length.toLocaleString()} transaction${tx.length===1?'':'s'} recorded ${pm2vPdfMoney(totalValue)} in the selected period.`);insights.slice(0,4).forEach((text,i)=>{const yy=y+i*19;doc.setFillColor(i===0&&low?255:247,i===0&&low?248:251,i===0&&low?239:248);doc.setDrawColor(223,232,226);doc.roundedRect(15,yy,180,15,3,3,'FD');pm2vReportPdfText(doc,i===0&&low?'ATTENTION':i===1&&over?'OVER TARGET':i===2?'INVENTORY MIX':'TRANSACTIONS',20,yy+5.5,6.2,'bold',i===0&&low?[180,102,0]:[22,111,55]);doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(23,51,90);const lines=doc.splitTextToSize(text,160);doc.text(lines.slice(0,1),20,yy+11)});y+=88;y=pm2vPdfSectionTitle(doc,'Category Breakdown','Detailed inventory mix by item count, weight, and share.',y);const body=entries.map(([c,v])=>[c,String(v.count),pm2vReportFmtWeight(v.weight),`${totalWeight?Math.round(v.weight/totalWeight*100):0}%`]);if(body.length)body.push(['TOTAL',String(inv.length),pm2vReportFmtWeight(totalWeight),'100%']);doc.autoTable({startY:y,margin:{left:15,right:15},theme:'grid',head:[['Category','Items','Weight','Share']],body,styles:{font:'helvetica',fontSize:8,textColor:[23,51,90],cellPadding:3},headStyles:{fillColor:[23,63,104],textColor:[255,255,255],fontStyle:'bold'},alternateRowStyles:{fillColor:[248,251,249]},footStyles:{fillColor:[235,245,238],textColor:[18,63,39],fontStyle:'bold'}});
-    const reportInfoRows=[['Generated',new Date().toLocaleString()],['Generated By',pm2vCurrentUserName()],['Role',String(PM2V_PROFILE?.role||'—')],['Category Filter',snap.categoryLabel],['Stock Status Filter',snap.statusLabel],['Transaction Period',snap.periodLabel]];const reportInfoRowHeight=6.2;const reportInfoTableHeight=reportInfoRows.length*reportInfoRowHeight;const reportInfoBottomSafeY=252;const reportInfoSectionHeight=18+reportInfoTableHeight;let reportInfoTitleY=Math.max(doc.lastAutoTable.finalY+10,195);if(reportInfoTitleY+reportInfoSectionHeight>reportInfoBottomSafeY){reportInfoTitleY=Math.max(195,reportInfoBottomSafeY-reportInfoSectionHeight)}const reportInfoTableY=pm2vPdfSectionTitle(doc,'Report Information','Source: PM2V Firestore inventory and transaction records.',reportInfoTitleY);doc.autoTable({startY:reportInfoTableY,margin:{left:15,right:15,bottom:8},theme:'plain',body:reportInfoRows,styles:{font:'helvetica',fontSize:7.6,textColor:[23,51,90],cellPadding:1.5,minCellHeight:reportInfoRowHeight},columnStyles:{0:{cellWidth:50,fontStyle:'bold',textColor:[82,106,96]},1:{cellWidth:130}}});const priorityActions=[];if(lowStockCount)priorityActions.push(`Review ${lowStockCount} low-stock record${lowStockCount===1?'':'s'} and plan replenishment.`);if(outOfStockCount)priorityActions.push(`Address ${outOfStockCount} out-of-stock record${outOfStockCount===1?'':'s'} before the next sale.`);if(healthOver)priorityActions.push(`Review ${healthOver} over-target record${healthOver===1?'':'s'} and incoming supply levels.`);if(!priorityActions.length)priorityActions.push('No immediate inventory actions are required for the selected filters.');const actionY=doc.lastAutoTable.finalY+6;pm2vReportPdfText(doc,'PRIORITY ACTIONS',15,actionY+4.5,6.2,'bold',[82,106,96]);const actionText=priorityActions.slice(0,2).join(' · ');doc.setFont('helvetica','normal');doc.setFontSize(6.8);doc.setTextColor(23,51,90);doc.text(doc.splitTextToSize(actionText,150).slice(0,1),55,actionY+4.5);pm2vPdfFooter(doc);
+    doc.addPage();
+    doc.setFillColor(22,131,66);doc.rect(0,0,210,9,'F');
+    y=23;
+    y=pm2vPdfSectionTitle(doc,'Inventory Insights','Key observations generated from the active report data.',y);
+    const low=(statusCounts['Low Stock']||0)+(statusCounts['Out of Stock']||0);
+    const over=statusCounts['Overstock']||0;
+    const top=entries[0];
+    const topShare=top&&totalWeight?Math.round(top[1].weight/totalWeight*100):0;
+    const insights=[];
+    if(low) insights.push(`${low} inventory record${low===1?' needs':'s need'} stock attention. Review replenishment or stock availability.`);
+    else insights.push(`All ${inv.length} inventory records are above the minimum stock threshold.`);
+    if(over) insights.push(`${over} inventory record${over===1?' is':'s are'} above the maximum stock threshold. Review incoming supply levels.`);
+    else insights.push('No inventory is currently above the maximum stock threshold.');
+    if(top) insights.push(`${top[0]} represents ${topShare}% of current inventory weight (${pm2vReportFmtWeight(top[1].weight)}).`);
+    else insights.push('No category weight data is available for the selected filters.');
+    if(tx.length) insights.push(`${tx.length.toLocaleString()} transaction${tx.length===1?'':'s'} recorded ${pm2vPdfMoney(totalValue)} in the selected period.`);
+    else insights.push('No transactions were recorded in the selected period.');
+    for(let i=0;i<4;i++){
+      const text=insights[i];
+      const yy=y+i*17;
+      const attention=(i===0&&low);
+      const overTarget=(i===1&&over);
+      doc.setFillColor(attention?255:247,attention?248:251,attention?239:248);
+      doc.setDrawColor(223,232,226);doc.roundedRect(15,yy,180,14,3,3,'FD');
+      let label='TRANSACTIONS';
+      if(i===0) label=low?'ATTENTION':'STOCK';
+      else if(i===1) label=overTarget?'OVER TARGET':'STOCK';
+      else if(i===2) label='INVENTORY MIX';
+      pm2vReportPdfText(doc,label,20,yy+5.2,6.1,'bold',attention?[180,102,0]:[22,111,55]);
+      doc.setFont('helvetica','normal');doc.setFontSize(7.2);doc.setTextColor(23,51,90);
+      const lines=doc.splitTextToSize(text,160);doc.text(lines.slice(0,1),20,yy+10.2);
+    }
+    y+=78;
+    y=pm2vPdfSectionTitle(doc,'Category Breakdown','Detailed inventory mix by item count, weight, and share.',y);
+    const body=[];
+    entries.forEach(([category,value])=>{body.push([category,String(value.count),pm2vReportFmtWeight(value.weight),`${totalWeight?Math.round(value.weight/totalWeight*100):0}%`]);});
+    if(body.length) body.push(['TOTAL',String(inv.length),pm2vReportFmtWeight(totalWeight),'100%']);
+    doc.autoTable({startY:y,margin:{left:15,right:15},theme:'grid',head:[['Category','Items','Weight','Share']],body:body,styles:{font:'helvetica',fontSize:8,textColor:[23,51,90],cellPadding:3},headStyles:{fillColor:[23,63,104],textColor:[255,255,255],fontStyle:'bold'},alternateRowStyles:{fillColor:[248,251,249]},footStyles:{fillColor:[235,245,238],textColor:[18,63,39],fontStyle:'bold'}});
+    const alertRows=[];
+    inv.forEach(item=>{
+      const status=pm2vStockStatus(item);
+      if(status==='Low Stock'||status==='Out of Stock'||status==='Overstock'){
+        alertRows.push({status:status,item:item.itemName||'Unnamed Item',category:item.category||'—',weight:pm2vNum(item.weight),min:pm2vNum(item.minStock,PM2V_DEFAULT_MIN_STOCK),max:pm2vNum(item.maxStock,PM2V_DEFAULT_MAX_STOCK)});
+      }
+    });
+    const alertRank={'Out of Stock':0,'Low Stock':1,'Overstock':2};
+    alertRows.sort((a,b)=>((alertRank[a.status]??9)-(alertRank[b.status]??9))||String(a.item).localeCompare(String(b.item)));
+    const alertsY=doc.lastAutoTable.finalY+7;
+    const alertTitleY=pm2vPdfSectionTitle(doc,'Inventory Alerts','Items currently outside their configured stock thresholds.',alertsY);
+    if(alertRows.length){
+      const alertBody=[];
+      alertRows.slice(0,5).forEach(item=>{
+        const threshold=item.status==='Overstock'?`Max ${pm2vReportFmtWeight(item.max)} kg`:`Min ${pm2vReportFmtWeight(item.min)} kg`;
+        alertBody.push([item.status,item.item,item.category,`${pm2vReportFmtWeight(item.weight)} kg`,threshold]);
+      });
+      doc.autoTable({startY:alertTitleY,margin:{left:15,right:15,bottom:8},theme:'grid',head:[['Status','Item','Category','Current','Threshold']],body:alertBody,styles:{font:'helvetica',fontSize:6.6,textColor:[23,51,90],cellPadding:1.4,minCellHeight:6},headStyles:{fillColor:[23,63,104],textColor:[255,255,255],fontStyle:'bold',fontSize:6.5},alternateRowStyles:{fillColor:[248,251,249]},columnStyles:{0:{cellWidth:29,fontStyle:'bold'},1:{cellWidth:55},2:{cellWidth:35},3:{cellWidth:29},4:{cellWidth:32}}});
+    }else{
+      doc.autoTable({startY:alertTitleY,margin:{left:15,right:15,bottom:8},theme:'plain',body:[['No inventory records are currently outside their stock thresholds.']],styles:{font:'helvetica',fontSize:7.2,textColor:[82,106,96],cellPadding:2}});
+    }
+    const reportInfoRows=[['Generated',new Date().toLocaleString()],['Generated By',pm2vCurrentUserName()],['Role',String(PM2V_PROFILE?.role||'—')],['Category Filter',snap.categoryLabel],['Stock Status Filter',snap.statusLabel],['Transaction Period',snap.periodLabel]];
+    const reportInfoTitleY=doc.lastAutoTable.finalY+6;
+    const reportInfoTableY=pm2vPdfSectionTitle(doc,'Report Information','Source: PM2V Firestore inventory and transaction records.',reportInfoTitleY);
+    doc.autoTable({startY:reportInfoTableY,margin:{left:15,right:15,bottom:8},theme:'plain',body:reportInfoRows,styles:{font:'helvetica',fontSize:7.1,textColor:[23,51,90],cellPadding:1.1,minCellHeight:5},columnStyles:{0:{cellWidth:50,fontStyle:'bold',textColor:[82,106,96]},1:{cellWidth:130}}});
+    pm2vPdfFooter(doc);
     const totalPages=doc.internal.getNumberOfPages();for(let i=1;i<=totalPages;i++){doc.setPage(i);doc.setDrawColor(222,232,226);doc.line(15,285,195,285);pm2vReportPdfText(doc,'PM2V Scrap Trading • Confidential Business Report',15,291,7,'normal',[123,141,130]);pm2vReportPdfText(doc,`Page ${i} of ${totalPages}`,165,291,7,'bold',[123,141,130])}
     const datePart=new Date().toISOString().slice(0,10);doc.save(`PM2V_Report_${datePart}.pdf`);toast('PDF report generated successfully.','success');
   }catch(e){console.error('PM2V PDF export failed',e);toast(`Could not generate PDF: ${e.message||'Unknown error'}`,'error')}finally{btn.disabled=false;btn.textContent=old}
