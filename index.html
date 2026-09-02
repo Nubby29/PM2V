@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — UPDATED: Professional real-style transaction receipt PDF for Secretary and Owner. This file is the current baseline for future updates. -->
+<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — UPDATED: Real-style PM2V receipt v2 with embedded official logo, compact layout, improved receipt reference, peso formatting, and print-ready signatures. This file is the current baseline/source of truth for future updates. -->
 
 <html lang="en">
 <head>
@@ -2174,6 +2174,8 @@ function pm2vReceiptDate(value){
   const d=valueDate(value);
   return d?d.toLocaleString():'—';
 }
+const PM2V_RECEIPT_LOGO_B64 = '/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwMDAgQDAwMEBAQFBgoGBgUFBgwICQcKDgwPDg4MDQ0PERYTDxAVEQ0NExoTFRcYGRkZDxIbHRsYHRYYGRj/2wBDAQQEBAYFBgsGBgsYEA0QGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBj/wAARCACtALQDASIAAhEBAxEB/8QAHQAAAgICAwEAAAAAAAAAAAAAAAEHCAUGAgQJA//EAEoQAAEDAwEFBAYFBwoFBQAAAAEAAgMEBREGBxIhMUETUXGBCBQiYZGhIzJSYrEVQoKSk6LBFyQzQ0RTVWNy0RYlNLLCdISz0uH/xAAbAQABBQEBAAAAAAAAAAAAAAAAAQMEBQYHAv/EADoRAAEDAgMEBwYFAwUAAAAAAAEAAgMEEQUhMQYSQVETImGBobHRFDJxkcHwFSNCUpIWM+FicoKi8f/aAAwDAQACEQMRAD8AoAgJJoQhJCaEIwkmkhCeEcAu5a7Vc73c47daKCorquQ4ZDTxl7j5BTpo/wBFy+3BsdXrK6R2iE4PqlNiafwJ+q395NSTMjHWKgV2KUtC3eqHgdnH5aqvy79vs13u0nZ2u11tc/OMU0DpD8grvab2KbNdMta+m05DXTt/tFy/nDie/DvZHkFvsEMNNCIaWGKCMcAyJgY0eQUF+JNHutWRqtu4Wm1PEXdpNvVUMpdj20+tYHwaJu2D1ki7P/uIXbdsN2rNZvHRdaR92SM/g5XsQmfxJ/IKqO3dXfKNvj6rz9uGzLaFa2F1boy9RtHNzaVzwPNoK1iennppjDUwyQyDmyRpaR5FelPHocLoXOy2a9U5gvFoobhGRgtqoGSfiF6biZ/U1SoNvXX/ADofkfofVecPRHNXM1N6N+z2+MfLaoqqw1LuIdSP34s++N2eHgQoI1rsA13pGOSspadl9t7Mk1FvBL2jvdGfaHlke9TYqyKTK9j2rUYftPQVpDWv3XcnZf48VFeEkEFri1wIIOCD0QFKWgRhCEkIRhPCEkITyhJCEJ8kk0ckIRhCMoQhGFLOy7YVftedldrm6S0WEnIqHt+lqB3RNPT7x4eK3PYnsHbcIqbWGuKT+aOxJRWyQY7YcxJKPs9zevXhzs+0NYxrGNa1jQA1rRgADkAO5VlVXbvUj15rCbQ7WinJpqI3dxdwHYOZ8AsBpLRGmdD2kW/TdripWkYknI3ppve954nw5dwWw4RkJZVS5xcbkrmk00kzzJI4kniU8Ix1RlHRIm0ISyjPFCE0JZKeUIRhAODwSyhIhRntF2IaT17HLWxRMtF6IJbXUzMNkP8AmsHB3jwPvVRNa6D1JoG/G16gojGXZMNTH7UU7ftMd1945jqF6EZWF1Ppex6x05NY9QUTamkl4jo+J3R7HfmuHf8AwU2nrXRGzswtXge1U9CRFP1o/EfD08l52Iwt82obL7xs11H6vUF1Vaqgk0deG4Eg+y77Lx1HmFoecq8Y8PG83RdZp6iOpjE0Ru06FJGE0ZXpPJHmhCEIQhMlGEIQAp39H7ZGzU9wbrLUdNv2elkxS08g4VUoPM97Gn4nh0KjDZ7ous17tAodOUhdGyQ79ROBnsYW8XO/gPeQr8Wq10NjslLZ7ZTtgo6SJsMMTfzWgfj1J7yq+vqejG43UrG7XY4aKIU0J679ewep4LuIT5BIqjXJkimjgg80oQjCEZTylRdcUcynhHTKRCMcMpJ9EuqVCEzhCMJEJdUJ44JJEqxGptM2jV+mKrT97pxNSVDcH7Ubuj2no4HiCqJa/wBD3TZ/rap0/cxv7n0lPUAYbPEfqvH4EdCCF6ChRtto2bx7QtBSGkib+WreHT0T+snDLovB2OHvA96m0VT0Tt06FarZbHDQTiCU/lu8Dz9VRzokuTmOZI5j2lrmnBBGCCjgFfrsC4oTQhCSeULKaZsdRqXWNssFKD2tdUsgBH5oJ4nyGT5JCbC5Xl7wxpc7QK2Ho06DdZNm79VTUr3V14OWkMJMdO04aPdvEF3huqbfVak/2Wf9mf8AZZTQd+l2f19GLSz/AJfBEymfScmyRNAAHuIA4FWlst3tmoLNDdLXKyanlbkHHFp6tI6EdypY4hVuLy6x5LllLh0W0c8lQZt19/dtfLhbPl4qo3q1TnjTy/qFc20VY/6tHUO8I3H+CuP2bPsN+Ce60cmhPfhg/d4KyGwLeM//AF/yqYyMdC/clY6N3c8YPzXHCuHcLNartTugudupqqMjBbNGHfioC2n7PYtKTx3WztebXO7ccwnPq7+gz9k9M+CYnoXRN3gbhUuMbJT4fEZ4377RrlYjzUcL6RwyyNJjikeBzLWk4XHHsk4Vl9lFi/I+zWkfNGGz1xNXICOIDvqj9UD4pmmgMzt26rMCwd2KzmLe3QBcm11W71WqP9ln/ZlfFzXNcWua5pHMOGCFc7cb0aB5KtO0u3VNTtluNJQwulnqJIhHG3m5xjaAE9UUfQt3gbqzxvZb8NhbK2TeJIFrW17ytHAOQMZJ4AAc1lotK6mnpxPDp26PjPEObSvwfkrC6H2eWnStrikngiqrq5uZap7Qd0/ZZnkB8St0x709Fh1xd5VpQ7Cl8YfVSWJ4AafEqmtRS1NJOYKunmp5RzjmYWO+BSbDLI0ujikeBzLWk4Vub1p+z6gt7qO7UMVQwjg5w9ph72u5gqMtEWus0NtfrdK1DjLQXGnM9JK4fX3Dnj94AuB8Am30JY4C+RUOq2NfTzsaZLxuNr2zB4XF+Ol1Cgp6k8qeY/oFfEhXP3GAcGD4KpmsLUbLru7W3cLWRVDjH/od7TfkQmqqk6AB17qDj2zRwqNkofvAm2lreJWCXJjJHf0bHuI+yCcfBAGVPmw20iDR1ZdZYgH1lQWsJHNjOH4lyZp4emfuKtwbCzidSKcO3ciSddF5fekDs2rrBtRkutntFW63XdpqgIoHERy5+kbwHDiQ79JQvxBwV7b7dtWVWhPRu1lqa2xl1bTWuUUwZwIkc3da79Eu3v0SvEniTknJ71oYmlrQ0m5C7VRQughbC9+8Wi10sIQhOKWl1UzejRYxc9s/5SezMdrpJKgHue7Ebf8AuPwUNKzXomUQFLqq5EcS6npwf13H+CjVjt2FxVHtJOYcNmcNSLfM2+qsjxWy6W1tfdHduLTLE6OfBfDO0uZn7QGRgrWwmDlZ9j3NO802K4tBUy08glhduuHEKR/5btZZ/obZ+xd/9lyj23axbM18lLapGDm3snDPnvKNThp4kBdijo6uvqW01DSzVEzjhscTC4n4J4VUxOTirVmP4o5wDZnEqz+hdbUmtbJJUxwGmqqdwZPBneDSRkEHqCszfLRSX/T9XaK1odDUxlh+6ehHvBwfJafsp0ZW6UsFTPcwI6yue17oQc9k1oOAT38SVIOOCvYd50Y6QZrruG9PPRM9tHXIzHqPhqqnWfT9RW7RafS87CJPWzBNgcmtJ3z8AVa6NjIYWxRNDWMaGtaOgHILVKHRUFHtYuGrgGYqKZrGN6tkPB5+DW/ErZ6uqp6Gikq6qQRxRjLnHp0TNJB0Idfn4Ku2ewf8Mjl39S4/xGnqvuothtrZ/SjqqiVu82ChbUN4fnFoYPxKlJV+2wVldbdqHa0FZUUj5aKMGSCQsLhvO4ZHgF6q3BrQ88CF62lnZTU8dRILhj2m3zU9VdTHR2+eslOI4Y3SO8AMn8FWi47UtZV94fXQ3eaii38xU8OAxgzwBGPa81gJNR6jlgdDNfrlJG9pa5j6h5DgehGeK6dLSVFfXxUVHC6apmcGRxs4lxKraitdLYR3CwuNbUzYiWMpN5luRzJ4aK0OgdSzar0PT3SqY1tSHOhmDORc3qPEYPmsTtSqmWW1WbUzW/S264xnI5ljsh7fMLM6E0ydJ6JprVI/fqOMs7hy33cSB7hwHktP253CBujaO0mQdtUVIl3eu4wHJ+JCsZHObBd2tvFbqullgwcyVB/MDRf/AHZW77qUopWTQsljcHMeA5pHUHiFBO3S1im1Nb7wxuBVwmJ573MPD5OHwUk7MLr+VtmNte9+9LTM9VkJ55ZwH7u6sftis5uezaapY3MtBI2ob34+q75HPkkqB0sBI5XTeNsGJYO6RnFocO7Pyuq4RhxkbGxu8953WgdSeAVu9PWtll0rb7VGAPV4Gsdjq7HE+Zyq47N7GL3tKtsTmZhp3+tSeDOIz+luq0I4BRsNjsC8ql2Doy2KSpcNTYd2v32KFtv9xp620UmjpsOirGSSVDT1YWlgB/Wd8F48XegktOoK61y/0lJUSQOz3tcW/wAF6l7Sru2+bS7lVRu3o4Heqx4P5rOHzOT5rzh2y0It+3jU9O0Ya6sMwH+sB/8A5J2nlL53jh6KdgmKGqxWqZfq5W/4m31WjDyQhCsFskK1/ooNH8n+oH9TcGA+UY/3KqgrSeibVNdpzVFFn2mVEEuPcWvH/iodf/ZKzO17ScLkt2eYViR71LeidjhuNNFdtUOlhp5AHR0LDuvcOheengOK1fZbp2PUW0GAVLA+lom+tStPJxBw0fEg+Ss4OAwoVDStkG+8ZLLbJbPRVTDV1QuL2A4ZakrE2/TGnbVTthoLLRQtaOYiBcfEniVk2QQxH6KJjP8AS0BRfqnbNQ2i6zW6zW/8oSQuLHzvk3I94cwMAk471rL9u99cwiKxW9jjyc573fLgppq4GHdutVLtJhVI8xb4uOQNvAWU51dXS0FFLWVk7IYIml75HnAaAsTpPVFFq6wuulCx8cbZ3w7j/rDdPAnuyMHzVbNSa11JqqUflavJgactpoRuRg+HU+OVu2w6/mm1NWWCZ2IqyPtoc/3jOY82n91NR14fKGAZKupNr46vEWU8bbRm4udSeHw5d6npRjtk1A63Wq1WiB/0lXVsklaDx7Jjgfm7HwKk5Vd2kagN92nVtRE/ego3iliGeGGHiR4u3k7Wy9HHlqVY7VYh7HRWB6zyAPr4eatCOLQVX/bozd19Qv6OoR8nuU+Uzg+iheDkOY058lBW3mM/8W2h4aXb1I5uAMk4f/8AqSvzgPcmtsG7+FOI5t81FkUb552QRMc+R7g1jGjJcTyAHUqxGzTZxFpejbdrqxsl4mb4inafzR97vPkujsu2bNskEeob3EHXGRu9BA8f9M09T98/JSRcrlQ2i1zXG41LKelhbvySvOA0JmjpNwdJJr5Ks2X2cbSMFbWDragH9I5nt8l87xeLfYrPNc7nUNhp4W5cTzJ6ADqT3KrWr9S1eq9WzXioyxhHZwQ5z2UY5Dx6n3lZHX+t6nWl4DmOdDbYHEU0Gef33fePyWo735pPFRK2q6U7jdB4rPbU7Q/iD/Z4P7bTr+48/hyUvbCr45l5uVgld7EzBUxD7zeDvkR8FNNxo47jZqqgmAMdRE6Jw9zgQqr6LvI0/ry2XR7sRsmDJT9x3su+Rz5K2I4hTsPfvRbp4LW7GVXtGHmB5uWEjuOY+qh7YdY56WS93OsjLZWTeoNBHIsOX/Pd+CknVl3Fh0Tc7tnDoIHOZ73kYaPiQshSUVLQtlbSQtjEsrpn46vcckqLtud6FPp2gscUmJKuUzSN+4wcP3iPgnSBTQEclPkY3BMJcGn3QfmTl4lQSC5x3nEuc45JPUnqqSekRG2P0hLzufnRwOPj2LFdonuVF9u1YK30gtSPaciOZkP6kbWn5gquw0HpCexYvYVpNc93+n6hR3xQhCvF1ZCnT0W716jtMuNmecMuFEXNHe+NwcP3S5QUts2a6jZpTavYr7K7dhgqmiY/5bvYf+64pmoZvxuaq7F6X2qilhGpBt8eHivWPYHG0118lx7Qjhb5Zcf4KY7o98VkrJYzh7IHuaR0IaVEOwQtMt+LSHDEGCOo9tbrtJ1fSaZ0hPDvB9fWxuhp4s8eIwXn3DPxwFHpXBlOCVR4BOylwRsspsAHeZVZA4uaHOJJPEk9UIHLCFQrkGpuhZCx3WWx6jorvDnepZmyYHUdR5jIWPQlBINwvcUjoniRhsQbhWr1ZqWGz7Oau/07wS6nBpnZ+s94wz5kFVVcXPy9xJeckuPUrYLlrG63TRFu0vUBgpaF2814J3pMZDQ7wBOFrxGRhSquo6Yi2gWh2kxoYnLGWe60eJ19FcOzydtp2gl+1Txu+LQulX6Xtlz1ZQX+tjMs9DG5kMbuLAXEHeI6kY4eKheg22Xy32qloY7Lb3tp4mwhznvy4NAGT8F2P5eb/wD4Fbv13qz9tgIsT4Lc/wBV4S+NrZXXtb9J1HdzU9LrVtvoblSGluNHBVwEgmKdge0kcjgqDht4v2eNht37R65fy83z/Abf+1evXt0HNPHa/CnCxef4n0UvDSGlAMDTdqx/6Vn+y6l00lpaOy1kzNO2tsjIHua4UzMghp9yiz+Xm+f4Bb/2r18arble6qhmpjYqBolY5hcJXkjIwvBrKe3+FGftLgpaQLfxPooqaO0jG/1CthoO9C/bPbZcN/ek7IRS/wCtnsn8M+aqiBhoHctp03tA1JpW0vt1omp2wPkMpEsW+Q4gA4+CraOoELiXaFYnZjGo8MqHumvuOHDnw+qtOqx7VrsbvtQrSx+9DSAUkfcN3O9+8T8F2jtj110rKMf+2C0WaeSoqJKiZ5fJI8ve49STklPVlW2VgaxWm020sGI07YKYHW5uLaacV8iWsBfIcMaMuPcAvOzVd1/LmurzeActrK2adue5zyR8sK8O1jUg0tsbvt1bJuTupzTQd/aS+wMeGSfJUFT2GMyc9WewdKRHLUHiQB3ZnzCeUJIVqugp8kIQhC9PfQ72mW2X0ebjqC71JfVW4Q0FRGOL5JGB24B3lzd058e5fTUl/r9T6jnvFwf9JJwZGD7MTByaPcFRfYLtGfonaCLbX1JZZbsWw1IcfZikH9HL5ZIJ7nHuV1HAtOFR128wiMe7quU7Xmanc2jAtFm4dpJJPyvkELL0lvo6m0ZjEktcRI4xiUMLWtGQWtI+kHA5wcju78RldqG5V9PRupIKuRkLs5YPfwOD0z1xzUJhAPWWQp3xscTILiy7FLTUMdjludayWYCZsDYo5BGAS0uJc7B7uAxx49yKCipavU8dEW1Dad7jhspEb8bhcATyHj5rq01bV0TnOpZ3RFww4DiHY5ZB4Lh61U+uOq+3kM7iSZC7LiSMHj5ou3JONmiG5dulr5a88+1ZC926G21VPFCHNkkgbI+EyNl3C4nADmjDsjdPmvpfLFLaYqaQx1DWuBhlMrcfTNALt3vbxGPArF+s1BfC8zPLoABESfqAHIA8Ckamd0L4XTPLHv7RzSc5dx4n38T8UrnNN8kr5oHb9mWvp2f+rMV1roYLIypBdDKaeGVjnTtd27ngbzQwDeaBknPu96wbC0SNL2lzQeLQcZHj0TkkkkLTI9zi1oYCTyAGAPILivL3AnIJmeZj3AsbZd+8R0dPUxsoqaaEdiyR3aS9pkuYHcPZGMZWSvVmpKGgNRFHJDiVsUe9O2Xt/Y3nHAGWEZbwP2lgZJJJ3h0z3PcGhuSegGAPIALnLV1UzXslnke17g9wcebgMA+ODhet9ueWqe9oi/MuzXTTL77FlDYZm6T/ACs6Ko3yTMMM+j7EO3Cc/a3uPgFxo6K2yWiGpqmVT5Jqs04EEgG6N1pzukHePtcuCxxq6reDvWJN4R9iDnkzGN3wwcL6Ut0uNDA6GjrJYWOdvEMOOOMZz0OEocy4yXps9OHA7mVrc8+a+5tzIbhc6SSQvNGyQte3gHFrw3PhxXbttihuFohqGzSetPq+yEAAxJGAwu3fvDeJx1APcsK2SRm/uPc3fbuuwfrDOcH4BfSGsq4Ox7Gpkj7GTtY9w43H8PaHv4D4JGuaDmE3FNA113suM/P6Bdulo6R9ZXuqDI6CkY6Ts4yA6QB4YBnHDmCTjkFxu1vbRS08kTd2Goi32DtmzDg4g4c3mOHUDqurFUVFPU+swTPjmyTvtPE55+OVhtba0ptOaUr9U3+qMjKSL2WuODI7kyNvieGB7ygWcN0DNe49yZvQxsu8nLvP2Ld6rl6U2sGz3S2aIpJctph67WAH+scMRtPg0k/pBVzwslfr3Xak1PXX65ydpV1szppD0BJ5D3AYA9wWNytFBF0TAxdtwmgFBSMpxqBn8ePihCSE8rJNCCjCEIGRyKt56P21b/iiyM0ffqoG80MeKeSQ8aqFo4D3vaOfeMHoVUNdm3XGutN1p7nbamSlq6eQSwzRnDmOHIhMVEAmZunVVOM4THidOYX5HUHkfvVekfLqmox2RbXbbtGsraKsdFS6ip2fzil5CcD+tj7x3jp4KTVnZI3Ru3XaridZRy0kpgnFnD7y7EEhJCa8KMjKa4poSWTylnikmiyLIJRnuSQhLZPPFBKSEIsjJ700cAkS1rS5zg1oGSScADvQi10OkZHE6WV7WRsBc57zgNA5knoFTDbrtTbrzVDbTZZ3GwW95EZHAVMvIy+HRvuyeq2XbntubfBPozR9V/ywHcra6M/9UerGH+77z+d4c6/FXNDSbn5j9eC6hsns4aa1ZUjrn3RyHM9p8EIQmrNbtJCSEIQmg8kIQkmEI8kIXZt9xrrVdILjbauWlq6d4kiniduuY4dQVa7ZZ6Q9r1DHBY9bSRW268GMrjhsFSfvf3bj+qfdyVSMITE9OyYWcqrFcGp8Tj3JhmNCNR98l6V5BAIIIIyCOoQqRbPtuWsdCsjoHSi72hnAUNW45jH+W/m3w4j3KyWkNu+z3VkbIn3QWaudwNLcSIxn7sn1T8QfcqWajkiztcLl2J7L1tCS4N32cx9RqPLtUloSY5skTZY3NfG4Za9pyCPceq5KIs2RZJCEIQhCEIQhC6d0vFosVC6tvdzpLfTtGTLUyiMeWefkoT1t6TenbU2Sj0ZRuvNXjAq5gYqdh7wPrP8AkPenY4XyGzArChwqrrnbtOwnt4fPRTRer7Z9OWaW7X24wUFFEPalmdgZ7gObj7hxVTNrW3m5a0bNYdNdtbrATuyOJ3Zqwfex9Vn3evXuUb6s1tqbW93/ACjqS6S1b257OL6scQ7mMHAfj3rX1cU1C2PrPzK6XgeycNCRNUdeTwHw5ntQjqgIU9a9GUkJoQkhMoQhLqnyRySQhNCQ4poQglCSaEJpdUkwhCz1h1tq7S7w6waiuFAB/VxTHcPiw+yfgpItXpN7SKFrWV4tVzaOs9NuOPmwt/BQyUJp8Eb/AHmhQanDKSqzmia4/DP56qx1L6WNcGgVuiqV56mGscz5FpXbd6WcO57Gh373vuHD/wCNVmSTPsMP7VWHZXCyb9D4u9VYSu9K7UEjCLdpO2U56OnmfLjyG6tNvXpCbUbxG6Nt7itsbvzbfTtjP6xy75qLuiS9tpYW6NUmDAMOgN2Qt7xfzuu5cbrc7vWGrutwqq6c85amV0jviSuojqgqQBbRW7WhosBkjKEIQlRlLKEIQmjKSEIRgoT5IQhf/9k=';
+
 function pm2vPdfWrap(value,maxChars=44){
   const words=String(value??'—').trim().split(/\s+/).filter(Boolean);
   if(!words.length)return ['—'];
@@ -2188,7 +2190,26 @@ function pm2vPdfWrap(value,maxChars=44){
 }
 function pm2vReceiptSafeId(value){
   const id=String(value||'').replace(/[^a-zA-Z0-9]/g,'').toUpperCase();
-  return id ? id.slice(-12) : 'PENDING';
+  return id ? id.slice(-6) : 'PENDING';
+}
+function pm2vReceiptDateParts(value){
+  const d=value?.toDate ? value.toDate() : new Date(value||Date.now());
+  if(Number.isNaN(d.getTime()))return {date:'—',time:'—',stamp:'00000000'};
+  const pad=n=>String(n).padStart(2,'0');
+  const stamp=`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}`;
+  return {
+    date:d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}),
+    time:d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit',second:'2-digit'}),
+    stamp
+  };
+}
+function pm2vReceiptDisplayName(value){
+  const raw=String(value||'').trim();
+  if(!raw)return 'PM2V User';
+  if(!raw.includes('@'))return raw;
+  const local=raw.split('@')[0].replace(/[._-]+/g,' ').trim();
+  if(!local)return raw;
+  return local.replace(/\b\w/g,ch=>ch.toUpperCase());
 }
 function pm2vBuildReceiptPdf(tx){
   const type=txTypeLabel(tx.type);
@@ -2197,57 +2218,50 @@ function pm2vBuildReceiptPdf(tx){
   const weight=Number(tx.weight||0).toLocaleString(undefined,{maximumFractionDigits:2})+' kg';
   const party=tx.buyerName||tx.supplierName||tx.party||'—';
   const amountValue=Number(tx.amount||0);
-  const amount='PHP '+amountValue.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+  const amount='₱'+amountValue.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
   const status=tx.status||'Recorded';
-  const receiptNo='PM2V-'+pm2vReceiptSafeId(tx.id);
+  const dateParts=pm2vReceiptDateParts(tx.createdAt);
+  const receiptNo='PM2V-'+dateParts.stamp+'-'+pm2vReceiptSafeId(tx.id);
   const transactionId=String(tx.id||'—');
-  const createdDate=pm2vReceiptDate(tx.createdAt);
-  const recordedBy=tx.createdBy||tx.createdByName||'PM2V User';
+  const recordedRaw=tx.createdByName||tx.createdBy||'PM2V User';
+  const recordedBy=pm2vReceiptDisplayName(recordedRaw);
   const notes=tx.notes||'No additional notes.';
 
-  // Compact receipt-size page (4 x 8.5 inches) for a more authentic transaction receipt.
-  const W=288,H=612, M=22;
+  const W=288,H=560,M=22;
   const c=[];
   const esc=pm2vPdfText;
-
-  const text=(x,y,size,value,font='F1')=>{
-    c.push('BT',`/${font} ${size} Tf`,`1 0 0 1 ${x} ${y} Tm`,`(${esc(value)}) Tj`,'ET');
-  };
-  const line=(x1,y1,x2,y2,width=.7)=>{
-    c.push(`${width} w`,`${x1} ${y1} m`,`${x2} ${y2} l`,'S');
-  };
-  const fillRect=(x,y,w,h,r,g,b)=>{
-    c.push(`${r} ${g} ${b} rg`,`${x} ${y} ${w} ${h} re`,'f','0 0 0 rg');
-  };
+  const text=(x,y,size,value,font='F1')=>c.push('BT',`/${font} ${size} Tf`,`1 0 0 1 ${x} ${y} Tm`,`(${esc(value)}) Tj`,'ET');
+  const line=(x1,y1,x2,y2,width=.6)=>c.push(`${width} w`,`${x1} ${y1} m`,`${x2} ${y2} l`,'S');
+  const fillRect=(x,y,w,h,r,g,b)=>c.push(`${r} ${g} ${b} rg`,`${x} ${y} ${w} ${h} re`,'f','0 0 0 rg');
   const section=(label,y)=>{
-    c.push('0.12 0.42 0.24 rg');
-    text(M,y,8,label,'F2');
-    c.push('0 0 0 rg');
-    line(M,y-6,W-M,y-6,.55);
+    c.push('0.12 0.42 0.24 rg');text(M,y,7,label,'F2');c.push('0 0 0 rg');line(M,y-5,W-M,y-5,.55);
   };
 
-  // Header
-  fillRect(0,H-94,W,94,.12,.42,.24);
+  fillRect(0,H-88,W,88,.12,.42,.24);
+  c.push('q','52 0 0 52 20 494 cm','/Im1 Do','Q');
   c.push('1 1 1 rg');
-  text(M,H-36,18,'PM2V','F2');
-  text(M+57,H-34,8,'SCRAP TRADING');
-  text(M,H-54,7,'SMART INVENTORY • SUSTAINABLE FUTURE');
-  text(W-M-94,H-35,7,'OFFICIAL');
-  text(W-M-94,H-48,7,'RECEIPT');
+  text(82,H-32,14,'PM2V SCRAP TRADING','F2');
+  text(82,H-48,6.8,'SMART INVENTORY • SUSTAINABLE FUTURE');
+  text(82,H-66,7,'OFFICIAL TRANSACTION RECEIPT','F2');
   c.push('0 0 0 rg');
 
-  let y=H-118;
-  text(M,y,7,'TRANSACTION RECEIPT','F2');
+  let y=H-108;
+  text(M,y,7,'RECEIPT NO.','F2');
+  text(M,y-16,12,receiptNo,'F2');
+  text(W-M-72,y,6,'STATUS','F2');
+  text(W-M-72,y-16,9,status,'F2');
+  y-=34;
+  line(M,y,W-M,y,.7);
   y-=17;
-  text(M,y,7,'Receipt No.'); text(104,y,7,receiptNo,'F2');
+  text(M,y,7,'DATE');
+  text(92,y,7,dateParts.date,'F2');
   y-=13;
-  text(M,y,7,'Date & Time'); text(104,y,7,createdDate);
-  y-=13;
-  text(M,y,7,'Status'); text(104,y,7,status,'F2');
+  text(M,y,7,'TIME');
+  text(92,y,7,dateParts.time);
 
-  y-=24;
+  y-=25;
   section('TRANSACTION DETAILS',y);
-  y-=22;
+  y-=20;
 
   const detailRows=[
     ['Transaction Type',type],
@@ -2256,72 +2270,73 @@ function pm2vBuildReceiptPdf(tx){
     ['Weight',weight],
     ['Buyer / Supplier',party]
   ];
-
-  detailRows.forEach(([label,value])=>{
-    const wrapped=pm2vPdfWrap(value,28);
-    text(M,y,7,label);
-    text(110,y,7,wrapped[0]);
-    wrapped.slice(1).forEach(extra=>{y-=10;text(110,y,7,extra);});
+  detailRows.forEach(([label,value],index)=>{
+    const wrapped=pm2vPdfWrap(value,27);
+    if(index%2===0)fillRect(M,y-10,W-(M*2),13,.97,.98,.97);
+    text(M+4,y,7,label);
+    text(112,y,7,wrapped[0]);
+    wrapped.slice(1).forEach(extra=>{y-=9;text(112,y,7,extra);});
     y-=16;
   });
 
-  y-=3;
-  fillRect(M,y-45,W-(M*2),45,.94,.97,.95);
-  text(M+10,y-15,7,'TOTAL AMOUNT');
-  text(M+10,y-34,16,amount,'F2');
-  y-=61;
-
-  section('RECORD INFORMATION',y);
-  y-=22;
-  text(M,y,7,'Transaction ID');
-  pm2vPdfWrap(transactionId,28).forEach((part,i)=>{
-    text(110,y-(i*10),6,part);
-  });
-  y-=22;
-  text(M,y,7,'Recorded By');
-  pm2vPdfWrap(recordedBy,28).forEach((part,i)=>{
-    text(110,y-(i*10),7,part);
-  });
-  y-=25;
+  y-=2;
+  fillRect(M,y-43,W-(M*2),43,.12,.42,.24);
+  c.push('1 1 1 rg');
+  text(M+10,y-14,6.8,'TOTAL AMOUNT','F2');
+  text(M+10,y-33,17,amount,'F2');
+  c.push('0 0 0 rg');
+  y-=57;
 
   section('NOTES',y);
-  y-=18;
-  pm2vPdfWrap(notes,42).slice(0,5).forEach(part=>{
-    text(M,y,7,part);
-    y-=11;
-  });
-
+  y-=17;
+  pm2vPdfWrap(notes,42).slice(0,4).forEach(part=>{text(M,y,7,part);y-=10;});
   y-=8;
-  line(M,y,W-M,y,.7);
-  y-=24;
-  line(M,y,112,y,.5);
-  line(176,y,W-M,y,.5);
-  text(M,y-11,6,'Authorized Signature');
-  text(176,y-11,6,'Received By');
 
-  // Footer
-  text(M,30,6,'This receipt is generated from the PM2V Scrap Trading system.');
-  text(M,18,6,'Keep this document for your transaction records.');
-  text(W-M-54,18,6,'PM2V');
+  section('RECORD INFORMATION',y);
+  y-=17;
+  text(M,y,7,'Recorded By');
+  text(94,y,7,recordedBy,'F2');
+  y-=13;
+  text(M,y,7,'Transaction ID');
+  pm2vPdfWrap(transactionId,29).forEach((part,i)=>text(94,y-(i*9),6.2,part));
 
-  const stream=c.join('\n');
-  const objects=[
-    '<< /Type /Catalog /Pages 2 0 R >>',
-    '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
-    `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${W} ${H}] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>`,
-    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
-    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>',
-    `<< /Length ${new TextEncoder().encode(stream).length} >>\nstream\n${stream}\nendstream`
-  ];
+  y-=31;
+  line(M,y,111,y,.55); line(177,y,W-M,y,.55);
+  text(M,y-10,6,'Authorized By');
+  text(177,y-10,6,'Received By');
+  text(M,y-19,5.5,'Name & Signature');
+  text(177,y-19,5.5,'Name & Signature');
 
-  let pdf='%PDF-1.4\n';
+  line(M,36,W-M,36,.5);
+  text(M,24,5.8,'PM2V Scrap Trading • System-generated transaction receipt');
+  text(M,15,5.8,'Keep this document for your transaction records.');
+
+  const encoder=new TextEncoder();
+  const ascii=s=>encoder.encode(s);
+  const logoBytes=Uint8Array.from(atob(PM2V_RECEIPT_LOGO_B64),ch=>ch.charCodeAt(0));
+  const content=c.join('\n');
+  const contentBytes=ascii(content);
+  const parts=[ascii('%PDF-1.4\n')];
   const offsets=[0];
-  objects.forEach((obj,i)=>{offsets.push(pdf.length);pdf+=`${i+1} 0 obj\n${obj}\nendobj\n`;});
-  const xref=pdf.length;
-  pdf+=`xref\n0 ${objects.length+1}\n0000000000 65535 f \n`;
-  for(let i=1;i<offsets.length;i++)pdf+=`${String(offsets[i]).padStart(10,'0')} 00000 n \n`;
-  pdf+=`trailer\n<< /Size ${objects.length+1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`;
-  return new Blob([pdf],{type:'application/pdf'});
+  let length=parts[0].length;
+  const addAscii=s=>{const b=ascii(s);parts.push(b);length+=b.length;};
+  const addBytes=b=>{parts.push(b);length+=b.length;};
+  const beginObj=n=>{offsets[n]=length;addAscii(`${n} 0 obj\n`);};
+  const endObj=()=>addAscii('endobj\n');
+
+  beginObj(1);addAscii('<< /Type /Catalog /Pages 2 0 R >>\n');endObj();
+  beginObj(2);addAscii('<< /Type /Pages /Kids [3 0 R] /Count 1 >>\n');endObj();
+  beginObj(3);addAscii(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${W} ${H}] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> /XObject << /Im1 6 0 R >> >> /Contents 7 0 R >>\n`);endObj();
+  beginObj(4);addAscii('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\n');endObj();
+  beginObj(5);addAscii('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>\n');endObj();
+  beginObj(6);addAscii(`<< /Type /XObject /Subtype /Image /Width 180 /Height 180 /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${logoBytes.length} >>\nstream\n`);addBytes(logoBytes);addAscii('\nendstream\n');endObj();
+  beginObj(7);addAscii(`<< /Length ${contentBytes.length} >>\nstream\n`);addBytes(contentBytes);addAscii('\nendstream\n');endObj();
+
+  const xref=length;
+  addAscii('xref\n0 8\n0000000000 65535 f \n');
+  for(let i=1;i<=7;i++)addAscii(`${String(offsets[i]).padStart(10,'0')} 00000 n \n`);
+  addAscii(`trailer\n<< /Size 8 /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`);
+  return new Blob(parts,{type:'application/pdf'});
 }
 
 function pm2vOpenReceipt(tx){
