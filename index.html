@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — UPDATED: Receipt V4 final signature-data touch. Recorded By uses the current logged-in user printed name, Authorized By is fixed to Raquel Vargas, and Received By uses the transaction Buyer/Supplier printed name while preserving the existing receipt layout. This file is the current baseline/source of truth for future updates. -->
+<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — VERSION V5: Quantity-based stock status system. Current baseline/source of truth. Stock status is automatically calculated from current weight, minimum stock, maximum stock, and the manual Active/Inactive state. Transactions update inventory weight and then recalculate status. -->
 
 <html lang="en">
 <head>
@@ -1302,6 +1302,29 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 }
 </style>
 
+
+<style id="pm2vStockStatusStyles">
+/* PM2V V5 quantity-based stock status UI */
+.stock-status-pill{display:inline-flex;align-items:center;gap:7px;min-height:28px;padding:0 10px;border-radius:999px;font-size:11px;font-weight:900;white-space:nowrap}
+.stock-status-pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.stock-in-stock{background:#e8f7ec;color:#14743c}
+.stock-low-stock{background:#fff6dc;color:#a66a00}
+.stock-out-of-stock{background:#fff0ef;color:#c33232}
+.stock-overstock{background:#e9f2ff;color:#1769c2}
+.stock-inactive{background:#f1f3f4;color:#7b8490}
+.stock-status-summary{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:18px}
+.stock-status-card{border:1px solid #e2e8e4;background:#fff;border-radius:14px;padding:15px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.03)}
+.stock-status-card>span{font-size:17px;line-height:1}
+.stock-status-card strong{display:block;font-size:22px;color:#17335a;line-height:1.1}
+.stock-status-card small{display:block;margin-top:4px;font-size:10px;font-weight:800;color:#718195}
+.stock-status-card.in-stock>span{color:#18a64b}.stock-status-card.low-stock>span{color:#f0ad00}.stock-status-card.out-stock>span{color:#df3b3b}.stock-status-card.overstock>span{color:#2478d4}.stock-status-card.inactive>span{color:#8b95a1}
+.stock-range{font-size:11px;color:#61758b;font-weight:800;white-space:nowrap}
+#inventory .form-grid-inventory{grid-template-columns:repeat(4,minmax(0,1fr))}
+#inventory .table-wrap td:nth-child(4){white-space:nowrap}
+@media(max-width:1050px){#inventory .form-grid-inventory{grid-template-columns:repeat(3,minmax(0,1fr))}.stock-status-summary{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){#inventory .form-grid-inventory{grid-template-columns:1fr!important}.stock-status-summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.stock-status-card{padding:12px}.stock-status-card strong{font-size:18px}}
+</style>
+
 <style id="pm2vReceiptStyles">
 .tx-receipt-btn{border:0;border-radius:9px;padding:9px 13px;font:inherit;font-weight:800;font-size:12px;letter-spacing:.02em;cursor:pointer;background:#1f6a3c;color:#fff;white-space:nowrap}
 .tx-receipt-btn:hover{filter:brightness(.94)}
@@ -1575,8 +1598,11 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 <div class="form-grid-inventory">
 <div><label>Item Name</label><input id="inventoryItemName" placeholder="e.g. Aluminum Cans"/></div>
 <div><label>Category</label><select id="inventoryCategory"><option>Metal</option><option>Wood</option><option>Plastic</option><option>Paper</option><option>Fiber</option></select></div>
-<div><label>Weight (kg)</label><input id="inventoryWeight" placeholder="0.00" step="0.01" type="number"/></div>
+<div><label>Current Weight (kg)</label><input id="inventoryWeight" placeholder="0.00" step="0.01" min="0" type="number"/></div>
+<div><label>Minimum Stock (kg)</label><input id="inventoryMinStock" value="10" step="0.01" min="0" type="number"/></div>
+<div><label>Maximum Stock (kg)</label><input id="inventoryMaxStock" value="100" step="0.01" min="0" type="number"/></div>
 <div><label>Condition</label><select id="inventoryCondition"><option>Good</option><option>Fair</option><option>Poor</option></select></div>
+<div><label>Item State</label><select id="inventoryState"><option value="Active">Active</option><option value="Inactive">Inactive</option></select></div>
 </div>
 <div class="inventory-form-actions">
 <button class="inventory-cancel" id="cancelInventoryEditBtn" style="display:none" type="button">Cancel</button>
@@ -1586,8 +1612,8 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 <div class="current-inventory-heading"><div><h2>Current Inventory</h2><p>Saved inventory records and their latest details.</p></div><span id="inventoryRecordCount">0 records</span></div>
 <div class="table-wrap">
 <table>
-<thead><tr><th>ITEM NAME</th><th>CATEGORY</th><th>WEIGHT</th><th>CONDITION</th><th>LAST UPDATED</th><th id="inventoryActionsHeader" style="display:none">ACTIONS</th></tr></thead>
-<tbody id="inventoryTableBody"><tr><td class="empty" colspan="6">Loading inventory…</td></tr></tbody>
+<thead><tr><th>ITEM NAME</th><th>CATEGORY</th><th>CURRENT WEIGHT</th><th>MIN / MAX</th><th>STOCK STATUS</th><th>CONDITION</th><th>LAST UPDATED</th><th id="inventoryActionsHeader" style="display:none">ACTIONS</th></tr></thead>
+<tbody id="inventoryTableBody"><tr><td class="empty" colspan="8">Loading inventory…</td></tr></tbody>
 </table>
 </div>
 </section>
@@ -1646,10 +1672,17 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 </div>
 <div class="report-grid">
 <div class="role-card"><h3>Total Items</h3><div class="big" id="rTotal">0</div><div class="muted">Inventory records</div></div>
-<div class="role-card"><h3>Available</h3><div class="big" id="rAvailable">0</div><div class="muted">Active inventory</div></div>
+<div class="role-card"><h3>In Stock</h3><div class="big" id="rAvailable">0</div><div class="muted">Within stock range</div></div>
 <div class="role-card"><h3>Transactions</h3><div class="big" id="rTransactions">0</div><div class="muted">Recorded transactions</div></div>
 <div class="role-card"><h3>Total Weight</h3><div class="big" id="rWeight">0 kg</div><div class="muted">Current inventory weight</div></div>
 </div>
+<section class="stock-status-summary" aria-label="Stock status summary">
+<div class="stock-status-card in-stock"><span>●</span><div><strong id="rInStock">0</strong><small>In Stock</small></div></div>
+<div class="stock-status-card low-stock"><span>●</span><div><strong id="rLowStock">0</strong><small>Low Stock</small></div></div>
+<div class="stock-status-card out-stock"><span>●</span><div><strong id="rOutOfStock">0</strong><small>Out of Stock</small></div></div>
+<div class="stock-status-card overstock"><span>●</span><div><strong id="rOverstock">0</strong><small>Overstock</small></div></div>
+<div class="stock-status-card inactive"><span>●</span><div><strong id="rInactive">0</strong><small>Inactive</small></div></div>
+</section>
 <section class="role-card report-category-card" style="margin-top:18px">
 <div class="report-category-head">
 <div>
@@ -1788,69 +1821,144 @@ function initials(n){return String(n||'U').trim().split(/\s+/).map(x=>x[0]).join
 let inventoryInlineEditRow=null;
 let inventoryInlineEditPlaceholder=null;
 let inventoryInlineEditActive=false;
-async function loadInventory(){try{const s=await getDocs(collection(db,'inventory'));const rows=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(valueDate(b.lastUpdated)?.getTime()||0)-(valueDate(a.lastUpdated)?.getTime()||0));const body=document.getElementById('inventoryTableBody'),dash=document.getElementById('dashboardInventoryBody');const role=String(PM2V_PROFILE?.role||'').trim().toLowerCase();const canManage=role==='secretary'||role==='owner';const canCreate=role==='staff';const actionHead=document.getElementById('inventoryActionsHeader');if(actionHead)actionHead.style.display=canManage?'':'none';const manualToggle=document.getElementById('manualEntryToggle');if(manualToggle)manualToggle.style.display=canCreate?'':'none';if(body)body.innerHTML=rows.length?rows.map(x=>`<tr><td><strong>${esc(x.itemName||'Unnamed Item')}</strong></td><td><span class="inventory-category-pill">${esc(x.category||'—')}</span></td><td>${Number(x.weight||0).toLocaleString(undefined,{maximumFractionDigits:2})} kg</td><td><span class="inventory-condition-pill condition-${String(x.condition||'unknown').toLowerCase().replace(/[^a-z]+/g,'-')}">${esc(x.condition||'—')}</span></td><td>${fmtDate(x.lastUpdated)}</td>${canManage?`<td><div class="inventory-actions"><button type="button" class="inventory-action edit" data-inventory-action="edit" data-inventory-id="${encodeURIComponent(x.id)}">Edit</button><button type="button" class="inventory-action delete" data-inventory-action="delete" data-inventory-id="${encodeURIComponent(x.id)}">Delete</button></div></td>`:''}</tr>`).join(''):`<tr><td colspan="${canManage?6:5}" class="empty">No inventory records found.</td></tr>`;if(dash)dash.innerHTML=rows.slice(0,10).map(x=>`<tr><td><strong>${esc(x.itemName||'Unnamed Item')}</strong></td><td><span class="category-pill">${esc(x.category||'—')}</span></td><td>${Number(x.weight||0).toLocaleString(undefined,{maximumFractionDigits:2})} kg</td><td><span class="status-pill">Active</span></td><td class="dashboard-updated">${fmtDate(x.lastUpdated)}</td></tr>`).join('')||'<tr><td colspan="5" style="text-align:center;color:#98a8ba">No inventory records found.</td></tr>';document.getElementById('dashTotalItems')?.replaceChildren(document.createTextNode(String(rows.length)));document.getElementById('dashCategories')?.replaceChildren(document.createTextNode(String(new Set(rows.map(x=>x.category).filter(Boolean)).size)));document.getElementById('dashActiveItems')?.replaceChildren(document.createTextNode(String(rows.filter(x=>String(x.status||'Active').toLowerCase()!=='inactive').length)));const summaryCount=document.getElementById('inventorySummaryCount');const summaryWeight=document.getElementById('inventorySummaryWeight');if(summaryCount)summaryCount.textContent=String(rows.length);const recordCount=document.getElementById('inventoryRecordCount');if(recordCount)recordCount.textContent=rows.length+' record'+(rows.length===1?'':'s');if(summaryWeight)summaryWeight.textContent=rows.reduce((sum,x)=>sum+Number(x.weight||0),0).toLocaleString(undefined,{maximumFractionDigits:2})+' kg';const writeSection=document.getElementById('inventoryWriteSection');if(writeSection&&!document.body.classList.contains('inventory-editing'))writeSection.style.display=canCreate?'':'none'}catch(e){console.error(e);toast('Could not load inventory. Check Firestore rules.','error')}}
-async function saveInventory(){const role=String(PM2V_PROFILE?.role||'').trim().toLowerCase();if(role!=='staff'){toast('Only staff can create new inventory items.','error');return}const name=document.getElementById('inventoryItemName')?.value.trim(),category=document.getElementById('inventoryCategory')?.value,weight=Number(document.getElementById('inventoryWeight')?.value),condition=document.getElementById('inventoryCondition')?.value;if(!name){toast('Enter an item name first.','error');return}if(!Number.isFinite(weight)||weight<0){toast('Enter a valid weight.','error');return}const b=document.getElementById('saveInventoryBtn');b.disabled=true;b.textContent='Saving…';try{await addDoc(collection(db,'inventory'),{itemName:name,category:category||'Metal',weight,condition:condition||'Good',quantity:1,status:'Active',updatedBy:PM2V_USER?.email||'PM2V Staff',lastUpdated:serverTimestamp()});document.getElementById('inventoryItemName').value='';document.getElementById('inventoryWeight').value='';await loadInventory();toast('Inventory item saved to Firebase.')}catch(e){console.error(e);toast('Could not save inventory item. Check Firestore write rules.','error')}finally{b.disabled=false;b.textContent='Save Item to Inventory'}}
+const PM2V_DEFAULT_MIN_STOCK=10;
+const PM2V_DEFAULT_MAX_STOCK=100;
+function pm2vNum(v,fallback=0){if(v===null||v===undefined||String(v).trim()==='')return fallback;const n=Number(v);return Number.isFinite(n)?n:fallback}
+function pm2vStockThresholds(x={}){
+  let min=pm2vNum(x.minStock,PM2V_DEFAULT_MIN_STOCK);
+  let max=pm2vNum(x.maxStock,PM2V_DEFAULT_MAX_STOCK);
+  min=Math.max(0,min); max=Math.max(0,max);
+  if(max<min)max=min;
+  return {min,max};
+}
+function pm2vStockStatus(x={}){
+  const state=String(x.status||x.itemState||'Active').trim().toLowerCase();
+  if(state==='inactive')return 'Inactive';
+  const weight=Math.max(0,pm2vNum(x.weight,0));
+  const {min,max}=pm2vStockThresholds(x);
+  if(weight===0)return 'Out of Stock';
+  if(weight<min)return 'Low Stock';
+  if(weight>max)return 'Overstock';
+  return 'In Stock';
+}
+function pm2vStockClass(status){return String(status||'').toLowerCase().replace(/\s+/g,'-')}
+function pm2vStockPill(status){return `<span class="stock-status-pill stock-${pm2vStockClass(status)}">${esc(status)}</span>`}
+function pm2vCurrentUserName(){return window.pm2vCurrentUserName||document.querySelector('.user-name')?.textContent?.trim()||PM2V_USER?.displayName||PM2V_USER?.email||'PM2V User'}
+
+async function loadInventory(){
+  try{
+    const s=await getDocs(collection(db,'inventory'));
+    const rows=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(valueDate(b.lastUpdated)?.getTime()||0)-(valueDate(a.lastUpdated)?.getTime()||0));
+    const body=document.getElementById('inventoryTableBody'),dash=document.getElementById('dashboardInventoryBody');
+    const role=String(PM2V_PROFILE?.role||'').trim().toLowerCase();
+    const canManage=role==='secretary'||role==='owner';
+    const canCreate=role==='staff';
+    const actionHead=document.getElementById('inventoryActionsHeader');
+    if(actionHead)actionHead.style.display=canManage?'':'none';
+    const manualToggle=document.getElementById('manualEntryToggle');
+    if(manualToggle)manualToggle.style.display=canCreate?'':'none';
+
+    if(body)body.innerHTML=rows.length?rows.map(x=>{
+      const status=pm2vStockStatus(x),{min,max}=pm2vStockThresholds(x);
+      return `<tr><td><strong>${esc(x.itemName||'Unnamed Item')}</strong></td><td><span class="inventory-category-pill">${esc(x.category||'—')}</span></td><td>${pm2vNum(x.weight).toLocaleString(undefined,{maximumFractionDigits:2})} kg</td><td><span class="stock-range">${min.toLocaleString(undefined,{maximumFractionDigits:2})} / ${max.toLocaleString(undefined,{maximumFractionDigits:2})} kg</span></td><td>${pm2vStockPill(status)}</td><td><span class="inventory-condition-pill condition-${String(x.condition||'unknown').toLowerCase().replace(/[^a-z]+/g,'-')}">${esc(x.condition||'—')}</span></td><td>${fmtDate(x.lastUpdated)}</td>${canManage?`<td><div class="inventory-actions"><button type="button" class="inventory-action edit" data-inventory-action="edit" data-inventory-id="${encodeURIComponent(x.id)}">Edit</button><button type="button" class="inventory-action delete" data-inventory-action="delete" data-inventory-id="${encodeURIComponent(x.id)}">Delete</button></div></td>`:''}</tr>`;
+    }).join(''):`<tr><td colspan="${canManage?8:7}" class="empty">No inventory records found.</td></tr>`;
+
+    if(dash)dash.innerHTML=rows.slice(0,10).map(x=>{
+      const status=pm2vStockStatus(x);
+      return `<tr><td><strong>${esc(x.itemName||'Unnamed Item')}</strong></td><td><span class="category-pill">${esc(x.category||'—')}</span></td><td>${pm2vNum(x.weight).toLocaleString(undefined,{maximumFractionDigits:2})} kg</td><td>${pm2vStockPill(status)}</td><td class="dashboard-updated">${fmtDate(x.lastUpdated)}</td></tr>`;
+    }).join('')||'<tr><td colspan="5" style="text-align:center;color:#98a8ba">No inventory records found.</td></tr>';
+
+    document.getElementById('dashTotalItems')?.replaceChildren(document.createTextNode(String(rows.length)));
+    document.getElementById('dashCategories')?.replaceChildren(document.createTextNode(String(new Set(rows.map(x=>x.category).filter(Boolean)).size)));
+    document.getElementById('dashActiveItems')?.replaceChildren(document.createTextNode(String(rows.filter(x=>pm2vStockStatus(x)!=='Inactive').length)));
+    const summaryCount=document.getElementById('inventorySummaryCount');
+    const summaryWeight=document.getElementById('inventorySummaryWeight');
+    if(summaryCount)summaryCount.textContent=String(rows.length);
+    const recordCount=document.getElementById('inventoryRecordCount');
+    if(recordCount)recordCount.textContent=rows.length+' record'+(rows.length===1?'':'s');
+    if(summaryWeight)summaryWeight.textContent=rows.reduce((sum,x)=>sum+pm2vNum(x.weight),0).toLocaleString(undefined,{maximumFractionDigits:2})+' kg';
+    const writeSection=document.getElementById('inventoryWriteSection');
+    if(writeSection&&!document.body.classList.contains('inventory-editing'))writeSection.style.display=canCreate?'':'none';
+  }catch(e){console.error(e);toast('Could not load inventory. Check Firestore rules.','error')}
+}
+
+async function saveInventory(){
+  const role=String(PM2V_PROFILE?.role||'').trim().toLowerCase();
+  if(role!=='staff'){toast('Only staff can create new inventory items.','error');return}
+  const name=document.getElementById('inventoryItemName')?.value.trim();
+  const category=document.getElementById('inventoryCategory')?.value;
+  const weight=pm2vNum(document.getElementById('inventoryWeight')?.value,NaN);
+  const minStock=pm2vNum(document.getElementById('inventoryMinStock')?.value,PM2V_DEFAULT_MIN_STOCK);
+  const maxStock=pm2vNum(document.getElementById('inventoryMaxStock')?.value,PM2V_DEFAULT_MAX_STOCK);
+  const condition=document.getElementById('inventoryCondition')?.value;
+  const status=document.getElementById('inventoryState')?.value||'Active';
+  if(!name){toast('Enter an item name first.','error');return}
+  if(!Number.isFinite(weight)||weight<0){toast('Enter a valid current weight.','error');return}
+  if(!Number.isFinite(minStock)||minStock<0||!Number.isFinite(maxStock)||maxStock<minStock){toast('Maximum stock must be greater than or equal to minimum stock.','error');return}
+  const b=document.getElementById('saveInventoryBtn');b.disabled=true;b.textContent='Saving…';
+  try{
+    await addDoc(collection(db,'inventory'),{itemName:name,category:category||'Metal',weight,minStock,maxStock,condition:condition||'Good',quantity:1,status,updatedBy:pm2vCurrentUserName(),lastUpdated:serverTimestamp()});
+    ['inventoryItemName','inventoryWeight','inventoryMinStock','inventoryMaxStock'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+    document.getElementById('inventoryMinStock').value=PM2V_DEFAULT_MIN_STOCK;
+    document.getElementById('inventoryMaxStock').value=PM2V_DEFAULT_MAX_STOCK;
+    await loadInventory(); await loadReports(); toast('Inventory item saved with automatic stock status.');
+  }catch(e){console.error(e);toast('Could not save inventory item. Check Firestore write rules.','error')}
+  finally{b.disabled=false;b.textContent='Save Item to Inventory'}
+}
+
 async function editInventory(id){
   const role=String(PM2V_PROFILE?.role||'').trim().toLowerCase();
   if(!['secretary','owner'].includes(role)){toast('Only secretary and owner can edit inventory items.','error');return}
   try{
     const snap=await getDoc(doc(db,'inventory',id));
     if(!snap.exists()){toast('Inventory item no longer exists.','error');await loadInventory();return}
-    if(inventoryInlineEditActive) cancelInventoryEdit();
-    const x=snap.data();
-    const nameField=document.getElementById('inventoryItemName');
-    const categoryField=document.getElementById('inventoryCategory');
-    const weightField=document.getElementById('inventoryWeight');
-    const conditionField=document.getElementById('inventoryCondition');
+    if(inventoryInlineEditActive)cancelInventoryEdit();
+    const x=snap.data(),{min,max}=pm2vStockThresholds(x);
+    const nameField=document.getElementById('inventoryItemName'),categoryField=document.getElementById('inventoryCategory'),weightField=document.getElementById('inventoryWeight'),minField=document.getElementById('inventoryMinStock'),maxField=document.getElementById('inventoryMaxStock'),conditionField=document.getElementById('inventoryCondition'),stateField=document.getElementById('inventoryState');
     if(nameField)nameField.value=x.itemName||'';
     if(categoryField)categoryField.value=x.category||'Metal';
-    if(weightField)weightField.value=Number(x.weight||0);
+    if(weightField)weightField.value=pm2vNum(x.weight);
+    if(minField)minField.value=min;
+    if(maxField)maxField.value=max;
     if(conditionField)conditionField.value=x.condition||'Good';
-
-    const section=document.getElementById('inventoryWriteSection');
-    const b=document.getElementById('saveInventoryBtn');
+    if(stateField)stateField.value=String(x.status||'Active').toLowerCase()==='inactive'?'Inactive':'Active';
+    const section=document.getElementById('inventoryWriteSection'),b=document.getElementById('saveInventoryBtn');
     if(!section||!b)return;
-
     const isMobile=window.matchMedia('(max-width: 760px)').matches;
-    document.body.classList.add('inventory-editing');
-    section.classList.remove('manual-entry-collapsed');
-    section.classList.add('editing');
-    section.style.display='';
+    document.body.classList.add('inventory-editing');section.classList.remove('manual-entry-collapsed');section.classList.add('editing');section.style.display='';
     document.getElementById('inventoryFormTitle').textContent='Edit Scrap Item';
-    const desc=section.querySelector('.manual-entry-head p');
-    if(desc)desc.textContent='Edit the selected inventory record.';
-    b.textContent='Save Changes';
-    b.dataset.editId=id;
-    const cancel=document.getElementById('cancelInventoryEditBtn');
-    if(cancel){cancel.style.display='';cancel.textContent='Cancel'}
-
+    const desc=section.querySelector('.manual-entry-head p');if(desc)desc.textContent='Edit stock thresholds, current weight, and item state.';
+    b.textContent='Save Changes';b.dataset.editId=id;
+    const cancel=document.getElementById('cancelInventoryEditBtn');if(cancel){cancel.style.display='';cancel.textContent='Cancel'}
     if(isMobile){
-      const body=document.getElementById('inventoryTableBody');
-      const button=body?.querySelector(`button[data-inventory-action="edit"][data-inventory-id="${CSS.escape(encodeURIComponent(id))}"]`);
+      const tableBody=document.getElementById('inventoryTableBody');
+      const button=tableBody?.querySelector(`button[data-inventory-action="edit"][data-inventory-id="${CSS.escape(encodeURIComponent(id))}"]`);
       const row=button?.closest('tr');
-      if(row&&body){
-        inventoryInlineEditRow=row;
-        inventoryInlineEditPlaceholder=document.createComment('PM2V inventory edit placeholder');
-        section.parentNode?.insertBefore(inventoryInlineEditPlaceholder,section);
-        const cell=document.createElement('td');
-        cell.colSpan=6;
-        cell.className='inventory-inline-edit-cell';
-        row.classList.add('inventory-inline-edit-row');
-        row.innerHTML='';
-        row.appendChild(cell);
-        cell.appendChild(section);
-        inventoryInlineEditActive=true;
-        setTimeout(()=>row.scrollIntoView({behavior:'smooth',block:'center'}),30);
-        nameField?.focus();
-        return;
+      if(row&&tableBody){
+        inventoryInlineEditRow=row;inventoryInlineEditPlaceholder=document.createComment('PM2V inventory edit placeholder');section.parentNode?.insertBefore(inventoryInlineEditPlaceholder,section);
+        const cell=document.createElement('td');cell.colSpan=8;cell.className='inventory-inline-edit-cell';row.classList.add('inventory-inline-edit-row');row.innerHTML='';row.appendChild(cell);cell.appendChild(section);inventoryInlineEditActive=true;
+        setTimeout(()=>row.scrollIntoView({behavior:'smooth',block:'center'}),30);nameField?.focus();return;
       }
     }
+    section.scrollIntoView({behavior:'smooth',block:'start'});nameField?.focus();
+  }catch(e){console.error(e);toast('Could not load inventory item for editing.','error')}
+}
 
-    section.scrollIntoView({behavior:'smooth',block:'start'});
-    nameField?.focus();
-  }catch(e){console.error(e);toast('Could not load inventory item for editing.','error')}}
-
-async function updateInventory(){const role=String(PM2V_PROFILE?.role||'').trim().toLowerCase();if(!['secretary','owner'].includes(role)){toast('Only secretary and owner can edit inventory items.','error');return}const b=document.getElementById('saveInventoryBtn'),id=b.dataset.editId;if(!id)return;const name=document.getElementById('inventoryItemName')?.value.trim(),category=document.getElementById('inventoryCategory')?.value,weight=Number(document.getElementById('inventoryWeight')?.value),condition=document.getElementById('inventoryCondition')?.value;if(!name){toast('Enter an item name first.','error');return}if(!Number.isFinite(weight)||weight<0){toast('Enter a valid weight.','error');return}b.disabled=true;b.textContent='Updating…';try{await updateDoc(doc(db,'inventory',id),{itemName:name,category:category||'Metal',weight,condition:condition||'Good',updatedBy:PM2V_USER?.email||'PM2V User',lastUpdated:serverTimestamp()});cancelInventoryEdit();await loadInventory();toast('Inventory item updated.')}catch(e){console.error(e);toast('Could not update inventory item. Check Firestore rules.','error')}finally{b.disabled=false}}
+async function updateInventory(){
+  const role=String(PM2V_PROFILE?.role||'').trim().toLowerCase();
+  if(!['secretary','owner'].includes(role)){toast('Only secretary and owner can edit inventory items.','error');return}
+  const b=document.getElementById('saveInventoryBtn'),id=b.dataset.editId;if(!id)return;
+  const name=document.getElementById('inventoryItemName')?.value.trim(),category=document.getElementById('inventoryCategory')?.value,weight=pm2vNum(document.getElementById('inventoryWeight')?.value,NaN),minStock=pm2vNum(document.getElementById('inventoryMinStock')?.value,PM2V_DEFAULT_MIN_STOCK),maxStock=pm2vNum(document.getElementById('inventoryMaxStock')?.value,PM2V_DEFAULT_MAX_STOCK),condition=document.getElementById('inventoryCondition')?.value,status=document.getElementById('inventoryState')?.value||'Active';
+  if(!name){toast('Enter an item name first.','error');return}
+  if(!Number.isFinite(weight)||weight<0){toast('Enter a valid current weight.','error');return}
+  if(!Number.isFinite(minStock)||minStock<0||!Number.isFinite(maxStock)||maxStock<minStock){toast('Maximum stock must be greater than or equal to minimum stock.','error');return}
+  b.disabled=true;b.textContent='Updating…';
+  try{
+    await updateDoc(doc(db,'inventory',id),{itemName:name,category:category||'Metal',weight,minStock,maxStock,condition:condition||'Good',status,updatedBy:pm2vCurrentUserName(),lastUpdated:serverTimestamp()});
+    cancelInventoryEdit();await loadInventory();await loadReports();toast('Inventory item updated. Stock status recalculated.');
+  }catch(e){console.error(e);toast('Could not update inventory item. Check Firestore rules.','error')}
+  finally{b.disabled=false}
+}
 async function deleteInventory(id){const role=String(PM2V_PROFILE?.role||'').trim().toLowerCase();if(!['secretary','owner'].includes(role)){toast('Only secretary and owner can delete inventory items.','error');return}if(!confirm('Delete this inventory item? This action cannot be undone.'))return;try{await deleteDoc(doc(db,'inventory',id));await loadInventory();toast('Inventory item deleted.')}catch(e){console.error(e);toast('Could not delete inventory item. Check Firestore rules.','error')}}
 // Compatibility: expose inventory actions globally as well as through the
 // delegated table listener. This prevents module-scope functions from breaking
@@ -1874,6 +1982,9 @@ function cancelInventoryEdit(){
   if(desc)desc.textContent='Review the AI result or enter the item manually.';
   document.getElementById('inventoryItemName').value='';
   document.getElementById('inventoryWeight').value='';
+  document.getElementById('inventoryMinStock').value=PM2V_DEFAULT_MIN_STOCK;
+  document.getElementById('inventoryMaxStock').value=PM2V_DEFAULT_MAX_STOCK;
+  document.getElementById('inventoryState').value='Active';
   b.textContent='Save Item to Inventory';
   delete b.dataset.editId;
   document.getElementById('cancelInventoryEditBtn').style.display='none';
@@ -2463,9 +2574,29 @@ async function saveTransaction(){
   const item=document.getElementById('txItem').value.trim(),type=document.getElementById('txType').value,category=document.getElementById('txCategory').value.trim(),weight=Number(document.getElementById('txWeight').value),party=document.getElementById('txParty').value.trim(),amount=Number(document.getElementById('txAmount').value||0),notes=document.getElementById('txNotes').value.trim();
   if(!item||!Number.isFinite(weight)||weight<=0){toast('Enter an item and a valid weight.','error');return}
   try{
-    await addDoc(collection(db,'transactions'),{type,itemName:item,category:category||'Uncategorized',weight,buyerName:type==='sale'?party:'',supplierName:type==='collection'?party:'',amount,notes,status:'Recorded',createdBy:PM2V_USER?.email||'PM2V User',createdAt:serverTimestamp()});
+    const invSnap=await getDocs(collection(db,'inventory'));
+    const normalizedItem=item.trim().toLowerCase(),normalizedCategory=(category||'').trim().toLowerCase();
+    const match=invSnap.docs.map(d=>({id:d.id,ref:d.ref,...d.data()})).find(x=>{
+      const sameItem=String(x.itemName||'').trim().toLowerCase()===normalizedItem;
+      const sameCategory=!normalizedCategory||String(x.category||'').trim().toLowerCase()===normalizedCategory;
+      return sameItem&&sameCategory;
+    });
+    if(!match){toast('No matching inventory item was found. Use the exact inventory item name and category.','error');return}
+    if(pm2vStockStatus(match)==='Inactive'){toast('Inactive inventory items cannot be used in transactions.','error');return}
+    const currentWeight=Math.max(0,pm2vNum(match.weight));
+    let newWeight=currentWeight;
+    if(type==='sale'){
+      if(weight>currentWeight){toast(`Sale exceeds available stock. Current stock is ${currentWeight.toLocaleString(undefined,{maximumFractionDigits:2})} kg.`,'error');return}
+      newWeight=currentWeight-weight;
+    }else{
+      newWeight=currentWeight+weight;
+    }
+    await updateDoc(match.ref,{weight:newWeight,updatedBy:pm2vCurrentUserName(),lastUpdated:serverTimestamp()});
+    await addDoc(collection(db,'transactions'),{type,itemName:item,category:category||match.category||'Uncategorized',weight,buyerName:type==='sale'?party:'',supplierName:type==='collection'?party:'',amount,notes,status:'Recorded',createdBy:PM2V_USER?.email||'PM2V User',createdByName:pm2vCurrentUserName(),createdAt:serverTimestamp()});
     ['txItem','txCategory','txWeight','txParty','txAmount','txNotes'].forEach(id=>document.getElementById(id).value='');
-    await loadTransactions(); await loadReports(); toast('Transaction saved to Firebase.');
+    await loadTransactions();await loadInventory();await loadReports();
+    const status=pm2vStockStatus({...match,weight:newWeight});
+    toast(`Transaction saved. Inventory is now ${newWeight.toLocaleString(undefined,{maximumFractionDigits:2})} kg — ${status}.`);
   }catch(e){console.error(e);toast('Could not save the transaction. Check Firestore rules.','error')}
 }
 async function loadReports(){
@@ -2474,11 +2605,18 @@ async function loadReports(){
     const inv=invSnap.docs.map(d=>d.data());
     const txSnap=await getDocs(collection(db,'transactions'));
     const tx=txSnap.docs.map(d=>d.data());
+    const statusCounts={'In Stock':0,'Low Stock':0,'Out of Stock':0,'Overstock':0,'Inactive':0};
+    inv.forEach(x=>{const status=pm2vStockStatus(x);statusCounts[status]=(statusCounts[status]||0)+1});
     document.getElementById('rTotal')?.replaceChildren(document.createTextNode(String(inv.length)));
-    document.getElementById('rAvailable')?.replaceChildren(document.createTextNode(String(inv.filter(x=>String(x.status||'Active').toLowerCase()!=='inactive').length)));
+    document.getElementById('rAvailable')?.replaceChildren(document.createTextNode(String(statusCounts['In Stock']||0)));
+    document.getElementById('rInStock')?.replaceChildren(document.createTextNode(String(statusCounts['In Stock']||0)));
+    document.getElementById('rLowStock')?.replaceChildren(document.createTextNode(String(statusCounts['Low Stock']||0)));
+    document.getElementById('rOutOfStock')?.replaceChildren(document.createTextNode(String(statusCounts['Out of Stock']||0)));
+    document.getElementById('rOverstock')?.replaceChildren(document.createTextNode(String(statusCounts['Overstock']||0)));
+    document.getElementById('rInactive')?.replaceChildren(document.createTextNode(String(statusCounts['Inactive']||0)));
     document.getElementById('rTransactions')?.replaceChildren(document.createTextNode(String(tx.length)));
-    document.getElementById('rWeight')?.replaceChildren(document.createTextNode(inv.reduce((a,x)=>a+Number(x.weight||0),0).toLocaleString(undefined,{maximumFractionDigits:2})+' kg'));
-    const map={};inv.forEach(x=>{const c=x.category||'Uncategorized';if(!map[c])map[c]={count:0,weight:0};map[c].count++;map[c].weight+=Number(x.weight||0)});
+    document.getElementById('rWeight')?.replaceChildren(document.createTextNode(inv.reduce((a,x)=>a+Math.max(0,pm2vNum(x.weight)),0).toLocaleString(undefined,{maximumFractionDigits:2})+' kg'));
+    const map={};inv.forEach(x=>{const c=x.category||'Uncategorized';if(!map[c])map[c]={count:0,weight:0};map[c].count++;map[c].weight+=Math.max(0,pm2vNum(x.weight))});
     const body=document.getElementById('categoryReportBody');
     if(body){
       const entries=Object.entries(map).sort((a,b)=>b[1].weight-a[1].weight||b[1].count-a[1].count);
