@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — VERSION V16: Reports PDF branding refinement. Current baseline/source of truth. Uses the proven transaction-receipt logo treatment in the Reports PDF header, matching the receipt's exact green header so the embedded logo background blends seamlessly. Also preserves V15 pagination, inventory alerts, data consistency, and report layout. -->
+<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — VERSION V17: Physical Inventory category filter refinement. Current baseline/source of truth. Replaces the always-visible category filter pills with a compact dropdown while preserving existing category filtering behavior, inventory data, role access, Reports PDF, receipts, and PM2V visual language. -->
 
 <html lang="en">
 <head>
@@ -89,7 +89,20 @@ h1{margin:0;font-size:31px;line-height:1.1;color:#071c3b;letter-spacing:-.8px}
 }
 
 /* PHYSICAL INVENTORY */
-.filters{display:flex;gap:9px;margin-bottom:26px}
+.filters{display:flex;align-items:center;gap:10px;margin-bottom:26px;position:relative;z-index:6}
+.inventory-category-filter{position:relative;display:inline-flex;align-items:center}
+.inventory-category-trigger{min-width:164px;height:44px;display:inline-flex;align-items:center;justify-content:space-between;gap:18px;border:1px solid #dce7df;background:#fff;color:#17335a;border-radius:11px;padding:0 14px 0 15px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 2px 5px rgba(23,57,40,.04);transition:border-color .18s ease,box-shadow .18s ease}
+.inventory-category-trigger:hover{border-color:#b8d2c0}
+.inventory-category-trigger[aria-expanded="true"]{border-color:#146f37;box-shadow:0 0 0 3px rgba(20,111,55,.09)}
+.inventory-category-trigger .filter-chevron{width:9px;height:9px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .18s ease}
+.inventory-category-trigger[aria-expanded="true"] .filter-chevron{transform:rotate(225deg) translate(-1px,-1px)}
+.inventory-category-menu{position:absolute;top:calc(100% + 7px);left:0;min-width:100%;padding:6px;background:#fff;border:1px solid #dce7df;border-radius:12px;box-shadow:0 12px 28px rgba(23,57,40,.14);display:none;overflow:hidden}
+.inventory-category-menu.open{display:block}
+.inventory-category-option{width:100%;min-height:38px;border:0;background:transparent;color:#5c718f;border-radius:8px;padding:0 11px;display:flex;align-items:center;justify-content:space-between;text-align:left;font-size:13px;font-weight:700;cursor:pointer}
+.inventory-category-option:hover{background:#f1f8f3;color:#146f37}
+.inventory-category-option[aria-selected="true"]{background:#e8f5eb;color:#146f37;font-weight:800}
+.inventory-category-option .filter-check{font-size:14px;line-height:1;opacity:0}
+.inventory-category-option[aria-selected="true"] .filter-check{opacity:1}
 .filter{border:0;background:#fff;color:#5c718f;border-radius:11px;padding:14px 20px;font-size:15px;font-weight:700;cursor:pointer}
 .filter.active{background:#146f37;color:#fff;box-shadow:0 5px 12px rgba(20,111,55,.18)}
 .classifier{background:#fff;border-radius:21px;padding:29px 33px 34px;box-shadow:0 2px 5px rgba(23,57,40,.04);margin-bottom:29px}
@@ -1270,6 +1283,8 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   #inventory .inventory-summary{margin:-2px 0 14px;width:390px;padding:10px 15px}
   #inventory .inventory-summary-item strong{font-size:17px}
   #inventory .filters{gap:8px;margin-bottom:18px}
+  #inventory .inventory-category-trigger{min-width:158px;height:42px;padding:0 13px;font-size:13px}
+  #inventory .inventory-category-menu{min-width:158px}
   #inventory .filter{padding:10px 16px;border-radius:10px;font-size:13px}
   #inventory .manual-entry-toggle{min-height:50px;padding:8px 14px;border-radius:13px;margin-bottom:10px}
   #inventory .manual-entry-toggle b{font-size:12px}
@@ -1651,9 +1666,20 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 <div class="inventory-summary-divider"></div>
 <div class="inventory-summary-item"><span>Total Weight</span><strong id="inventorySummaryWeight">0 kg</strong></div>
 </div>
-<div class="filters">
-<button class="filter active">All</button><button class="filter">Metal</button><button class="filter">Wood</button>
-<button class="filter">Plastic</button><button class="filter">Paper</button><button class="filter">Fiber</button>
+<div class="filters" aria-label="Inventory category filter">
+  <div class="inventory-category-filter" id="inventoryCategoryFilter">
+    <button aria-expanded="false" aria-haspopup="listbox" aria-label="Filter inventory by category" class="inventory-category-trigger" id="inventoryCategoryTrigger" type="button">
+      <span id="inventoryCategoryLabel">All Categories</span><span aria-hidden="true" class="filter-chevron"></span>
+    </button>
+    <div aria-label="Inventory categories" class="inventory-category-menu" id="inventoryCategoryMenu" role="listbox">
+      <button aria-selected="true" class="inventory-category-option" data-category="All" role="option" type="button"><span>All Categories</span><span aria-hidden="true" class="filter-check">✓</span></button>
+      <button aria-selected="false" class="inventory-category-option" data-category="Metal" role="option" type="button"><span>Metal</span><span aria-hidden="true" class="filter-check">✓</span></button>
+      <button aria-selected="false" class="inventory-category-option" data-category="Wood" role="option" type="button"><span>Wood</span><span aria-hidden="true" class="filter-check">✓</span></button>
+      <button aria-selected="false" class="inventory-category-option" data-category="Plastic" role="option" type="button"><span>Plastic</span><span aria-hidden="true" class="filter-check">✓</span></button>
+      <button aria-selected="false" class="inventory-category-option" data-category="Paper" role="option" type="button"><span>Paper</span><span aria-hidden="true" class="filter-check">✓</span></button>
+      <button aria-selected="false" class="inventory-category-option" data-category="Fiber" role="option" type="button"><span>Fiber</span><span aria-hidden="true" class="filter-check">✓</span></button>
+    </div>
+  </div>
 </div>
 <section class="ai-scanner" id="aiScannerSection">
 <div class="ai-scanner-head">
@@ -2459,18 +2485,44 @@ document.getElementById('inventoryTableBody')?.addEventListener('click',async e=
 
 document.querySelector('[data-dashboard-inventory]')?.addEventListener('click',e=>{e.preventDefault();showPage('inventory')});
 
-document.querySelectorAll('.filters .filter').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.querySelectorAll('.filters .filter').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    const category=btn.textContent.trim();
-    const rows=document.querySelectorAll('#inventory .table-wrap table tbody tr');
-    rows.forEach(row=>{
-      const cell=row.children[1];
-      row.style.display=(!cell || category==='All' || cell.textContent.trim()===category)?'':'none';
-    });
+const inventoryCategoryFilter=document.getElementById('inventoryCategoryFilter');
+const inventoryCategoryTrigger=document.getElementById('inventoryCategoryTrigger');
+const inventoryCategoryMenu=document.getElementById('inventoryCategoryMenu');
+const inventoryCategoryLabel=document.getElementById('inventoryCategoryLabel');
+const inventoryCategoryOptions=[...document.querySelectorAll('.inventory-category-option')];
+let PM2V_INVENTORY_CATEGORY='All';
+function closeInventoryCategoryMenu(){
+  inventoryCategoryMenu?.classList.remove('open');
+  inventoryCategoryTrigger?.setAttribute('aria-expanded','false');
+}
+function applyInventoryCategoryFilter(category){
+  PM2V_INVENTORY_CATEGORY=category||'All';
+  if(inventoryCategoryLabel)inventoryCategoryLabel.textContent=PM2V_INVENTORY_CATEGORY==='All'?'All Categories':PM2V_INVENTORY_CATEGORY;
+  inventoryCategoryOptions.forEach(option=>option.setAttribute('aria-selected',option.dataset.category===PM2V_INVENTORY_CATEGORY?'true':'false'));
+  const rows=document.querySelectorAll('#inventory .table-wrap table tbody tr');
+  rows.forEach(row=>{
+    const cell=row.children[1];
+    const rowCategory=cell?.textContent?.trim()||'';
+    row.style.display=(!cell || PM2V_INVENTORY_CATEGORY==='All' || rowCategory===PM2V_INVENTORY_CATEGORY)?'':'none';
   });
+}
+inventoryCategoryTrigger?.addEventListener('click',e=>{
+  e.preventDefault();
+  const open=!inventoryCategoryMenu?.classList.contains('open');
+  if(open){inventoryCategoryMenu?.classList.add('open');inventoryCategoryTrigger?.setAttribute('aria-expanded','true');}
+  else closeInventoryCategoryMenu();
 });
+inventoryCategoryOptions.forEach(option=>option.addEventListener('click',()=>{
+  applyInventoryCategoryFilter(option.dataset.category||'All');
+  closeInventoryCategoryMenu();
+}));
+document.addEventListener('click',e=>{
+  if(inventoryCategoryFilter && !inventoryCategoryFilter.contains(e.target))closeInventoryCategoryMenu();
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape')closeInventoryCategoryMenu();
+});
+applyInventoryCategoryFilter('All');
 
 
 let PM2V_TRANSACTIONS_CACHE=[];
