@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — UPDATED: Receipt V3 with corrected PHP currency label, compact professional layout, blended official logo, status badge, improved authorization/signature fields, and receipt reference repeated in footer. This file is the current baseline/source of truth for future updates. -->
+<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — UPDATED: Receipt V4 final signature-data touch. Recorded By uses the current logged-in user printed name, Authorized By is fixed to Raquel Vargas, and Received By uses the transaction Buyer/Supplier printed name while preserving the existing receipt layout. This file is the current baseline/source of truth for future updates. -->
 
 <html lang="en">
 <head>
@@ -1967,6 +1967,8 @@ document.getElementById('closeAccessBtn')?.addEventListener('click',closeAccessM
 document.getElementById('pm2vAccessModal')?.addEventListener('click',e=>{if(e.target.id==='pm2vAccessModal')closeAccessModal()});
 function applyProfile(user,p){
   const name=p.fullName||user.displayName||user.email?.split('@')[0]||'PM2V User';
+  // Current session display name used by system-generated receipts.
+  window.pm2vCurrentUserName=name;
   const role=String(p.role||'Staff');
   const status=p.status||'Active';
   const ini=initials(name);
@@ -2222,8 +2224,19 @@ function pm2vBuildReceiptPdf(tx){
   const dateParts=pm2vReceiptDateParts(tx.createdAt);
   const receiptNo='PM2V-'+dateParts.stamp+'-'+pm2vReceiptSafeId(tx.id);
   const transactionId=String(tx.id||'—');
-  const recordedBy=pm2vReceiptDisplayName(tx.createdByName||tx.createdBy||'PM2V User');
-  const authorizedBy=pm2vReceiptDisplayName(tx.authorizedByName||tx.createdByName||tx.createdBy||'PM2V Authorized');
+
+  // FINAL RECEIPT NAME LOGIC:
+  // 1) Recorded By = current logged-in user's printed name.
+  // 2) Authorized By = fixed PM2V owner printed name.
+  // 3) Received By = Buyer/Supplier printed name from this transaction.
+  const currentSessionName=window.pm2vCurrentUserName
+    ||document.querySelector('.user-name')?.textContent?.trim()
+    ||tx.createdByName
+    ||tx.createdBy
+    ||'PM2V User';
+  const recordedBy=pm2vReceiptDisplayName(currentSessionName);
+  const authorizedBy='Raquel Vargas';
+  const receivedBy=pm2vReceiptDisplayName(party);
   const notes=tx.notes||'No additional notes.';
 
   // Compact 4-inch receipt format.
@@ -2308,14 +2321,16 @@ function pm2vBuildReceiptPdf(tx){
   pm2vPdfWrap(transactionId,28).slice(0,2).forEach((part,i)=>text(94,y-(i*8),5.8,part));
   y-=25;
 
-  // Print-ready signature section. Authorized name is pre-filled; receiver stays open for physical signing.
+  // Existing two-column signature layout preserved.
+  // Authorized By is always the owner's printed name; Received By is the Buyer/Supplier printed name.
   line(M,y,112,y,.55);
   line(176,y,W-M,y,.55);
   text(M,y-10,6,'Authorized By','F2');
   text(176,y-10,6,'Received By','F2');
-  text(M,y-19,6,authorizedBy);
+  pm2vPdfWrap(authorizedBy,16).slice(0,1).forEach(name=>text(M,y-19,6,name));
+  pm2vPdfWrap(receivedBy,16).slice(0,1).forEach(name=>text(176,y-19,6,name));
   text(M,y-28,5.4,'Name & Signature');
-  text(176,y-19,5.4,'Name & Signature');
+  text(176,y-28,5.4,'Name & Signature');
 
   // Compact footer with repeated receipt reference for printed/scanned records.
   line(M,31,W-M,31,.5);
