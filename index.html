@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — VERSION V7: Professional Power BI-inspired Reports dashboard upgrade. Current baseline/source of truth. Secretary and Owner Reports now include executive KPIs, inventory health analytics, category weight doughnut, transaction activity, filters, insights, and responsive analytical layouts while preserving PM2V functionality and visual identity. -->
+<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — VERSION V8: Professional business intelligence Reports dashboard refinement. Current baseline/source of truth. Secretary and Owner Reports now include clearer filter scope, inventory health scoring, improved transaction analytics, transaction performance metrics, smarter insights, category share detail, and responsive analytical layouts while preserving PM2V functionality and visual identity. -->
 
 <html lang="en">
 <head>
@@ -1343,10 +1343,10 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 </style>
 
 
-<style id="pm2v-reports-v7">
+<style id="pm2v-reports-v8">
 /* =========================================================
-   PM2V REPORTS — VERSION V7
-   Professional business dashboard / Power BI-inspired layout.
+   PM2V REPORTS — VERSION V8
+   Professional business dashboard refinement / Power BI-inspired.
    Native HTML/CSS/SVG only; no external chart dependency.
    ========================================================= */
 #reports .report-dashboard-v7{display:flex;flex-direction:column;gap:18px}
@@ -1360,16 +1360,22 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 #reports .report-kpi-label{position:relative;z-index:1;font-size:11px;font-weight:800;color:#647a70;text-transform:uppercase;letter-spacing:.7px}
 #reports .report-kpi-value{position:relative;z-index:1;margin-top:7px;font-size:30px;line-height:1;font-weight:900;color:#123f27;letter-spacing:-.7px}
 #reports .report-kpi-note{position:relative;z-index:1;margin-top:8px;color:#7b8d82;font-size:10px}
-#reports .report-filter-card{padding:16px 18px}
-#reports .report-filter-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-#reports .report-filter-title{font-size:11px;font-weight:900;color:#526a60;text-transform:uppercase;letter-spacing:.75px;margin-right:2px}
-#reports .report-filter-control{display:flex;align-items:center;gap:7px}
-#reports .report-filter-control label{font-size:10px;font-weight:800;color:#7a8c83}
+#reports .report-filter-card{padding:15px 18px 13px}
+#reports .report-filter-bar{display:flex;align-items:end;gap:12px;flex-wrap:wrap}
+#reports .report-filter-heading{display:flex;flex-direction:column;gap:4px;margin-right:4px;min-width:100px}
+#reports .report-filter-title{font-size:11px;font-weight:900;color:#526a60;text-transform:uppercase;letter-spacing:.75px}
+#reports .report-filter-scope{font-size:9px;color:#8a9891;font-weight:700}
+#reports .report-filter-control{display:flex;flex-direction:column;gap:5px}
+#reports .report-filter-control label{font-size:9px;font-weight:800;color:#7a8c83;text-transform:uppercase;letter-spacing:.55px;margin:0}
 #reports .report-filter-control select{height:36px;min-width:145px;border:1px solid #d4e0d8;border-radius:9px;background:#fff;color:#17335a;font-size:11px;font-weight:700;padding:0 28px 0 10px;outline:none}
+#reports .report-period-control select{min-width:155px}
 #reports .report-filter-reset{height:36px;border:1px solid #d4e0d8;border-radius:9px;background:#f6faf7;color:#146f37;font-size:11px;font-weight:900;padding:0 13px;cursor:pointer}
 #reports .report-filter-reset:hover{background:#edf7ef}
+#reports .report-filter-result{font-size:9px;color:#8a9891;font-weight:700;margin-left:auto;align-self:center}
+#reports .report-filter-summary{margin-top:10px;padding-top:10px;border-top:1px solid #edf1ee;color:#7b8d82;font-size:9px;font-weight:700}
 #reports .report-analytics-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:18px}
 #reports .report-chart-card{min-width:0;overflow:hidden}
+#reports .report-card-kicker{white-space:nowrap;color:#146f37;background:#eef8f0;border:1px solid #dceede;border-radius:999px;padding:6px 9px;font-size:9px;font-weight:900}
 #reports .report-chart-body{padding:14px 20px 20px}
 #reports .report-donut-layout{display:grid;grid-template-columns:minmax(210px,.9fr) minmax(180px,1.1fr);align-items:center;gap:12px;min-height:250px}
 #reports .report-donut-wrap{position:relative;display:grid;place-items:center;min-height:240px}
@@ -1384,6 +1390,7 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 #reports .report-legend-value{text-align:right;color:#60776b;font-weight:900;white-space:nowrap}
 #reports .report-legend-share{margin-left:4px;color:#8a9891;font-size:9px;font-weight:700}
 #reports .report-empty-chart{display:grid;place-items:center;min-height:230px;color:#8b9b92;font-size:11px;font-weight:700;text-align:center}
+#reports .report-health-score{white-space:nowrap;color:#17335a;background:#f5f8f6;border:1px solid #e1e9e4;border-radius:999px;padding:6px 9px;font-size:9px;font-weight:900}
 #reports .report-health-list{display:flex;flex-direction:column;gap:15px;padding-top:7px}
 #reports .report-health-row{display:grid;grid-template-columns:94px minmax(0,1fr) 28px;align-items:center;gap:10px}
 #reports .report-health-label{font-size:10px;color:#526a60;font-weight:800}
@@ -1400,6 +1407,13 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 #reports .report-activity-svg{width:100%;height:210px;display:block;overflow:visible}
 #reports .report-activity-legend{display:flex;gap:15px;align-items:center;margin-top:2px;color:#71837a;font-size:9px;font-weight:800}
 #reports .report-activity-key{display:inline-flex;align-items:center;gap:5px}.report-activity-key i{width:8px;height:8px;border-radius:50%;display:inline-block}
+#reports .report-performance-card{overflow:hidden}
+#reports .report-performance-total{white-space:nowrap;color:#17335a;background:#f5f8f6;border:1px solid #e1e9e4;border-radius:999px;padding:6px 9px;font-size:9px;font-weight:900}
+#reports .report-performance-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:14px 20px 20px}
+#reports .report-performance-metric{border:1px solid #e2ebe5;border-radius:13px;padding:13px 14px;background:#fbfdfb;min-height:82px}
+#reports .report-performance-metric .metric-label{display:block;color:#7b8d82;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+#reports .report-performance-metric strong{display:block;margin-top:7px;color:#17335a;font-size:19px;line-height:1.1;font-weight:900}
+#reports .report-performance-metric span{display:block;margin-top:5px;color:#8a9891;font-size:8px;font-weight:700}
 #reports .report-insights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:14px 20px 20px}
 #reports .report-insight{border:1px solid #e2ebe5;border-radius:13px;padding:13px 14px;background:#fbfdfb;min-height:82px}
 #reports .report-insight .tag{display:inline-flex;padding:4px 7px;border-radius:999px;font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;background:#eef8f0;color:#146f37}
@@ -1418,10 +1432,10 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 #reports .report-category-v7 .category-weight-fill{height:100%;width:0;border-radius:999px}
 #reports .report-category-v7 .category-weight-number{white-space:nowrap;font-weight:900;color:#17335a}
 #reports .report-category-v7 .report-category-percent{font-size:9px}
-#reports .report-filter-result{font-size:9px;color:#8a9891;font-weight:700;margin-left:auto}
 @media(max-width:1050px){
   #reports .report-analytics-grid{grid-template-columns:1fr}
   #reports .report-donut-layout{grid-template-columns:minmax(230px,.8fr) minmax(230px,1.2fr)}
+  #reports .report-performance-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:760px){
   #reports .report-dashboard-v7{gap:12px}
@@ -1433,43 +1447,27 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   #reports .report-kpi-card{min-height:88px!important;height:88px!important;padding:13px!important;border-radius:14px!important}
   #reports .report-kpi-label{font-size:9px}.report-kpi-value{font-size:24px!important}.report-kpi-note{font-size:8px!important;margin-top:5px!important}
   #reports .report-filter-card{padding:12px}
-  #reports .report-filter-bar{gap:8px}
-  #reports .report-filter-title{width:100%;font-size:9px}
-  #reports .report-filter-control{flex:1;min-width:0;display:block}
-  #reports .report-filter-control label{display:block;margin:0 0 4px;font-size:8px}
+  #reports .report-filter-bar{gap:8px;align-items:stretch}
+  #reports .report-filter-heading{width:100%;min-width:0}
+  #reports .report-filter-title{font-size:9px}.report-filter-scope{font-size:8px!important}
+  #reports .report-filter-control{flex:1;min-width:0}
+  #reports .report-filter-control label{font-size:8px}
   #reports .report-filter-control select{width:100%;min-width:0;height:34px;font-size:10px}
+  #reports .report-period-control{width:100%;flex:1 1 100%}
   #reports .report-filter-reset{height:34px;align-self:flex-end}
-  #reports .report-filter-result{width:100%;margin-left:0}
+  #reports .report-filter-result{width:100%;margin-left:0;align-self:center}
+  #reports .report-filter-summary{font-size:8px;line-height:1.45}
+  #reports .report-card-kicker,#reports .report-health-score,#reports .report-performance-total{font-size:8px;padding:5px 7px}
   #reports .report-chart-body{padding:10px 12px 14px}
   #reports .report-donut-layout{grid-template-columns:1fr;gap:2px;min-height:0}
   #reports .report-donut-wrap{min-height:215px}.report-donut-svg{width:205px;height:205px}
-  #reports .report-donut-center strong{font-size:21px}
-  #reports .report-legend{padding:0 6px 4px;gap:8px}
-  #reports .report-health-list{gap:12px;padding-top:3px}
-  #reports .report-health-row{grid-template-columns:82px minmax(0,1fr) 24px;gap:8px}
-  #reports .report-health-label{font-size:9px}.report-health-track{height:8px}.report-health-count{font-size:10px}
-  #reports .report-health-summary{margin-top:14px;padding-top:12px}
-  #reports .report-activity-chart{padding:4px 10px 12px}.report-activity-svg{height:175px!important}
-  #reports .report-insights{grid-template-columns:1fr;padding:10px 12px 12px;gap:8px}
-  #reports .report-insight{min-height:70px;padding:11px 12px}
-  #reports .report-category-v7 .role-table-wrap{padding:0 8px 4px}
-  #reports .report-category-v7 .role-table th{display:none}
-  #reports .report-category-v7 .role-table tr{display:grid!important;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"cat metrics" "bar bar";gap:4px 8px;padding:10px 7px!important}
-  #reports .report-category-v7 .role-table td{padding:0!important;border:0!important}
-  #reports .report-category-v7 .role-table td:nth-child(1){grid-area:cat;font-size:11px;font-weight:900}
-  #reports .report-category-v7 .role-table td:nth-child(2){grid-area:metrics;text-align:right;font-size:9px;color:#60776b;font-weight:900}
-  #reports .report-category-v7 .role-table td:nth-child(3){grid-area:bar;font-size:9px;padding-top:2px!important}
-  #reports .report-category-v7 .category-weight-cell{min-width:0}
-  #reports .report-category-v7 .category-weight-line{gap:6px}
-  #reports .report-category-v7 .category-weight-track{height:4px;order:1}
-  #reports .report-category-v7 .category-weight-number{order:2;font-size:9px}
-  #reports .report-category-v7 .report-category-percent{font-size:7.5px}
-}
-@media(max-width:430px){
-  #reports .report-kpi-card{height:84px!important;min-height:84px!important;padding:11px!important}
-  #reports .report-kpi-value{font-size:22px!important}
-  #reports .report-donut-wrap{min-height:195px}.report-donut-svg{width:185px;height:185px}
-  #reports .report-health-row{grid-template-columns:76px minmax(0,1fr) 22px}
+  #reports .report-performance-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:10px 12px 14px}
+  #reports .report-performance-metric{min-height:76px;padding:11px 10px}.report-performance-metric strong{font-size:16px!important}
+  #reports .report-insights{grid-template-columns:1fr;gap:8px;padding:10px 12px 14px}
+  #reports .report-category-v7 .role-table-wrap{padding:0 10px 6px}
+  #reports .report-category-v7 .category-weight-cell{min-width:210px}
+  #reports .report-activity-chart{padding:4px 10px 14px}
+  #reports .report-activity-svg{height:190px}
 }
 </style>
 </head>
@@ -1821,22 +1819,23 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 
   <section class="report-section-card report-filter-card" aria-label="Report filters">
     <div class="report-filter-bar">
-      <span class="report-filter-title">Report Filters</span>
+      <div class="report-filter-heading"><span class="report-filter-title">Report Filters</span><span class="report-filter-scope">Inventory filters</span></div>
       <div class="report-filter-control"><label for="reportCategoryFilter">Category</label><select id="reportCategoryFilter"><option value="__all__">All Categories</option></select></div>
       <div class="report-filter-control"><label for="reportStatusFilter">Stock Status</label><select id="reportStatusFilter"><option value="__all__">All Statuses</option><option>In Stock</option><option>Low Stock</option><option>Out of Stock</option><option>Overstock</option><option>Inactive</option></select></div>
-      <div class="report-filter-control"><label for="reportPeriodFilter">Transactions</label><select id="reportPeriodFilter"><option value="7">Last 7 Days</option><option value="30">Last 30 Days</option><option value="90">Last 90 Days</option><option value="0">All Time</option></select></div>
+      <div class="report-filter-control report-period-control"><label for="reportPeriodFilter">Transaction Period</label><select id="reportPeriodFilter"><option value="7">Last 7 Days</option><option value="30">Last 30 Days</option><option value="90">Last 90 Days</option><option value="0">All Time</option></select></div>
       <button class="report-filter-reset" id="reportFilterReset" type="button">Reset</button>
-      <span class="report-filter-result" id="reportFilterResult">All inventory records</span>
+      <span class="report-filter-result" id="reportFilterResult">Showing all inventory records</span>
     </div>
+    <div class="report-filter-summary" id="reportFilterSummary">Current inventory: 0 records · 0 kg · Transaction analytics: Last 7 Days</div>
   </section>
 
   <div class="report-analytics-grid">
     <section class="report-section-card report-chart-card">
-      <div class="report-section-card-header"><div><h2>Inventory Weight by Category</h2><p>Current inventory composition by weight.</p></div></div>
+      <div class="report-section-card-header"><div><h2>Inventory Weight by Category</h2><p>Current inventory composition by weight.</p></div><span class="report-card-kicker" id="reportTopCategory">Top category —</span></div>
       <div class="report-chart-body"><div class="report-donut-layout"><div class="report-donut-wrap" id="reportDonutWrap"><svg id="reportCategoryDonut" class="report-donut-svg" viewBox="0 0 240 240" role="img" aria-label="Inventory weight by category"></svg><div class="report-donut-center"><strong id="reportDonutTotal">0 kg</strong><span>Total Weight</span></div></div><div class="report-legend" id="reportCategoryLegend"></div></div></div>
     </section>
     <section class="report-section-card report-chart-card">
-      <div class="report-section-card-header"><div><h2>Inventory Health</h2><p>Distribution of records against their stock thresholds.</p></div></div>
+      <div class="report-section-card-header"><div><h2>Inventory Health</h2><p>Current distribution against configured stock thresholds.</p></div><span class="report-health-score" id="reportHealthScore">0% healthy</span></div>
       <div class="report-chart-body"><div class="report-health-list" id="reportHealthList"></div><div class="report-health-summary" id="reportHealthSummary"></div></div>
     </section>
   </div>
@@ -1846,13 +1845,18 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
     <div class="report-activity-chart"><svg id="reportActivitySvg" class="report-activity-svg" viewBox="0 0 900 210" preserveAspectRatio="none" role="img" aria-label="Transaction activity chart"></svg><div class="report-activity-legend"><span class="report-activity-key"><i style="background:#168342"></i>Collection</span><span class="report-activity-key"><i style="background:#173f68"></i>Sale</span></div></div>
   </section>
 
+  <section class="report-section-card report-performance-card">
+    <div class="report-section-card-header"><div><h2>Transaction Performance</h2><p id="reportPerformanceSubtitle">Financial and volume summary for the selected transaction period.</p></div><span class="report-performance-total" id="reportPerformanceTotal">0 recorded value</span></div>
+    <div class="report-performance-grid" id="reportPerformanceGrid"></div>
+  </section>
+
   <section class="report-section-card">
     <div class="report-section-card-header"><div><h2>Inventory Insights</h2><p>Key observations generated from the current report data.</p></div></div>
     <div class="report-insights" id="reportInsights"></div>
   </section>
 
   <section class="report-section-card report-category-v7">
-    <div class="report-section-card-header"><div><h2>Category Breakdown</h2><p>Detailed inventory mix by item count and weight.</p></div></div>
+    <div class="report-section-card-header"><div><h2>Category Breakdown</h2><p>Detailed inventory mix by item count, weight, and share.</p></div></div>
     <div class="role-table-wrap" id="categoryReport"><table class="role-table"><thead><tr><th>CATEGORY</th><th>ITEMS</th><th>WEIGHT</th></tr></thead><tbody id="categoryReportBody"></tbody></table></div>
   </section>
 
@@ -2798,42 +2802,61 @@ function pm2vRenderReportDonut(entries,totalWeight){
   svg.innerHTML=`<circle cx="120" cy="120" r="76" fill="none" stroke="#edf3ee" stroke-width="30"></circle>${paths}<circle cx="120" cy="120" r="58" fill="#fff"></circle>`;
   legend.innerHTML=entries.map(([name,v],i)=>{const pct=totalWeight?Number(v.weight||0)/totalWeight*100:0;return `<div class="report-legend-row"><span class="report-legend-dot" style="background:${PM2V_REPORT_COLORS[i%PM2V_REPORT_COLORS.length]}"></span><span class="report-legend-name">${pm2vReportEsc(name)}</span><span class="report-legend-value">${pm2vReportFmtWeight(v.weight)}<span class="report-legend-share">${Math.round(pct)}%</span></span></div>`}).join('');
 }
+function pm2vReportTransactionFilter(tx,days,category){
+  const now=new Date();now.setHours(23,59,59,999);
+  const categoryName=String(category||'__all__');
+  return tx.filter(x=>{
+    if(categoryName!=='__all__' && String(x.category||'Uncategorized')!==categoryName)return false;
+    if(days===0)return true;
+    const dt=pm2vReportDate(x.createdAt);if(!dt)return false;
+    const start=new Date(now);start.setDate(start.getDate()-(days-1));start.setHours(0,0,0,0);
+    return dt>=start&&dt<=now;
+  });
+}
 function pm2vRenderReportHealth(statusCounts,total){
-  const list=document.getElementById('reportHealthList'),summary=document.getElementById('reportHealthSummary');if(!list)return;
+  const list=document.getElementById('reportHealthList'),summary=document.getElementById('reportHealthSummary'),score=document.getElementById('reportHealthScore');if(!list)return;
   const rows=[['In Stock','#19a65b'],['Low Stock','#e2a51a'],['Out of Stock','#d83a3a'],['Overstock','#2f7fd0'],['Inactive','#9aa6ad']];
-  const denom=Math.max(1,total);
+  const denom=Math.max(1,total);const healthy=total?Math.round((statusCounts['In Stock']||0)/total*100):0;
+  if(score)score.textContent=`${healthy}% healthy`;
   list.innerHTML=rows.map(([label,color])=>{const n=statusCounts[label]||0;return `<div class="report-health-row"><span class="report-health-label">${label}</span><div class="report-health-track"><div class="report-health-bar" style="width:${Math.min(100,n/denom*100)}%;background:${color}"></div></div><span class="report-health-count">${n}</span></div>`}).join('');
   if(summary)summary.innerHTML=`<span class="report-health-chip"><strong>${statusCounts['In Stock']||0}</strong> healthy</span><span class="report-health-chip"><strong>${(statusCounts['Low Stock']||0)+(statusCounts['Out of Stock']||0)}</strong> needs attention</span><span class="report-health-chip"><strong>${statusCounts['Overstock']||0}</strong> over target</span>`;
 }
-function pm2vRenderReportActivity(tx,days){
+function pm2vRenderReportActivity(tx,days,category){
   const svg=document.getElementById('reportActivitySvg'),totalEl=document.getElementById('reportActivityTotal'),sub=document.getElementById('reportActivitySubtitle');if(!svg)return;
-  const now=new Date();now.setHours(23,59,59,999);
-  let dates=[];
-  if(days===0){
-    const dated=tx.map(x=>pm2vReportDate(x.createdAt)).filter(Boolean);const min=dated.length?new Date(Math.min(...dated.map(d=>d.getTime()))):new Date(now.getTime()-6*86400000);const maxSpan=Math.min(30,Math.max(7,Math.ceil((now-min)/86400000)+1));dates=Array.from({length:maxSpan},(_,i)=>{const d=new Date(now);d.setDate(d.getDate()-(maxSpan-1-i));d.setHours(0,0,0,0);return d});
-  }else dates=Array.from({length:days},(_,i)=>{const d=new Date(now);d.setDate(d.getDate()-(days-1-i));d.setHours(0,0,0,0);return d});
-  const rows=dates.map(d=>{const next=new Date(d);next.setDate(next.getDate()+1);const a=tx.filter(x=>{const dt=pm2vReportDate(x.createdAt);return dt&&dt>=d&&dt<next&&String(x.type||'').toLowerCase()==='collection'}).length;const b=tx.filter(x=>{const dt=pm2vReportDate(x.createdAt);return dt&&dt>=d&&dt<next&&String(x.type||'').toLowerCase()==='sale'}).length;return {d,a,b}});
-  const activityTx=rows.reduce((sum,r)=>sum+r.a+r.b,0);if(totalEl)totalEl.textContent=`${activityTx.toLocaleString()} transaction${activityTx===1?'':'s'}`;if(sub)sub.textContent=days===0?'Recorded activity across the available transaction history.':`Recorded activity over the last ${days} days.`;
-  const W=900,H=210,left=42,right=16,top=18,bottom=34,plotW=W-left-right,plotH=H-top-bottom,max=Math.max(1,...rows.map(r=>r.a+r.b));
-  const grid=[0,Math.ceil(max/2),max];
-  let out=grid.map(v=>{const y=top+plotH-(v/max)*plotH;return `<line x1="${left}" y1="${y}" x2="${W-right}" y2="${y}" stroke="#edf1ee" stroke-width="1"></line><text x="${left-10}" y="${y+3}" text-anchor="end" fill="#8a9891" font-size="9" font-weight="700">${v}</text>`}).join('');
-  const step=rows.length>1?plotW/(rows.length-1):plotW;const pointsA=[],pointsB=[];
-  rows.forEach((r,i)=>{const x=left+i*step,ya=top+plotH-(r.a/max)*plotH,yb=top+plotH-(r.b/max)*plotH;pointsA.push(`${x.toFixed(1)},${ya.toFixed(1)}`);pointsB.push(`${x.toFixed(1)},${yb.toFixed(1)}`);if(i===0||i===rows.length-1||rows.length<=10){out+=`<text x="${x}" y="${H-10}" text-anchor="middle" fill="#8a9891" font-size="8" font-weight="700">${pm2vReportFmtShortDate(r.d)}</text>`}if(r.a)out+=`<circle cx="${x}" cy="${ya}" r="3.5" fill="#168342"></circle>`;if(r.b)out+=`<circle cx="${x}" cy="${yb}" r="3.5" fill="#173f68"></circle>`});
-  const lineA=pointsA.join(' L '),lineB=pointsB.join(' L ');svg.innerHTML=`${out}<polyline points="${lineA}" fill="none" stroke="#168342" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></polyline><polyline points="${lineB}" fill="none" stroke="#173f68" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></polyline>`;
+  const filtered=pm2vReportTransactionFilter(tx,days,category);const now=new Date();now.setHours(23,59,59,999);let dates=[];
+  if(days===0){const dated=filtered.map(x=>pm2vReportDate(x.createdAt)).filter(Boolean);const min=dated.length?new Date(Math.min(...dated.map(d=>d.getTime()))):new Date(now.getTime()-6*86400000);const maxSpan=Math.min(30,Math.max(7,Math.ceil((now-min)/86400000)+1));dates=Array.from({length:maxSpan},(_,i)=>{const d=new Date(now);d.setDate(d.getDate()-(maxSpan-1-i));d.setHours(0,0,0,0);return d});}
+  else dates=Array.from({length:days},(_,i)=>{const d=new Date(now);d.setDate(d.getDate()-(days-1-i));d.setHours(0,0,0,0);return d});
+  const rows=dates.map(d=>{const next=new Date(d);next.setDate(next.getDate()+1);let a=0,b=0;filtered.forEach(x=>{const dt=pm2vReportDate(x.createdAt);if(!dt||dt<d||dt>=next)return;const type=String(x.type||'').toLowerCase();if(type==='collection')a++;if(type==='sale')b++;});return {d,a,b}});
+  const activityTx=rows.reduce((sum,r)=>sum+r.a+r.b,0),collections=rows.reduce((sum,r)=>sum+r.a,0),sales=rows.reduce((sum,r)=>sum+r.b,0);
+  if(totalEl)totalEl.textContent=`${activityTx.toLocaleString()} transaction${activityTx===1?'':'s'} · ${collections} collection${collections===1?'':'s'} · ${sales} sale${sales===1?'':'s'}`;
+  if(sub)sub.textContent=days===0?'Recorded activity across the available transaction history.':`Recorded activity over the last ${days} days.`;
+  const W=900,H=210,left=42,right=16,top=18,bottom=34,plotW=W-left-right,plotH=H-top-bottom,max=Math.max(1,...rows.map(r=>Math.max(r.a,r.b))),step=rows.length?plotW/rows.length:plotW;
+  let out='';const grid=[0,Math.ceil(max/2),max];grid.forEach(v=>{const y=top+plotH-(v/max)*plotH;out+=`<line x1="${left}" y1="${y}" x2="${W-right}" y2="${y}" stroke="#edf1ee" stroke-width="1"></line><text x="${left-10}" y="${y+3}" text-anchor="end" fill="#8a9891" font-size="9" font-weight="700">${v}</text>`});
+  rows.forEach((r,i)=>{const x=left+i*step+step/2,barW=Math.max(4,Math.min(16,step*.22)),ha=(r.a/max)*plotH,hb=(r.b/max)*plotH;const ya=top+plotH-ha,yb=top+plotH-hb;out+=`<rect x="${(x-barW-2).toFixed(1)}" y="${ya.toFixed(1)}" width="${barW}" height="${Math.max(0,ha).toFixed(1)}" rx="3" fill="#168342"><title>${pm2vReportFmtShortDate(r.d)} — Collection: ${r.a}</title></rect><rect x="${(x+2).toFixed(1)}" y="${yb.toFixed(1)}" width="${barW}" height="${Math.max(0,hb).toFixed(1)}" rx="3" fill="#173f68"><title>${pm2vReportFmtShortDate(r.d)} — Sale: ${r.b}</title></rect>`;if(i===0||i===rows.length-1||rows.length<=10)out+=`<text x="${x}" y="${H-10}" text-anchor="middle" fill="#8a9891" font-size="8" font-weight="700">${pm2vReportFmtShortDate(r.d)}</text>`});
+  if(!activityTx)out+=`<text x="450" y="105" text-anchor="middle" fill="#8b9b92" font-size="12" font-weight="800">No transactions in the selected period</text>`;
+  svg.innerHTML=out;
 }
-function pm2vRenderReportInsights(inv,statusCounts,totalWeight,entries,tx){
+function pm2vRenderReportPerformance(tx,days,category){
+  const box=document.getElementById('reportPerformanceGrid'),totalEl=document.getElementById('reportPerformanceTotal'),sub=document.getElementById('reportPerformanceSubtitle');if(!box)return;
+  const filtered=pm2vReportTransactionFilter(tx,days,category);let collectionValue=0,saleValue=0,collectionWeight=0,saleWeight=0;
+  filtered.forEach(x=>{const amount=Math.max(0,Number(x.amount)||0),weight=Math.max(0,Number(x.weight)||0),type=String(x.type||'').toLowerCase();if(type==='collection'){collectionValue+=amount;collectionWeight+=weight}else if(type==='sale'){saleValue+=amount;saleWeight+=weight}});
+  const totalValue=collectionValue+saleValue,avg=filtered.length?totalValue/filtered.length:0;const fmtMoney=v=>v.toLocaleString(undefined,{style:'currency',currency:'PHP',maximumFractionDigits:2});const periodLabel=days===0?'All Time':`Last ${days} Days`;
+  if(totalEl)totalEl.textContent=`${fmtMoney(totalValue)} recorded value`;
+  if(sub)sub.textContent=`Financial and volume summary · ${periodLabel}${category&&category!=='__all__'?` · ${category}`:''}`;
+  const metrics=[['Collection Value',fmtMoney(collectionValue),`${collectionWeight.toLocaleString(undefined,{maximumFractionDigits:2})} kg collected`],['Sale Value',fmtMoney(saleValue),`${saleWeight.toLocaleString(undefined,{maximumFractionDigits:2})} kg sold`],['Transactions',String(filtered.length),`${filtered.filter(x=>String(x.type||'').toLowerCase()==='collection').length} collection · ${filtered.filter(x=>String(x.type||'').toLowerCase()==='sale').length} sale`],['Average Transaction',fmtMoney(avg),filtered.length?'Based on recorded transaction amounts':'No transaction amount data']];
+  box.innerHTML=metrics.map(([label,value,note])=>`<div class="report-performance-metric"><span class="metric-label">${label}</span><strong>${value}</strong><span>${note}</span></div>`).join('');
+}
+function pm2vRenderReportInsights(inv,statusCounts,totalWeight,entries,tx,days,category){
   const box=document.getElementById('reportInsights');if(!box)return;
-  const low=(statusCounts['Low Stock']||0)+(statusCounts['Out of Stock']||0),over=statusCounts['Overstock']||0,inStock=statusCounts['In Stock']||0;
-  const top=entries[0];const topShare=top&&totalWeight?Math.round(Number(top[1].weight||0)/totalWeight*100):0;
-  const txAmount=tx.reduce((a,x)=>a+Math.max(0,Number(x.amount)||0),0);
-  const cards=[];
-  if(low)cards.push({type:'warning',tag:'Attention',title:`${low} inventory record${low===1?'':'s'} need stock attention.`,detail:`Low or out-of-stock items should be reviewed against current demand.`});
+  const low=(statusCounts['Low Stock']||0)+(statusCounts['Out of Stock']||0),over=statusCounts['Overstock']||0;const top=entries[0];const topShare=top&&totalWeight?Math.round(Number(top[1].weight||0)/totalWeight*100):0;
+  const periodTx=pm2vReportTransactionFilter(tx,days,category),txAmount=periodTx.reduce((a,x)=>a+Math.max(0,Number(x.amount)||0),0);const periodLabel=days===0?'all time':`the last ${days} days`;const cards=[];
+  if(low)cards.push({type:'warning',tag:'Attention',title:`${low} inventory record${low===1?'':'s'} need stock attention.`,detail:'Low or out-of-stock items should be reviewed against current demand.'});
   else cards.push({type:'',tag:'Healthy',title:`All ${inv.length} inventory record${inv.length===1?'':'s'} are above the minimum stock threshold.`,detail:'No low-stock or out-of-stock records are currently detected.'});
   if(over)cards.push({type:'warning',tag:'Over Target',title:`${over} record${over===1?' is':'s are'} above the maximum stock threshold.`,detail:'Consider reviewing storage capacity and purchasing levels.'});
   else cards.push({type:'',tag:'Balanced',title:'No inventory is currently above the maximum threshold.',detail:'All active records are at or below their configured maximum stock.'});
   if(top)cards.push({type:'',tag:'Inventory Mix',title:`${pm2vReportEsc(top[0])} represents ${topShare}% of current inventory weight.`,detail:`${pm2vReportFmtWeight(top[1].weight)} across ${top[1].count} record${top[1].count===1?'':'s'}.`});
   else cards.push({type:'',tag:'Inventory Mix',title:'No category weight data is available.',detail:'Add inventory weight to populate the composition analysis.'});
-  if(txAmount>0)cards[2]={type:'',tag:'Transactions',title:`${tx.length.toLocaleString()} recorded transaction${tx.length===1?'':'s'} with ${txAmount.toLocaleString(undefined,{style:'currency',currency:'PHP',maximumFractionDigits:2})} in recorded amount.`,detail:'Transaction totals reflect the amount values stored in transaction records.'};
+  if(txAmount>0)cards[2]={type:'',tag:'Transactions',title:`${periodTx.length.toLocaleString()} transaction${periodTx.length===1?'':'s'} recorded ${txAmount.toLocaleString(undefined,{style:'currency',currency:'PHP',maximumFractionDigits:2})}.`,detail:`Transaction amount summary for ${periodLabel}.`};
   box.innerHTML=cards.slice(0,3).map(c=>`<div class="report-insight ${c.type}"><span class="tag">${c.tag}</span><strong>${c.title}</strong><span>${c.detail}</span></div>`).join('');
 }
 function pm2vRenderReportCategoryTable(entries,totalWeight){
@@ -2842,41 +2865,20 @@ function pm2vRenderReportCategoryTable(entries,totalWeight){
   body.innerHTML=entries.map(([c,v],i)=>{const pct=totalWeight?Number(v.weight||0)/totalWeight*100:0;const visual=maxWeight?Number(v.weight||0)/maxWeight*100:0;return `<tr data-weight="${Number(v.weight||0)}"><td>${pm2vReportEsc(c)}</td><td>${v.count}</td><td class="category-weight-cell"><div class="category-weight-line"><div class="category-weight-track"><div class="category-weight-fill" style="width:${visual}%;background:${PM2V_REPORT_COLORS[i%PM2V_REPORT_COLORS.length]}"></div></div><span class="category-weight-number">${pm2vReportFmtWeight(v.weight)}</span><span class="report-category-percent">${Math.round(pct)}%</span></div></td></tr>`}).join('')||'<tr><td colspan="3" class="empty-role">No inventory data matches the selected filters.</td></tr>';
 }
 function pm2vRenderReports(){
-  const invAll=PM2V_REPORT_CACHE.inv||[],txAll=PM2V_REPORT_CACHE.tx||[];
-  const cat=document.getElementById('reportCategoryFilter')?.value||'__all__',status=document.getElementById('reportStatusFilter')?.value||'__all__';
-  const inv=invAll.filter(x=>(cat==='__all__'||String(x.category||'Uncategorized')===cat)&&(status==='__all__'||pm2vStockStatus(x)===status));
-  const statusCounts={'In Stock':0,'Low Stock':0,'Out of Stock':0,'Overstock':0,'Inactive':0};inv.forEach(x=>{const st=pm2vStockStatus(x);statusCounts[st]=(statusCounts[st]||0)+1});
-  const totalWeight=inv.reduce((a,x)=>a+Math.max(0,pm2vNum(x.weight)),0);
-  const map={};inv.forEach(x=>{const c=x.category||'Uncategorized';if(!map[c])map[c]={count:0,weight:0};map[c].count++;map[c].weight+=Math.max(0,pm2vNum(x.weight))});
-  const entries=Object.entries(map).sort((a,b)=>b[1].weight-a[1].weight||b[1].count-a[1].count);
-  document.getElementById('rTotal')?.replaceChildren(document.createTextNode(String(inv.length)));
-  document.getElementById('rAvailable')?.replaceChildren(document.createTextNode(String(statusCounts['In Stock']||0)));
-  document.getElementById('rInStock')?.replaceChildren(document.createTextNode(String(statusCounts['In Stock']||0)));
-  document.getElementById('rLowStock')?.replaceChildren(document.createTextNode(String(statusCounts['Low Stock']||0)));
-  document.getElementById('rOutOfStock')?.replaceChildren(document.createTextNode(String(statusCounts['Out of Stock']||0)));
-  document.getElementById('rOverstock')?.replaceChildren(document.createTextNode(String(statusCounts['Overstock']||0)));
-  document.getElementById('rInactive')?.replaceChildren(document.createTextNode(String(statusCounts['Inactive']||0)));
-  document.getElementById('rTransactions')?.replaceChildren(document.createTextNode(String(txAll.length)));
-  document.getElementById('rWeight')?.replaceChildren(document.createTextNode(pm2vReportFmtWeight(totalWeight)));
+  const invAll=PM2V_REPORT_CACHE.inv||[],txAll=PM2V_REPORT_CACHE.tx||[];const cat=document.getElementById('reportCategoryFilter')?.value||'__all__',status=document.getElementById('reportStatusFilter')?.value||'__all__';
+  const inv=invAll.filter(x=>(cat==='__all__'||String(x.category||'Uncategorized')===cat)&&(status==='__all__'||pm2vStockStatus(x)===status));const statusCounts={'In Stock':0,'Low Stock':0,'Out of Stock':0,'Overstock':0,'Inactive':0};inv.forEach(x=>{const st=pm2vStockStatus(x);statusCounts[st]=(statusCounts[st]||0)+1});
+  const totalWeight=inv.reduce((a,x)=>a+Math.max(0,pm2vNum(x.weight)),0);const map={};inv.forEach(x=>{const c=x.category||'Uncategorized';if(!map[c])map[c]={count:0,weight:0};map[c].count++;map[c].weight+=Math.max(0,pm2vNum(x.weight))});const entries=Object.entries(map).sort((a,b)=>b[1].weight-a[1].weight||b[1].count-a[1].count);
+  const days=Number(document.getElementById('reportPeriodFilter')?.value||7),periodTx=pm2vReportTransactionFilter(txAll,days,cat);const top=entries[0];
+  document.getElementById('rTotal')?.replaceChildren(document.createTextNode(String(inv.length)));document.getElementById('rAvailable')?.replaceChildren(document.createTextNode(String(statusCounts['In Stock']||0)));document.getElementById('rInStock')?.replaceChildren(document.createTextNode(String(statusCounts['In Stock']||0)));document.getElementById('rLowStock')?.replaceChildren(document.createTextNode(String(statusCounts['Low Stock']||0)));document.getElementById('rOutOfStock')?.replaceChildren(document.createTextNode(String(statusCounts['Out of Stock']||0)));document.getElementById('rOverstock')?.replaceChildren(document.createTextNode(String(statusCounts['Overstock']||0)));document.getElementById('rInactive')?.replaceChildren(document.createTextNode(String(statusCounts['Inactive']||0)));document.getElementById('rTransactions')?.replaceChildren(document.createTextNode(String(txAll.length)));document.getElementById('rWeight')?.replaceChildren(document.createTextNode(pm2vReportFmtWeight(totalWeight)));
   const filterResult=document.getElementById('reportFilterResult');if(filterResult)filterResult.textContent=`Showing ${inv.length.toLocaleString()} of ${invAll.length.toLocaleString()} inventory record${invAll.length===1?'':'s'}`;
-  pm2vRenderReportDonut(entries,totalWeight);pm2vRenderReportHealth(statusCounts,inv.length);pm2vRenderReportCategoryTable(entries,totalWeight);pm2vRenderReportInsights(inv,statusCounts,totalWeight,entries,txAll);
-  const days=Number(document.getElementById('reportPeriodFilter')?.value||7);pm2vRenderReportActivity(txAll,days);
+  const periodLabel=days===0?'All Time':`Last ${days} Days`;const filterSummary=document.getElementById('reportFilterSummary');if(filterSummary)filterSummary.textContent=`Current inventory: ${inv.length.toLocaleString()} record${inv.length===1?'':'s'} · ${pm2vReportFmtWeight(totalWeight)} · Transaction analytics: ${periodLabel}${cat!=='__all__'?` · ${cat}`:''}`;
+  const topCategory=document.getElementById('reportTopCategory');if(topCategory)topCategory.textContent=top?`${pm2vReportEsc(top[0])} · ${Math.round((Number(top[1].weight||0)/Math.max(1,totalWeight))*100)}%`: 'Top category —';
+  pm2vRenderReportDonut(entries,totalWeight);pm2vRenderReportHealth(statusCounts,inv.length);pm2vRenderReportCategoryTable(entries,totalWeight);pm2vRenderReportInsights(inv,statusCounts,totalWeight,entries,txAll,days,cat);pm2vRenderReportActivity(txAll,days,cat);pm2vRenderReportPerformance(txAll,days,cat);
 }
-function pm2vPopulateReportFilters(inv){
-  const select=document.getElementById('reportCategoryFilter');if(!select)return;const current=select.value;const cats=[...new Set(inv.map(x=>String(x.category||'Uncategorized')))].sort((a,b)=>a.localeCompare(b));select.innerHTML='<option value="__all__">All Categories</option>'+cats.map(c=>`<option value="${pm2vReportEsc(c)}">${pm2vReportEsc(c)}</option>`).join('');if(cats.includes(current))select.value=current;
-}
-function pm2vResetReportFilters(){const c=document.getElementById('reportCategoryFilter'),s=document.getElementById('reportStatusFilter'),p=document.getElementById('reportPeriodFilter');if(c)c.value='__all__';if(s)s.value='__all__';if(p)p.value='7';pm2vRenderReports()}
-async function loadReports(){
-  try{
-    const invSnap=await getDocs(collection(db,'inventory'));PM2V_REPORT_CACHE.inv=invSnap.docs.map(d=>d.data());
-    const txSnap=await getDocs(collection(db,'transactions'));PM2V_REPORT_CACHE.tx=txSnap.docs.map(d=>d.data());
-    pm2vPopulateReportFilters(PM2V_REPORT_CACHE.inv);pm2vRenderReports();
-  }catch(e){console.error(e);toast('Could not load reports. Check Firestore rules.','error')}
-}
-function pm2vInitReportControls(){
-  ['reportCategoryFilter','reportStatusFilter','reportPeriodFilter'].forEach(id=>document.getElementById(id)?.addEventListener('change',pm2vRenderReports));
-  document.getElementById('reportFilterReset')?.addEventListener('click',pm2vResetReportFilters);
-}
+function pm2vPopulateReportFilters(inv){const select=document.getElementById('reportCategoryFilter');if(!select)return;const current=select.value;const cats=[...new Set(inv.map(x=>String(x.category||'Uncategorized')))].sort((a,b)=>a.localeCompare(b));select.innerHTML='<option value="__all__">All Categories</option>'+cats.map(c=>`<option value="${pm2vReportEsc(c)}">${pm2vReportEsc(c)}</option>`).join('');if(cats.includes(current))select.value=current;}
+function pm2vResetReportFilters(){const c=document.getElementById('reportCategoryFilter'),s=document.getElementById('reportStatusFilter'),p=document.getElementById('reportPeriodFilter');if(c)c.value='__all__';if(s)s.value='__all__';if(p)p.value='7';pm2vRenderReports();}
+async function loadReports(){try{const invSnap=await getDocs(collection(db,'inventory'));PM2V_REPORT_CACHE.inv=invSnap.docs.map(d=>d.data());const txSnap=await getDocs(collection(db,'transactions'));PM2V_REPORT_CACHE.tx=txSnap.docs.map(d=>d.data());pm2vPopulateReportFilters(PM2V_REPORT_CACHE.inv);pm2vRenderReports();}catch(e){console.error(e);toast('Could not load reports. Check Firestore rules.','error')}}
+function pm2vInitReportControls(){['reportCategoryFilter','reportStatusFilter','reportPeriodFilter'].forEach(id=>document.getElementById(id)?.addEventListener('change',pm2vRenderReports));document.getElementById('reportFilterReset')?.addEventListener('click',pm2vResetReportFilters);}
 
 async function loadApplicants(){
   const body=document.getElementById('applicantBody');if(!body)return;
