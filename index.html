@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — UPDATED: Hide 0% AI alternative classifications. This file is the current baseline for future updates. -->
 
 <html lang="en">
 <head>
@@ -2806,7 +2807,10 @@ function renderAIResult(result){
   }
   const primaryKey=String(result.material||'').toLowerCase();
   classScores.delete(primaryKey);
-  const rows=[...classScores.values()].sort((a,b)=>b.confidence-a.confidence||a.name.localeCompare(b.name));
+  // Only show alternative classifications that have a confidence above 0%.
+  const rows=[...classScores.values()]
+    .filter(x=>Number.isFinite(x.confidence)&&x.confidence>0)
+    .sort((a,b)=>b.confidence-a.confidence||a.name.localeCompare(b.name));
   if(rows.length){
     ai.altsBox.style.display='block';
     ai.alts.innerHTML=rows.map(x=>`<div class="scanner-alt-row"><span>${esc(x.name)}</span><strong>${Math.round(x.confidence*100)}%</strong></div>`).join('');
