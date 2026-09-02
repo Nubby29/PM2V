@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — VERSION V5: Quantity-based stock status system. Current baseline/source of truth. Stock status is automatically calculated from current weight, minimum stock, maximum stock, and the manual Active/Inactive state. Transactions update inventory weight and then recalculate status. -->
+<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — VERSION V6: Staff stock-threshold permission update. Current baseline/source of truth. Staff users cannot see or edit Minimum Stock or Maximum Stock; new staff-created inventory records are always saved with the protected system defaults of 10 kg minimum and 100 kg maximum. Secretary and Owner retain access to edit stock thresholds. -->
 
 <html lang="en">
 <head>
@@ -1599,8 +1599,8 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 <div><label>Item Name</label><input id="inventoryItemName" placeholder="e.g. Aluminum Cans"/></div>
 <div><label>Category</label><select id="inventoryCategory"><option>Metal</option><option>Wood</option><option>Plastic</option><option>Paper</option><option>Fiber</option></select></div>
 <div><label>Current Weight (kg)</label><input id="inventoryWeight" placeholder="0.00" step="0.01" min="0" type="number"/></div>
-<div><label>Minimum Stock (kg)</label><input id="inventoryMinStock" value="10" step="0.01" min="0" type="number"/></div>
-<div><label>Maximum Stock (kg)</label><input id="inventoryMaxStock" value="100" step="0.01" min="0" type="number"/></div>
+<div class="inventory-stock-threshold-field"><label>Minimum Stock (kg)</label><input id="inventoryMinStock" value="10" step="0.01" min="0" type="number"/></div>
+<div class="inventory-stock-threshold-field"><label>Maximum Stock (kg)</label><input id="inventoryMaxStock" value="100" step="0.01" min="0" type="number"/></div>
 <div><label>Condition</label><select id="inventoryCondition"><option>Good</option><option>Fair</option><option>Poor</option></select></div>
 <div><label>Item State</label><select id="inventoryState"><option value="Active">Active</option><option value="Inactive">Inactive</option></select></div>
 </div>
@@ -1888,8 +1888,10 @@ async function saveInventory(){
   const name=document.getElementById('inventoryItemName')?.value.trim();
   const category=document.getElementById('inventoryCategory')?.value;
   const weight=pm2vNum(document.getElementById('inventoryWeight')?.value,NaN);
-  const minStock=pm2vNum(document.getElementById('inventoryMinStock')?.value,PM2V_DEFAULT_MIN_STOCK);
-  const maxStock=pm2vNum(document.getElementById('inventoryMaxStock')?.value,PM2V_DEFAULT_MAX_STOCK);
+  // Staff cannot configure stock thresholds. Protect the saved values as well
+  // as hiding the fields, so client-side input changes cannot override defaults.
+  const minStock=PM2V_DEFAULT_MIN_STOCK;
+  const maxStock=PM2V_DEFAULT_MAX_STOCK;
   const condition=document.getElementById('inventoryCondition')?.value;
   const status=document.getElementById('inventoryState')?.value||'Active';
   if(!name){toast('Enter an item name first.','error');return}
@@ -2017,6 +2019,13 @@ function setRoleAccess(role){
   if(inv) inv.style.display='';
   const manualToggle=document.getElementById('manualEntryToggle');
   if(manualToggle) manualToggle.style.display=r==='staff'?'':'none';
+
+  // Stock thresholds are management settings. Staff can record actual inventory
+  // details, but only Secretary and Owner may view or edit Minimum/Maximum Stock.
+  document.querySelectorAll('.inventory-stock-threshold-field').forEach(el=>{
+    el.style.display=r==='staff'?'none':'';
+  });
+
   if(r!=='staff'){
     const writeSection=document.getElementById('inventoryWriteSection');
     if(writeSection&&!document.body.classList.contains('inventory-editing')){
