@@ -6,6 +6,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>PM2V Scrap Trading</title>
+<!-- PM2V V21 — CLIENT REQUEST + REGRESSION FIX BASELINE / SOURCE OF TRUTH -->
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif;color:#17335a}
@@ -30,7 +31,7 @@ button,input,select{font-family:inherit}
 
 /* MAIN */
 .main{margin-left:295px;width:calc(100% - 295px);padding:40px 43px 70px;min-height:100vh}
-.page{display:none}.page.active{display:block}
+.page{display:none}.page.active{display:block}#dashboard.page.active{display:block!important;visibility:visible!important}
 .topbar{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:30px}
 h1{margin:0;font-size:31px;line-height:1.1;color:#071c3b;letter-spacing:-.8px}
 .subtitle{margin-top:15px;color:#597395;font-size:15px}
@@ -423,13 +424,11 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   border: 0 !important;
   box-shadow: none !important;
   background: transparent !important;
-  clip-path: circle(44% at 50% 50%) !important;
 }
 
-/* PM2V V20 — CLIENT LOGO PRESENTATION FIX
-   The supplied PNG contains a black square outside the green circular mark.
-   Clip the image to the green circular artwork and remove CSS borders/shadows
-   so no black ring is displayed around the PM2V logo. */
+/* PM2V V21 — CLEAN LOGO PRESENTATION
+   Uses the new outline-free PM2V logo asset. No CSS border or artificial clipping
+   is applied so the supplied logo artwork remains faithful at every size. */
 .logo,
 .mobile-header-logo,
 .login-header-brand img,
@@ -439,22 +438,7 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   border: 0 !important;
   box-shadow: none !important;
   background: transparent !important;
-  clip-path: circle(44% at 50% 50%) !important;
 }
-</style>
-<style id="pm2v-logo-fix">
-  .logo,
-  .sidebar-logo,
-  .brand-logo,
-  .logo img,
-  .sidebar-logo img,
-  .brand-logo img,
-  img[alt*="PM2V" i] {
-    border-radius: 100%;
-    border: 1px solid black;
-    box-sizing: border-box;
-    overflow: hidden;
-  }
 </style>
 <style id="pm2v-approval-modal-css">
 #pm2vApprovalModal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}.pm2v-approval-backdrop{position:absolute;inset:0;background:rgba(7,28,59,.48);backdrop-filter:blur(3px)}#pm2vApprovalModal.open{display:flex}.pm2v-approval-card{position:relative;width:min(520px,100%);background:#fff;border-radius:20px;padding:26px;box-shadow:0 22px 70px rgba(7,28,59,.24);z-index:1}.pm2v-approval-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}.pm2v-approval-eyebrow{font-size:10px;letter-spacing:1px;font-weight:800;color:#146f37;margin-bottom:6px}.pm2v-approval-head h2{margin:0;color:#071c3b;font-size:24px}.pm2v-approval-close{border:0;background:#f2f5f7;color:#52677e;border-radius:10px;width:36px;height:36px;font-size:24px;cursor:pointer}.pm2v-approval-person{padding:13px 15px;background:#f4faf5;border:1px solid #dceee0;border-radius:12px;color:#28513a;font-size:13px;font-weight:700;margin-bottom:17px}.pm2v-approval-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.pm2v-approval-card label{display:block;color:#46627e;font-size:12px;font-weight:800}.pm2v-approval-card input,.pm2v-approval-card select{width:100%;height:44px;margin-top:7px;border:1px solid #d8e1e9;border-radius:10px;padding:0 12px;background:#fff;color:#17335a;outline:none}.pm2v-approval-password-label{margin-top:13px}.pm2v-approval-note{margin-top:12px;color:#71849b;font-size:11px;line-height:1.5}.pm2v-approval-error{min-height:18px;margin-top:10px;color:#b42318;font-size:12px;font-weight:700}.pm2v-approval-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:12px}.pm2v-approval-actions button{height:44px;border-radius:10px;padding:0 16px;font-weight:800;cursor:pointer}.pm2v-approval-cancel{border:1px solid #d8e1e9;background:#fff;color:#49617e}.pm2v-approval-confirm{border:0;background:#146f37;color:#fff}@media(max-width:600px){.pm2v-approval-grid{grid-template-columns:1fr}.pm2v-approval-card{padding:20px}}
@@ -1617,7 +1601,7 @@ section.page>.topbar{display:none!important}
     <span class="global-clock-sep">|</span>
     <span class="global-clock-time" id="globalClockTime">—</span>
   </div>
-</div>
+</header>
 <div aria-label="PM2V mobile header" class="mobile-app-header">
 <div class="mobile-header-brand">
 <img alt="PM2V" class="mobile-header-logo" src="pm2v-logo.png"/>
@@ -3754,6 +3738,19 @@ ai.apply.addEventListener('click',()=>{
 
 window.addEventListener('beforeunload',()=>{stopAICamera();revokeAIUrl();});
 pm2vInitReportControls();
+
+// PM2V V21 runtime guard: preserve the active dashboard if a non-fatal runtime
+// exception elsewhere attempts to leave the authenticated workspace blank.
+window.addEventListener('error',e=>{
+  console.error('PM2V runtime error:',e.error||e.message);
+  if(PM2V_PROFILE){
+    const dash=document.getElementById('dashboard');
+    if(dash){dash.classList.add('active');dash.style.display='block';dash.style.visibility='visible';}
+  }
+});
+window.addEventListener('unhandledrejection',e=>{
+  console.error('PM2V unhandled promise rejection:',e.reason);
+});
 </script>
 
 <div class="pm2v-receipt-modal" id="pm2vReceiptModal" aria-hidden="true">
