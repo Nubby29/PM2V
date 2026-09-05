@@ -1,15 +1,11 @@
 <!DOCTYPE html>
-<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — VERSION V22: Client-requested unified internal UI, dynamic header clock, business-focused reports, interactive summary cards, profile/activity polish, and AI classifier presentation/validation improvements. This is the current baseline/source of truth and replaces V21. -->
+<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — VERSION V18: Client-requested unified internal UI, dynamic header clock, business-focused reports, interactive summary cards, profile/activity polish, and AI classifier presentation/validation improvements. This is the current baseline/source of truth and replaces V17. -->
 
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>PM2V Scrap Trading</title>
-<!-- PM2V V22 — CLIENT REQUEST + REGRESSION FIX BASELINE / SOURCE OF TRUTH -->
-<style id="pm2v-clean-logo-v22">
-img.pm2v-clean-logo, .logo img, .sidebar-logo img, .brand-logo img, .mobile-header-logo, .login-header-brand img, .login-company-logo, .pm2v-landing-brand img, .pm2v-landing-logo-large { border:0 !important; outline:0 !important; box-shadow:none !important; background:transparent !important; }
-</style>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif;color:#17335a}
@@ -34,7 +30,7 @@ button,input,select{font-family:inherit}
 
 /* MAIN */
 .main{margin-left:295px;width:calc(100% - 295px);padding:40px 43px 70px;min-height:100vh}
-.page{display:none}.page.active{display:block}#dashboard.page.active{display:block!important;visibility:visible!important}
+.page{display:none}.page.active{display:block}
 .topbar{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:30px}
 h1{margin:0;font-size:31px;line-height:1.1;color:#071c3b;letter-spacing:-.8px}
 .subtitle{margin-top:15px;color:#597395;font-size:15px}
@@ -251,12 +247,12 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 /* LOGIN / PUBLIC ACCESS */
 .login-screen{position:fixed;inset:0;z-index:20000;display:flex;flex-direction:column;background:linear-gradient(135deg,#e9f7eb 0%,#f7fbf8 55%,#e6f1e8 100%);overflow:auto;padding:0;color:#172235}
 .login-header{height:88px;flex:0 0 88px;background:#063c20;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(28px,5vw,72px);box-shadow:0 2px 10px rgba(3,50,27,.18);border-bottom:1px solid rgba(255,255,255,.18)}
-.login-header-brand{display:flex;align-items:center;gap:13px;color:#fff;font-weight:900;font-size:18px;letter-spacing:-.3px}.login-header-brand img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:0;background:transparent;}.login-header-nav{display:flex;align-items:center;gap:34px}.login-header-nav a{color:#d8e9df;text-decoration:none;font-size:14px;font-weight:800;transition:color .2s ease}.login-header-nav a:hover{color:#fff}
+.login-header-brand{display:flex;align-items:center;gap:13px;color:#fff;font-weight:900;font-size:18px;letter-spacing:-.3px}.login-header-brand img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid #000;background:#25d36d}.login-header-nav{display:flex;align-items:center;gap:34px}.login-header-nav a{color:#d8e9df;text-decoration:none;font-size:14px;font-weight:800;transition:color .2s ease}.login-header-nav a:hover{color:#fff}
 .login-shell{width:min(1160px,calc(100% - 64px));margin:22px auto 40px;display:grid;grid-template-columns:1fr 1fr;background:#fff;border-radius:25px;overflow:hidden;box-shadow:0 22px 65px rgba(19,68,39,.14);min-height:640px}
 .login-company{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:56px 58px;background:linear-gradient(145deg,#075329 0%,#0a6a34 54%,#0c7c3d 100%);color:#fff;overflow:hidden}
 .login-company:before{content:"";position:absolute;inset:0;opacity:.2;background-image:linear-gradient(45deg,rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(-45deg,rgba(255,255,255,.08) 1px,transparent 1px);background-size:38px 38px}
 .login-company:after{content:"";position:absolute;width:260px;height:260px;border:26px solid rgba(56,219,112,.08);border-radius:50%;right:-90px;top:-80px;box-shadow:0 0 0 34px rgba(56,219,112,.035),0 0 0 68px rgba(56,219,112,.025)}
-.login-company > *{position:relative;z-index:1}.login-company-logo{width:158px;height:158px;border-radius:50%;object-fit:cover;border:0;background:transparent;box-shadow:none;margin-bottom:30px}.login-company h2{font-size:18px;margin:0 0 18px;font-weight:900;letter-spacing:.1px}.login-company-divider{width:55px;height:4px;border-radius:10px;background:#36d877;margin-bottom:30px}.login-company-copy{max-width:450px;font-size:16px;line-height:1.75;color:#d9f3e2;margin:0 0 30px}.login-materials{display:flex;gap:9px;flex-wrap:wrap;justify-content:center}.login-material{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid rgba(255,255,255,.24);border-radius:20px;background:rgba(255,255,255,.08);color:#f2fff5;font-size:12px;font-weight:800}.login-material i{display:inline-block;width:12px;height:12px;border:1.5px solid currentColor;border-radius:2px}.login-material:nth-child(2) i{border-radius:50%}.login-material:nth-child(3) i{transform:rotate(45deg);border-radius:1px;width:10px;height:10px}.login-material:nth-child(4) i{border-radius:2px;width:10px;height:13px}
+.login-company > *{position:relative;z-index:1}.login-company-logo{width:158px;height:158px;border-radius:50%;object-fit:cover;border:4px solid #000;background:#2bd56f;box-shadow:0 10px 24px rgba(0,0,0,.18);margin-bottom:30px}.login-company h2{font-size:18px;margin:0 0 18px;font-weight:900;letter-spacing:.1px}.login-company-divider{width:55px;height:4px;border-radius:10px;background:#36d877;margin-bottom:30px}.login-company-copy{max-width:450px;font-size:16px;line-height:1.75;color:#d9f3e2;margin:0 0 30px}.login-materials{display:flex;gap:9px;flex-wrap:wrap;justify-content:center}.login-material{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid rgba(255,255,255,.24);border-radius:20px;background:rgba(255,255,255,.08);color:#f2fff5;font-size:12px;font-weight:800}.login-material i{display:inline-block;width:12px;height:12px;border:1.5px solid currentColor;border-radius:2px}.login-material:nth-child(2) i{border-radius:50%}.login-material:nth-child(3) i{transform:rotate(45deg);border-radius:1px;width:10px;height:10px}.login-material:nth-child(4) i{border-radius:2px;width:10px;height:13px}
 .login-panel{padding:60px 60px 46px;display:flex;flex-direction:column;justify-content:center}.login-panel h1{font-size:32px;color:#172235;margin:0 0 10px;letter-spacing:-1px}.login-panel-subtitle{font-size:17px;color:#6f8199;margin-bottom:40px}.login-form{display:grid;gap:14px}.login-field{position:relative}.login-field input{width:100%;height:59px;border:1px solid #d7e0e9;border-radius:13px;padding:0 48px 0 56px;font-size:15px;color:#24364d;outline:none;background:#fbfcfd;transition:border-color .2s,box-shadow .2s}.login-field input:focus{border-color:#149149;box-shadow:0 0 0 4px rgba(20,145,73,.09);background:#fff}.login-field input::placeholder{color:#91a2b7}.login-field-icon{position:absolute;left:18px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:#8aa0b8;pointer-events:none}.login-field-icon svg{width:100%;height:100%}.login-password-toggle{position:absolute;right:16px;top:50%;transform:translateY(-50%);border:0;background:none;color:#8aa0b8;padding:4px;cursor:pointer}.login-password-toggle svg{width:20px;height:20px}.login-forgot{border:0;background:none;color:#0b7438;font-size:14px;font-weight:800;cursor:pointer;margin:7px auto 7px}.login-submit{height:58px;border:0;border-radius:13px;background:linear-gradient(135deg,#146d35,#087d3e);color:#fff;font-size:16px;font-weight:900;cursor:pointer;box-shadow:0 10px 22px rgba(14,112,57,.18);transition:transform .15s,box-shadow .15s}.login-submit:hover{transform:translateY(-1px);box-shadow:0 13px 27px rgba(14,112,57,.23)}.login-submit:disabled{opacity:.65;cursor:wait;transform:none}.login-protected{text-align:center;color:#6e829b;font-size:13px;margin:27px 0 29px}.login-protected .lock{color:#0db95a;font-size:18px;vertical-align:-2px;margin-right:7px}.login-apply{text-align:center;color:#71839a;font-size:15px;margin-bottom:29px}.login-apply-mobile-top{display:none}.login-apply button{border:0;background:none;color:#0b7438;font-size:15px;font-weight:900;cursor:pointer;padding:0}.login-legal{border-top:1px solid #e3e8ee;padding-top:25px;text-align:center;color:#8493a7;font-size:11px}.login-legal a{color:#0b7438;text-decoration:none;font-weight:800}.login-message{min-height:20px;text-align:center;font-size:13px;font-weight:700;color:#b42318;margin-top:2px}.login-message.success{color:#146b35}
 
 /* Public application modal */
@@ -421,27 +417,20 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
     color:#b42318!important;
   }
 }
-
-/* PM2V CLIENT LOGO FIX — remove the black ring/background around the supplied logo. */
-.login-header-brand img, .login-company-logo {
-  border: 0 !important;
-  box-shadow: none !important;
-  background: transparent !important;
-}
-
-/* PM2V V21 — CLEAN LOGO PRESENTATION
-   Uses the new outline-free PM2V logo asset. No CSS border or artificial clipping
-   is applied so the supplied logo artwork remains faithful at every size. */
-.logo,
-.mobile-header-logo,
-.login-header-brand img,
-.login-company-logo,
-.pm2v-landing-brand img,
-.pm2v-landing-logo-large {
-  border: 0 !important;
-  box-shadow: none !important;
-  background: transparent !important;
-}
+</style>
+<style id="pm2v-logo-fix">
+  .logo,
+  .sidebar-logo,
+  .brand-logo,
+  .logo img,
+  .sidebar-logo img,
+  .brand-logo img,
+  img[alt*="PM2V" i] {
+    border-radius: 100%;
+    border: 1px solid black;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
 </style>
 <style id="pm2v-approval-modal-css">
 #pm2vApprovalModal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}.pm2v-approval-backdrop{position:absolute;inset:0;background:rgba(7,28,59,.48);backdrop-filter:blur(3px)}#pm2vApprovalModal.open{display:flex}.pm2v-approval-card{position:relative;width:min(520px,100%);background:#fff;border-radius:20px;padding:26px;box-shadow:0 22px 70px rgba(7,28,59,.24);z-index:1}.pm2v-approval-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}.pm2v-approval-eyebrow{font-size:10px;letter-spacing:1px;font-weight:800;color:#146f37;margin-bottom:6px}.pm2v-approval-head h2{margin:0;color:#071c3b;font-size:24px}.pm2v-approval-close{border:0;background:#f2f5f7;color:#52677e;border-radius:10px;width:36px;height:36px;font-size:24px;cursor:pointer}.pm2v-approval-person{padding:13px 15px;background:#f4faf5;border:1px solid #dceee0;border-radius:12px;color:#28513a;font-size:13px;font-weight:700;margin-bottom:17px}.pm2v-approval-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.pm2v-approval-card label{display:block;color:#46627e;font-size:12px;font-weight:800}.pm2v-approval-card input,.pm2v-approval-card select{width:100%;height:44px;margin-top:7px;border:1px solid #d8e1e9;border-radius:10px;padding:0 12px;background:#fff;color:#17335a;outline:none}.pm2v-approval-password-label{margin-top:13px}.pm2v-approval-note{margin-top:12px;color:#71849b;font-size:11px;line-height:1.5}.pm2v-approval-error{min-height:18px;margin-top:10px;color:#b42318;font-size:12px;font-weight:700}.pm2v-approval-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:12px}.pm2v-approval-actions button{height:44px;border-radius:10px;padding:0 16px;font-weight:800;cursor:pointer}.pm2v-approval-cancel{border:1px solid #d8e1e9;background:#fff;color:#49617e}.pm2v-approval-confirm{border:0;background:#146f37;color:#fff}@media(max-width:600px){.pm2v-approval-grid{grid-template-columns:1fr}.pm2v-approval-card{padding:20px}}
@@ -464,7 +453,7 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   /* Native-like app header */
   .mobile-app-header{position:sticky;top:0;z-index:1000;margin:0 -16px 18px;padding:12px 16px 13px;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #e5ece7;display:flex;align-items:center;justify-content:space-between;min-height:64px}
   .mobile-header-brand{display:flex;align-items:center;gap:10px;min-width:0}
-  .mobile-header-logo{width:40px;height:40px;border-radius:50%;object-fit:cover;background:transparent;border:0;box-shadow:none;flex:0 0 auto}
+  .mobile-header-logo{width:40px;height:40px;border-radius:50%;object-fit:cover;background:#eaf5ec;border:1px solid #111;box-shadow:0 2px 7px rgba(0,0,0,.10);flex:0 0 auto}
   .mobile-header-copy{min-width:0}
   .mobile-header-kicker{font-size:10px;line-height:1.1;text-transform:uppercase;letter-spacing:1px;font-weight:900;color:#7a8d80}
   .mobile-header-title{font-size:19px;line-height:1.2;font-weight:900;color:#102844;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
@@ -1510,12 +1499,7 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 </style>
 
 <style id="pm2v-v18-client-refresh">
-/* V20 client implementation: logo presentation correction. */
-/* V20 verified logo sizing and ring removal */
-.sidebar .logo-wrap{height:178px;display:flex;align-items:center;justify-content:center}.sidebar .logo{width:150px;height:150px;display:block;object-fit:contain;margin:0 auto}.pm2v-landing-brand img{width:48px;height:48px;object-fit:cover;display:block}.pm2v-landing-logo-large{width:min(270px,72%);height:auto;aspect-ratio:1/1;object-fit:contain;display:block;margin:0 auto}
-
-.pm2v-faq-list{display:grid;gap:10px;margin-top:20px}.pm2v-faq-item{background:#fff;border:1px solid #dfe9e2;border-radius:14px;overflow:hidden}.pm2v-faq-question{width:100%;border:0;background:#fff;padding:17px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px;text-align:left;font:inherit;font-weight:800;color:#153253;cursor:pointer}.pm2v-faq-question>span:last-child{font-size:20px;color:#146f37;line-height:1}.pm2v-faq-answer{padding:0 18px 17px;color:#61758b;font-size:13px;line-height:1.65}.pm2v-faq-item.open{border-color:#c8dfcf;box-shadow:0 4px 14px rgba(20,111,55,.06)}
-
+/* V18 client implementation: unified internal UI foundation. */
 .global-page-header{display:flex;align-items:center;justify-content:space-between;gap:24px;background:#fff;border:1px solid #e1e9e4;border-radius:18px;padding:22px 25px;margin-bottom:24px;box-shadow:0 3px 12px rgba(23,57,40,.045)}
 .global-page-header-copy{min-width:0}.global-page-eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:1.1px;font-weight:900;color:#789083;margin-bottom:5px}.global-page-header h1{font-size:29px;margin:0;color:#071c3b;letter-spacing:-.7px}.global-page-clock{display:flex;align-items:center;gap:10px;white-space:nowrap;color:#526f61;font-size:13px;font-weight:800}.global-clock-date{color:#476a57}.global-clock-sep{color:#b7c7bd}.global-clock-time{color:#146f37;min-width:84px;text-align:right}
 section.page>.topbar{display:none!important}
@@ -1545,15 +1529,13 @@ section.page>.topbar{display:none!important}
 <div class="pm2v-landing-wrap" id="pm2vLandingWrap">
 <header class="pm2v-landing-header">
 <a aria-label="PM2V Scrap Trading home" class="pm2v-landing-brand" data-landing-target="pm2v-home" href="#pm2v-home"><img alt="PM2V Scrap Trading logo" src="pm2v-logo.png"/><span>PM2V Scrap Trading</span></a>
-<nav aria-label="Public navigation" class="pm2v-landing-nav"><a data-landing-target="pm2v-about" href="#pm2v-about">About</a><a data-landing-target="pm2v-services" href="#pm2v-services">What We Do</a><a data-landing-target="pm2v-materials" href="#pm2v-materials">Materials</a><a data-landing-target="pm2v-faq" href="#pm2v-faq">FAQs</a><button class="pm2v-landing-login" id="pm2vOpenLogin" type="button">Login</button></nav>
+<nav aria-label="Public navigation" class="pm2v-landing-nav"><a data-landing-target="pm2v-about" href="#pm2v-about">About</a><a data-landing-target="pm2v-services" href="#pm2v-services">What We Do</a><a data-landing-target="pm2v-materials" href="#pm2v-materials">Materials</a><button class="pm2v-landing-login" id="pm2vOpenLogin" type="button">Login</button></nav>
 </header>
 <main>
 <section class="pm2v-landing-hero" id="pm2v-home"><div><span class="pm2v-landing-eyebrow"><i></i> Smart Scrap Management</span><h1>Smart Inventory.<br/><strong>Sustainable Future.</strong></h1><p>PM2V Scrap Trading combines practical scrap management with a smarter digital inventory system—helping teams track materials, organize physical inventory, and make better day-to-day decisions.</p><div class="pm2v-landing-actions"><button class="pm2v-landing-primary" id="pm2vHeroLogin" type="button">Access PM2V →</button><a class="pm2v-landing-secondary" data-landing-target="pm2v-about" href="#pm2v-about">Learn More</a></div></div><div class="pm2v-landing-visual"><div class="pm2v-landing-visual-card"><img alt="PM2V logo" class="pm2v-landing-logo-large" src="pm2v-logo.png"/><h3>One workspace for scrap inventory</h3><p>Keep material records, physical inventory, and AI-assisted identification connected in one secure portal.</p><div class="pm2v-landing-mini-grid"><div class="pm2v-landing-mini"><b>Inventory</b><span>Track current stock</span></div><div class="pm2v-landing-mini"><b>AI Scanner</b><span>Identify materials</span></div><div class="pm2v-landing-mini"><b>Records</b><span>Keep activity organized</span></div><div class="pm2v-landing-mini"><b>Access</b><span>Role-based workspace</span></div></div></div></div></section>
 <section class="pm2v-landing-section" id="pm2v-about"><div class="pm2v-landing-section-head"><div class="pm2v-landing-kicker">About PM2V</div><h2>Built around real-world scrap operations</h2><p>PM2V Scrap Trading is designed around the practical needs of managing scrap materials—from physical inventory to organized digital records.</p></div><div class="pm2v-landing-cards"><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">01</div><h3>Smart Inventory</h3><p>Keep a clear view of materials currently recorded in your physical inventory.</p></article><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">02</div><h3>Organized Records</h3><p>Bring inventory activity and operational records into one structured workspace.</p></article><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">03</div><h3>AI-Assisted Scanning</h3><p>Use the integrated ScrapScan workflow to help identify materials from photos.</p></article><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">04</div><h3>Controlled Access</h3><p>Role-based accounts keep workspace functions appropriate to each team member.</p></article></div></section>
 <section class="pm2v-landing-section alt" id="pm2v-services"><div class="pm2v-landing-section-head"><div class="pm2v-landing-kicker">What We Do</div><h2>From scrap on the ground to data on screen</h2><p>The public experience introduces PM2V. The secure portal takes your team into the operational tools behind it.</p></div><div class="pm2v-landing-cards"><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">▦</div><h3>Physical Inventory</h3><p>Record, review, and manage the materials currently in your inventory.</p></article><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">✦</div><h3>AI Scrap Scanner</h3><p>Capture or upload a photo and use the configured AI workflow for material identification.</p></article><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">↗</div><h3>Transactions &amp; Reports</h3><p>Authorized team members can work with operational records and reporting tools.</p></article><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">✓</div><h3>Team Access</h3><p>Secure sign-in and role-based access keep internal tools protected.</p></article></div></section>
 <section class="pm2v-landing-section" id="pm2v-materials"><div class="pm2v-landing-section-head"><div class="pm2v-landing-kicker">Materials</div><h2>Designed for the materials you handle</h2><p>Start with broad material categories, then manage the scanner classes from inside the PM2V portal as your operation evolves.</p></div><div class="pm2v-landing-materials"><div class="pm2v-landing-material"><b>Metal</b><span>Steel, aluminum, copper and more</span></div><div class="pm2v-landing-material"><b>Plastic</b><span>Plastic materials and recyclable grades</span></div><div class="pm2v-landing-material"><b>Paper &amp; Cardboard</b><span>Paper-based recyclable materials</span></div><div class="pm2v-landing-material"><b>Wood &amp; Other</b><span>Wood, textiles, e-waste and mixed scrap</span></div></div></section>
-
-<section class="pm2v-landing-section alt pm2v-faq-section" id="pm2v-faq"><div class="pm2v-landing-section-head"><div class="pm2v-landing-kicker">FAQs</div><h2>Frequently asked questions</h2><p>Quick answers about accessing and using the PM2V workspace.</p></div><div class="pm2v-faq-list"><div class="pm2v-faq-item"><button type="button" class="pm2v-faq-question" aria-expanded="false"><span>Who can access PM2V?</span><span aria-hidden="true">+</span></button><div class="pm2v-faq-answer" hidden>PM2V access is limited to approved users with an active account and the appropriate role.</div></div><div class="pm2v-faq-item"><button type="button" class="pm2v-faq-question" aria-expanded="false"><span>What can I manage in PM2V?</span><span aria-hidden="true">+</span></button><div class="pm2v-faq-answer" hidden>Authorized users can manage physical inventory, review transactions and reports, and use the AI-assisted scrap classifier according to their role.</div></div><div class="pm2v-faq-item"><button type="button" class="pm2v-faq-question" aria-expanded="false"><span>How do I request access?</span><span aria-hidden="true">+</span></button><div class="pm2v-faq-answer" hidden>Use the public access application and wait for owner approval before signing in.</div></div><div class="pm2v-faq-item"><button type="button" class="pm2v-faq-question" aria-expanded="false"><span>Is the AI classification automatic?</span><span aria-hidden="true">+</span></button><div class="pm2v-faq-answer" hidden>The configured AI workflow analyzes the uploaded or captured image and returns the detected material and confidence score.</div></div></div></section>
 <section class="pm2v-landing-cta"><div><h2>Ready to enter the PM2V workspace?</h2><p>Sign in to access your inventory and authorized operational tools.</p></div><button class="pm2v-landing-primary" id="pm2vCtaLogin" type="button">Login to PM2V →</button></section>
 </main><footer class="pm2v-landing-footer"><span><strong>PM2V Scrap Trading</strong> · Smart Inventory. Sustainable Future.</span><span>© 2026 PM2V Scrap Trading. All Rights Reserved.</span></footer>
 </div>
@@ -1594,7 +1576,7 @@ section.page>.topbar{display:none!important}
 <div class="logout"><a href="#"><span>↪</span>Logout</a></div>
 </aside>
 <main class="main">
-<header class="global-page-header" id="globalPageHeader" aria-label="PM2V internal page header">
+<div class="global-page-header" id="globalPageHeader" aria-label="PM2V internal page header">
   <div class="global-page-header-copy">
     <div class="global-page-eyebrow">PM2V Scrap Trading</div>
     <h1 id="globalPageTitle">Dashboard</h1>
@@ -1604,7 +1586,7 @@ section.page>.topbar{display:none!important}
     <span class="global-clock-sep">|</span>
     <span class="global-clock-time" id="globalClockTime">—</span>
   </div>
-</header>
+</div>
 <div aria-label="PM2V mobile header" class="mobile-app-header">
 <div class="mobile-header-brand">
 <img alt="PM2V" class="mobile-header-logo" src="pm2v-logo.png"/>
@@ -1617,7 +1599,12 @@ section.page>.topbar{display:none!important}
 </div>
 <!-- DASHBOARD -->
 <section class="page active" id="dashboard">
-
+<div class="topbar dashboard-topbar">
+<div>
+<h1>Dashboard</h1>
+</div>
+<div class="date">▣   Tuesday, August 18, 2026 <span class="sep">|</span> ◷  05:26 PM</div>
+</div>
 <section class="dashboard-stats">
 <button class="dashboard-stat dashboard-stat-action" data-dashboard-action="inventory" type="button" aria-label="View total inventory items">
 <div class="dashboard-stat-icon">⬡</div>
@@ -1677,7 +1664,10 @@ section.page>.topbar{display:none!important}
 </section>
 <!-- PHYSICAL INVENTORY -->
 <section class="page" id="inventory">
-
+<div class="topbar">
+<div><h1>Physical Inventory</h1><div class="subtitle">Scan scrap, confirm the result, and add it to inventory.</div></div>
+<div class="date">Tuesday, August 18, 2026 <span class="sep">|</span> 05:11:45 PM</div>
+</div>
 <div aria-label="Inventory summary" class="inventory-summary">
 <div class="inventory-summary-item"><span>Items</span><strong id="inventorySummaryCount">0</strong></div>
 <div class="inventory-summary-divider"></div>
@@ -1752,7 +1742,7 @@ section.page>.topbar{display:none!important}
 <div class="scanner-result-label">Detected material</div>
 <div class="scanner-material" id="aiMaterial">Unknown</div>
 </div>
-<div><div class="scanner-result-label">Confidence</div><div class="scanner-confidence" id="aiConfidence">—</div></div>
+<div><div class="scanner-result-label">Confidence</div><div class="scanner-confidence" id="aiConfidence">0%</div></div>
 </div>
 <div class="scanner-bar"><i id="aiConfidenceBar"></i></div>
 <div class="scanner-description" id="aiDescription"></div>
@@ -1799,7 +1789,10 @@ section.page>.topbar{display:none!important}
 </section>
 <!-- TRANSACTIONS: SECRETARY + OWNER -->
 <section class="page role-secretary-owner" id="transactions">
-
+<div class="topbar">
+<div><h1>Transactions</h1><div class="subtitle">Record and review scrap trading transactions.</div></div>
+<div class="date" id="transactionsDate"></div>
+</div>
 <section class="role-card" style="margin-bottom:18px">
 <h2 class="card-title">Record Transaction</h2>
 <div class="role-form">
@@ -1843,7 +1836,10 @@ section.page>.topbar{display:none!important}
 </section>
 <!-- REPORTS: SECRETARY + OWNER -->
 <section class="page role-secretary-owner" id="reports">
-
+<div class="topbar">
+<div><h1>Reports</h1></div>
+<div class="report-topbar-actions"><div class="date" id="reportsDate"></div></div>
+</div>
 <div class="report-dashboard-v7">
   <div class="report-grid report-kpi-grid">
     <button class="role-card report-kpi-card report-kpi-action" data-report-action="all" type="button"><div class="report-kpi-label">Total Items</div><div class="report-kpi-value" id="rTotal">0</div><div class="report-kpi-note">Inventory records</div></button>
@@ -1864,10 +1860,10 @@ section.page>.topbar{display:none!important}
   </section>
 
   <section class="report-section-card report-filter-card" aria-label="Report filters">
-    <button class="report-filter-toggle" id="reportFilterToggle" type="button" aria-expanded="false" aria-controls="reportFilterContent">
+    <button class="report-filter-toggle" id="reportFilterToggle" type="button" aria-expanded="true" aria-controls="reportFilterContent">
       <span><strong>Report Filters</strong><small>Filter inventory and trading records</small></span><span class="report-filter-toggle-icon">⌄</span>
     </button>
-    <div class="report-filter-content" id="reportFilterContent" hidden>
+    <div class="report-filter-content" id="reportFilterContent">
       <div class="report-filter-bar">
         <div class="report-filter-control"><label for="reportCategoryFilter">Material Category</label><select id="reportCategoryFilter"><option value="__all__">All Categories</option></select></div>
         <div class="report-filter-control"><label for="reportStatusFilter">Stock Status</label><select id="reportStatusFilter"><option value="__all__">All Statuses</option><option>In Stock</option><option>Low Stock</option><option>Out of Stock</option><option>Overstock</option><option>Inactive</option></select></div>
@@ -1905,7 +1901,10 @@ section.page>.topbar{display:none!important}
 </section>
 <!-- USER MANAGEMENT: OWNER ONLY -->
 <section class="page role-only role-owner" id="users">
-
+<div class="topbar">
+<div><h1>User Management</h1><div class="subtitle">Review applications and manage PM2V user records.</div></div>
+<div class="date" id="usersDate"></div>
+</div>
 <section class="role-card" style="margin-bottom:18px">
 <h2 class="card-title">Pending Applicants</h2>
 <div style="overflow:auto"><table class="role-table"><thead><tr><th>NAME</th><th>EMAIL</th><th>ROLE REQUESTED</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="applicantBody"><tr><td class="empty-role" colspan="5">Loading applicants…</td></tr></tbody></table></div>
@@ -1917,7 +1916,13 @@ section.page>.topbar{display:none!important}
 </section>
 <!-- PROFILE -->
 <section class="page" id="profile">
-
+<div class="topbar">
+<div>
+<h1>Profile</h1>
+<div class="subtitle">Manage your account information and settings.</div>
+</div>
+<div class="date">▣   Tuesday, August 18, 2026 <span class="sep">|</span> ◷  05:30:22 PM</div>
+</div>
 <section class="profile-hero">
 <div class="profile-avatar-large" id="profileAvatar">N</div>
 <div>
@@ -2329,10 +2334,6 @@ function applyProfile(user,p){
   document.getElementById('profileLastSignIn')?.replaceChildren(document.createTextNode(fmtDateTime(user.metadata?.lastSignInTime)));
 }
 
-
-// Public FAQ accordion
-document.querySelectorAll('.pm2v-faq-question').forEach(btn=>btn.addEventListener('click',()=>{const item=btn.closest('.pm2v-faq-item'),answer=item?.querySelector('.pm2v-faq-answer');if(!item||!answer)return;const open=item.classList.toggle('open');btn.setAttribute('aria-expanded',String(open));answer.hidden=!open;const icon=btn.querySelector('span:last-child');if(icon)icon.textContent=open?'−':'+';}));
-
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAccessModal()});
 document.getElementById('loginPasswordToggle')?.addEventListener('click',()=>{
   const input=document.getElementById('loginPassword'),btn=document.getElementById('loginPasswordToggle');
@@ -2421,7 +2422,7 @@ function updateGlobalPageTitle(id){
   const el=document.getElementById('globalPageTitle');if(el)el.textContent=title;
   const mobile=document.getElementById('mobilePageTitle');if(mobile)mobile.textContent=title;
 }
-updateGlobalClock();setInterval(updateGlobalClock,1000); // V20: single live clock drives every internal page header.
+updateGlobalClock();setInterval(updateGlobalClock,1000);
 function showPage(id){
   if(PM2V_PROFILE && !canAccessPage(id,String(PM2V_PROFILE.role||'').toLowerCase())) id='dashboard';
   updateGlobalPageTitle(id);
@@ -3257,7 +3258,7 @@ const AI_CONFIG={
   workspace:'jhave-larios',
   workflowId:'muse-spark-1-1-classification',
   modelName:'Muse Spark 1.1',
-  // PM2V Scrap Trading V20 — CURRENT BASELINE / SOURCE OF TRUTH.
+  // PM2V Scrap Trading V18 — CURRENT BASELINE / SOURCE OF TRUTH.
   // Live GitHub Pages frontend must use the deployed Render proxy, not a relative local API path.
   proxyUrl:'https://pm2v-scrapscan.onrender.com/api/roboflow',
   directFallback:false
@@ -3510,12 +3511,45 @@ async function parseResponse(response,label){
 async function callAIWorkflow(){
   if(!aiBlob)throw new Error('Capture or upload a scrap image first.');
   const base64=await blobToBase64(aiBlob);
-  const payload={workflowUrl:buildWorkflowUrl(),inputs:{image:{type:'base64',value:base64},classes:getAIClasses()}};
+  const payload={
+    workflowUrl:buildWorkflowUrl(),
+    inputs:{image:{type:'base64',value:base64},classes:getAIClasses()}
+  };
+
+  // First use the same local proxy architecture as ScrapScan.
   try{
-    const r=await fetch(AI_CONFIG.proxyUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-    return await parseResponse(r,'PM2V AI service');
+    const r=await fetch(AI_CONFIG.proxyUrl,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
+    });
+    if(r.ok)return await parseResponse(r,'ScrapScan proxy');
+    // If the local proxy returns an error such as HTTP 502, continue to the
+    // direct workflow when directFallback is enabled.
+    if(!AI_CONFIG.directFallback){
+      return await parseResponse(r,'ScrapScan proxy');
+    }
   }catch(e){
-    throw new Error(`Could not reach the configured PM2V AI service. ${e.message||'network error'}`);
+    if(!AI_CONFIG.directFallback){
+      throw new Error(`Could not reach the local ScrapScan proxy. ${e.message||'network error'}`);
+    }
+  }
+
+  if(!AI_CONFIG.directFallback){
+    throw new Error('Could not reach /api/roboflow. Start the ScrapScan local proxy and try again.');
+  }
+
+  // Direct fallback keeps the standalone HTML usable in Live Server.
+  throw new Error('Direct AI workflow access is disabled; use the configured PM2V ScrapScan service.');
+  try{
+    const direct=await fetch(buildWorkflowUrl(),{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify(directPayload)
+    });
+    return await parseResponse(direct,'Roboflow Workflow');
+  }catch(e){
+    throw new Error(`Roboflow direct fallback failed. ${e.message||'network error'}`);
   }
 }
 
@@ -3639,20 +3673,22 @@ function extractStructured(data){
 
 function normalizeResult(data){
   const extracted=extractStructured(data);
-  const direct=(data&&typeof data==='object')?data:null;
-  const directConfidence=Number(direct?.confidence??direct?.score??direct?.probability);
-  const r=(direct && (direct.material||direct.primary_material||direct.label||direct.class) && Number.isFinite(directConfidence) && directConfidence>0)?direct:extracted;
-  if(!r)throw new Error('The AI workflow returned no supported classification result. Please retake the photo and try again.');
+  const r=(data&&(data.material||data.primary_material||data.label||data.class))?data:extracted;
+  if(!r)throw new Error('The AI workflow returned no supported classification confidence. Please retake the photo and try again.');
   let raw=Number(r.confidence??r.score??r.probability); if(raw>1)raw/=100;
   if(!Number.isFinite(raw)||raw<=0)throw new Error('The AI workflow did not return a valid confidence score. Please retake the photo and try again.');
   let material=String(r.material||r.primary_material||r.label||r.class||'').trim();
   const unidentifiable=!material||/^(unknown|unidentified|unidentifiable|null|undefined|n\/a)$/i.test(material);
   if(unidentifiable)material='Not a scrap';
   return{
-    material,confidence:Math.max(0,Math.min(1,raw)),evidence:Array.isArray(r.evidence)?r.evidence:[],alternatives:Array.isArray(r.alternatives)?r.alternatives:[],
+    material,
+    confidence:Math.max(0,Math.min(1,raw)),
+    evidence:Array.isArray(r.evidence)?r.evidence:[],
+    alternatives:Array.isArray(r.alternatives)?r.alternatives:[],
     description:unidentifiable?'The scanned image could not be identified as a supported scrap material.':(r.description||r.caption||''),
     isScrap:unidentifiable?false:(typeof r.is_scrap==='boolean'?r.is_scrap:(typeof r.isScrap==='boolean'?r.isScrap:getAIClasses().some(x=>x.toLowerCase()===material.toLowerCase()))),
-    condition:unidentifiable?'Unidentifiable':'AI classification complete',raw:r._raw||data
+    condition:unidentifiable?'Unidentifiable':(r.condition||'AI classification complete'),
+    raw:r._raw||data
   };
 }
 function renderAIResult(result){
@@ -3741,22 +3777,6 @@ ai.apply.addEventListener('click',()=>{
 
 window.addEventListener('beforeunload',()=>{stopAICamera();revokeAIUrl();});
 pm2vInitReportControls();
-
-// // PM2V V22 runtime guard: only restore Dashboard when authentication is ready
-// and no internal page is currently active. Never override an active page.
-window.addEventListener('error',e=>{
-  console.error('PM2V runtime error:',e.error||e.message);
-  if(PM2V_PROFILE){
-    const activePage=document.querySelector('.main .page.active');
-    if(!activePage){
-      const dash=document.getElementById('dashboard');
-      if(dash){dash.classList.add('active');dash.style.display='block';dash.style.visibility='visible';}
-    }
-  }
-});
-window.addEventListener('unhandledrejection',e=>{
-  console.error('PM2V unhandled promise rejection:',e.reason);
-});
 </script>
 
 <div class="pm2v-receipt-modal" id="pm2vReceiptModal" aria-hidden="true">
@@ -3993,7 +4013,7 @@ window.addEventListener('unhandledrejection',e=>{
 /* PM2V PUBLIC LANDING PAGE — fully scoped */
 .pm2v-landing-wrap{position:absolute;inset:0;overflow:auto;background:#f5faf6;color:#17335a;font-family:inherit}
 .pm2v-landing-header{position:sticky;top:0;z-index:20;height:76px;background:rgba(6,60,32,.97);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(22px,5vw,72px);box-shadow:0 2px 16px rgba(3,50,27,.16)}
-.pm2v-landing-brand{display:flex;align-items:center;gap:11px;color:#fff;text-decoration:none;font-weight:900;font-size:18px}.pm2v-landing-brand img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:0;background:transparent}
+.pm2v-landing-brand{display:flex;align-items:center;gap:11px;color:#fff;text-decoration:none;font-weight:900;font-size:18px}.pm2v-landing-brand img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #000;background:#25d36d}
 .pm2v-landing-nav{display:flex;align-items:center;gap:28px}.pm2v-landing-nav a{color:#dceee3;text-decoration:none;font-size:13px;font-weight:800;transition:.2s}.pm2v-landing-nav a:hover{color:#fff}
 .pm2v-landing-login{border:1px solid rgba(255,255,255,.38);background:#fff;color:#075e2e;border-radius:10px;padding:11px 19px;font-weight:900;cursor:pointer;font-size:13px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
 .pm2v-landing-hero{min-height:590px;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:42px;padding:72px clamp(24px,7vw,100px);background:linear-gradient(135deg,#eff9f1 0%,#fff 52%,#e4f4e8 100%);position:relative;overflow:hidden}.pm2v-landing-hero:before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;right:-120px;top:-140px;background:rgba(37,211,109,.09);pointer-events:none}
@@ -4001,7 +4021,7 @@ window.addEventListener('unhandledrejection',e=>{
 .pm2v-landing-hero h1{font-size:clamp(40px,5.2vw,70px);line-height:1.02;letter-spacing:-2.8px;margin:0 0 20px;color:#12395d;max-width:700px}.pm2v-landing-hero h1 strong{color:#087a3b}.pm2v-landing-hero p{font-size:17px;line-height:1.75;color:#60758b;max-width:620px;margin:0 0 30px}
 .pm2v-landing-actions{display:flex;gap:12px;flex-wrap:wrap}.pm2v-landing-primary,.pm2v-landing-secondary{border-radius:12px;padding:14px 21px;font-size:14px;font-weight:900;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.pm2v-landing-primary{background:#11763a;color:#fff;border:1px solid #11763a;box-shadow:0 10px 24px rgba(17,118,58,.18)}.pm2v-landing-secondary{background:#fff;color:#174267;border:1px solid #d7e4dc}
 .pm2v-landing-visual{min-height:410px;border-radius:28px;background:linear-gradient(145deg,#0a5d30,#158343);padding:22px;box-shadow:0 28px 70px rgba(14,86,44,.2);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}.pm2v-landing-visual:before,.pm2v-landing-visual:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.08)}.pm2v-landing-visual:before{width:300px;height:300px;right:-90px;top:-100px}.pm2v-landing-visual:after{width:240px;height:240px;left:-120px;bottom:-100px}
-.pm2v-landing-visual-card{width:min(430px,90%);background:#fff;border-radius:22px;padding:28px;position:relative;z-index:1;box-shadow:0 18px 45px rgba(0,0,0,.18)}.pm2v-landing-logo-large{width:86px;height:86px;border-radius:50%;object-fit:cover;border:0;background:transparent;display:block;margin:0 auto 18px}.pm2v-landing-visual-card h3{text-align:center;color:#12395d;font-size:22px;margin:0 0 8px}.pm2v-landing-visual-card>p{text-align:center;color:#71859a;font-size:13px;line-height:1.55;margin:0 0 22px}.pm2v-landing-mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.pm2v-landing-mini{border:1px solid #e3ebe6;border-radius:12px;padding:14px;background:#f8fbf9}.pm2v-landing-mini b{display:block;color:#12395d;font-size:13px;margin-bottom:3px}.pm2v-landing-mini span{color:#7890a0;font-size:11px}
+.pm2v-landing-visual-card{width:min(430px,90%);background:#fff;border-radius:22px;padding:28px;position:relative;z-index:1;box-shadow:0 18px 45px rgba(0,0,0,.18)}.pm2v-landing-logo-large{width:86px;height:86px;border-radius:50%;object-fit:cover;border:4px solid #111;background:#25d36d;display:block;margin:0 auto 18px}.pm2v-landing-visual-card h3{text-align:center;color:#12395d;font-size:22px;margin:0 0 8px}.pm2v-landing-visual-card>p{text-align:center;color:#71859a;font-size:13px;line-height:1.55;margin:0 0 22px}.pm2v-landing-mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.pm2v-landing-mini{border:1px solid #e3ebe6;border-radius:12px;padding:14px;background:#f8fbf9}.pm2v-landing-mini b{display:block;color:#12395d;font-size:13px;margin-bottom:3px}.pm2v-landing-mini span{color:#7890a0;font-size:11px}
 .pm2v-landing-section{padding:76px clamp(24px,7vw,100px);background:#fff}.pm2v-landing-section.alt{background:#f5faf6}.pm2v-landing-section-head{max-width:700px;margin:0 auto 38px;text-align:center}.pm2v-landing-kicker{color:#0a7639;font-weight:900;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}.pm2v-landing-section h2{font-size:clamp(30px,4vw,45px);line-height:1.08;letter-spacing:-1.5px;color:#12395d;margin:0 0 13px}.pm2v-landing-section-head p{color:#6b8094;line-height:1.7;margin:0}
 .pm2v-landing-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1180px;margin:auto}.pm2v-landing-card{background:#fff;border:1px solid #dfebe2;border-radius:18px;padding:23px;box-shadow:0 8px 25px rgba(17,67,39,.05)}.pm2v-landing-card-icon{width:42px;height:42px;border-radius:12px;background:#e4f6e9;color:#08763a;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:900;margin-bottom:15px}.pm2v-landing-card h3{margin:0 0 7px;color:#173f62;font-size:16px}.pm2v-landing-card p{margin:0;color:#74889b;font-size:13px;line-height:1.6}
 .pm2v-landing-materials{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:1050px;margin:auto}.pm2v-landing-material{min-height:145px;border-radius:18px;padding:22px;background:linear-gradient(145deg,#0b6333,#168444);color:#fff;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:0 10px 25px rgba(11,99,51,.12)}.pm2v-landing-material b{font-size:18px}.pm2v-landing-material span{font-size:12px;color:#d7f1df;margin-top:4px}
