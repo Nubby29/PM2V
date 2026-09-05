@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — VERSION V17: Physical Inventory category filter refinement. Current baseline/source of truth. Replaces the always-visible category filter pills with a compact dropdown while preserving existing category filtering behavior, inventory data, role access, Reports PDF, receipts, and PM2V visual language. -->
+<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — VERSION V18: Authentication refinement. Current baseline/source of truth. Enforces legitimate Google-authenticated @gmail.com accounts for Staff and Secretary access while preserving owner@pm2v.com as the sole non-Gmail exception. Adds Google Sign-In, Gmail-only access applications, approved-applicant Google account linking, and blocks all other non-Gmail/password logins without removing the existing Owner exception. -->
 
 <html lang="en">
 <head>
@@ -26,7 +26,9 @@ button,input,select{font-family:inherit}
 .nav-icon{width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 20px;color:currentColor}
 .nav-icon svg{width:20px;height:20px;display:block;overflow:visible}
 .logout{position:absolute;left:25px;right:25px;bottom:25px;border-top:1px solid rgba(255,255,255,.18);padding-top:23px}
-.logout a{display:flex;align-items:center;gap:14px;color:#ff9c96;text-decoration:none;font-weight:700;font-size:15px;padding-left:17px}
+ .logout a{display:flex;align-items:center;gap:14px;color:#ff9c96;text-decoration:none;font-weight:700;font-size:15px;padding-left:17px}
+ .nav-divider{height:1px;background:rgba(255,255,255,.12);margin:4px 0 14px}
+ .logo-wrap{display:flex;align-items:center;justify-content:center;width:100%;margin-bottom:8px}
 
 /* MAIN */
 .main{margin-left:295px;width:calc(100% - 295px);padding:40px 43px 70px;min-height:100vh}
@@ -36,6 +38,32 @@ h1{margin:0;font-size:31px;line-height:1.1;color:#071c3b;letter-spacing:-.8px}
 .subtitle{margin-top:15px;color:#597395;font-size:15px}
 .date{background:#fff;border:1px solid #e3e8ee;border-radius:12px;padding:14px 17px;color:#24466d;font-weight:600;font-size:14px;box-shadow:0 2px 6px rgba(0,0,0,.03)}
 .date .sep{color:#b8c3cf;margin:0 12px}
+
+/* GLOBAL HEADER */
+.global-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
+.global-header .page-title h1{margin:0;font-size:31px;line-height:1.1;color:#071c3b;letter-spacing:-.8px}
+.global-header .page-title .subtitle{margin-top:4px;color:#597395;font-size:14px}
+.global-header .date{display:flex;align-items:center;gap:6px}
+
+/* FOOTER */
+.global-footer{text-align:center;padding:28px 0 18px;color:#597395;font-size:13px;border-top:1px solid #e3e8ee;margin-top:40px}
+
+/* CLICKABLE CARDS */
+.dashboard-stat.cursor-pointer{cursor:pointer;transition:transform .15s,box-shadow .15s}
+.dashboard-stat.cursor-pointer:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.dashboard-stat-icon{width:51px;height:51px;border-radius:13px;display:grid;place-items:center;margin-right:18px;font-size:25px;font-weight:700;flex-shrink:0}
+.dashboard-stat-content{display:flex;flex-direction:column;flex:1;justify-content:center}
+.dashboard-stat-label{color:#58708d;text-transform:uppercase;font-size:11px;font-weight:800;letter-spacing:.8px;margin-bottom:7px}
+.dashboard-stat-value{font-size:28px;font-weight:900;color:#071c3b;line-height:1}
+.role-card.cursor-pointer{cursor:pointer;transition:transform .15s,box-shadow .15s}
+.role-card.cursor-pointer:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.report-kpi-card.cursor-pointer{cursor:pointer;transition:transform .15s,box-shadow .15s}
+.report-kpi-card.cursor-pointer:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.stock-status-card.cursor-pointer{cursor:pointer;transition:transform .15s,box-shadow .15s}
+.stock-status-card.cursor-pointer:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.08)}
+
+/* COLLAPSIBLE FILTER */
+.report-filter-collapsible-header{cursor:pointer;display:flex;align-items:center;justify-content:space-between;width:100%}
 
 
 /* AI SCRAP SCANNER */
@@ -1513,19 +1541,19 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 <section class="pm2v-landing-cta"><div><h2>Ready to enter the PM2V workspace?</h2><p>Sign in to access your inventory and authorized operational tools.</p></div><button class="pm2v-landing-primary" id="pm2vCtaLogin" type="button">Login to PM2V →</button></section>
 </main><footer class="pm2v-landing-footer"><span><strong>PM2V Scrap Trading</strong> · Smart Inventory. Sustainable Future.</span><span>© 2026 PM2V Scrap Trading</span></footer>
 </div>
-<div aria-hidden="true" class="pm2v-login-modal" id="pm2vLoginModal"><div aria-labelledby="pm2vLoginTitle" aria-modal="true" class="pm2v-login-modal-card" role="dialog"><button aria-label="Close login" class="pm2v-login-modal-close" id="pm2vCloseLogin" type="button">×</button><section class="login-panel"><h1 id="pm2vLoginTitle">Welcome Back</h1><div class="login-panel-subtitle">Sign in to manage your inventory</div><form class="login-form" id="loginForm"><div class="login-field"><span aria-hidden="true" class="login-field-icon"><svg fill="none" viewbox="0 0 24 24"><rect height="14" rx="2" stroke="currentColor" stroke-width="1.8" width="18" x="3" y="5"></rect><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg></span><input aria-label="Email Address" autocomplete="username" id="loginEmail" placeholder="Email Address" required="" type="email"/></div><div class="login-field"><span aria-hidden="true" class="login-field-icon"><svg fill="none" viewbox="0 0 24 24"><rect height="10" rx="2" stroke="currentColor" stroke-width="1.8" width="14" x="5" y="10"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"></path></svg></span><input aria-label="Password" autocomplete="current-password" id="loginPassword" placeholder="Password" required="" type="password"/><button aria-label="Show password" class="login-password-toggle" id="loginPasswordToggle" type="button"><svg fill="none" viewbox="0 0 24 24"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" stroke="currentColor" stroke-width="1.8"></path><circle cx="12" cy="12" r="2.6" stroke="currentColor" stroke-width="1.8"></circle></svg></button></div><button class="login-forgot" id="forgotBtn" type="button">Forgot password?</button><button class="login-submit" id="loginBtn" type="submit">Sign In →</button><div class="login-message" id="loginMessage"></div></form><div class="login-protected"><span class="lock">♧</span> Protected by encrypted connection</div><div class="login-apply">Don't have an account? <button id="openAccessBtn" type="button">Apply for Access</button></div><div class="login-legal">By signing in, you agree to your organization's access policies.</div></section></div></div>
+<div aria-hidden="true" class="pm2v-login-modal" id="pm2vLoginModal"><div aria-labelledby="pm2vLoginTitle" aria-modal="true" class="pm2v-login-modal-card" role="dialog"><button aria-label="Close login" class="pm2v-login-modal-close" id="pm2vCloseLogin" type="button">×</button><section class="login-panel"><h1 id="pm2vLoginTitle">Welcome Back</h1><div class="login-panel-subtitle">Sign in to manage your inventory</div><button class="login-google" id="googleLoginBtn" type="button"><span aria-hidden="true" class="login-google-icon"><svg viewbox="0 0 24 24"><path d="M21.35 12.27c0-.79-.07-1.55-.22-2.27H12v4.3h5.23a4.47 4.47 0 0 1-1.94 2.93v2.44h3.14c1.84-1.69 2.92-4.18 2.92-7.4Z" fill="#4285F4"></path><path d="M12 21.75c2.63 0 4.84-.87 6.45-2.35l-3.14-2.44c-.87.58-1.98.93-3.31.93-2.54 0-4.69-1.72-5.46-4.03H3.29v2.52A9.74 9.74 0 0 0 12 21.75Z" fill="#34A853"></path><path d="M6.54 13.86A5.86 5.86 0 0 1 6.23 12c0-.65.11-1.28.31-1.86V7.62H3.29A9.74 9.74 0 0 0 2.25 12c0 1.57.38 3.05 1.04 4.38l3.25-2.52Z" fill="#FBBC05"></path><path d="M12 6.11c1.43 0 2.71.49 3.72 1.45l2.79-2.79C16.84 3.17 14.63 2.25 12 2.25a9.74 9.74 0 0 0-8.71 5.37l3.25 2.52C7.31 7.83 9.46 6.11 12 6.11Z" fill="#EA4335"></path></svg></span>Continue with Google</button><div class="login-auth-divider"><span>OWNER EXCEPTION</span></div><form class="login-form" id="loginForm"><div class="login-field"><span aria-hidden="true" class="login-field-icon"><svg fill="none" viewbox="0 0 24 24"><rect height="14" rx="2" stroke="currentColor" stroke-width="1.8" width="18" x="3" y="5"></rect><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg></span><input aria-label="Owner Email Address" autocomplete="username" id="loginEmail" placeholder="owner@pm2v.com" required="" type="email"/></div><div class="login-field"><span aria-hidden="true" class="login-field-icon"><svg fill="none" viewbox="0 0 24 24"><rect height="10" rx="2" stroke="currentColor" stroke-width="1.8" width="14" x="5" y="10"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"></path></svg></span><input aria-label="Owner Password" autocomplete="current-password" id="loginPassword" placeholder="Owner Password" required="" type="password"/><button aria-label="Show password" class="login-password-toggle" id="loginPasswordToggle" type="button"><svg fill="none" viewbox="0 0 24 24"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" stroke="currentColor" stroke-width="1.8"></path><circle cx="12" cy="12" r="2.6" stroke="currentColor" stroke-width="1.8"></circle></svg></button></div><button class="login-forgot" id="forgotBtn" type="button">Forgot owner password?</button><button class="login-submit" id="loginBtn" type="submit">Sign In as Owner →</button><div class="login-message" id="loginMessage"></div></form><div class="login-auth-note">Staff and Secretary accounts must use a real Google-authenticated <strong>@gmail.com</strong> account. <strong>owner@pm2v.com</strong> is the only non-Gmail exception.</div><div class="login-protected"><span class="lock">♧</span> Protected by encrypted connection</div><div class="login-apply">Don't have an account? <button id="openAccessBtn" type="button">Apply for Access</button></div><div class="login-legal">By signing in, you agree to your organization's access policies.</div></section></div></div>
 </div>
 <div aria-hidden="true" id="pm2vAccessModal">
 <div aria-labelledby="pm2vAccessTitle" aria-modal="true" class="pm2v-access-card" role="dialog">
 <div class="pm2v-access-head">
-<div><h2 id="pm2vAccessTitle">Apply for Access</h2><p class="pm2v-access-sub">Submit your application for review</p></div>
+<div><h2 id="pm2vAccessTitle">Apply for Access</h2><p class="pm2v-access-sub">Submit your Gmail application for owner review</p></div>
 <button aria-label="Close" class="pm2v-access-close" id="closeAccessBtn" type="button">×</button>
 </div>
 <form class="pm2v-access-form" id="accessForm">
 <label>FULL NAME<input id="accessFullName" placeholder="Enter your full name" required="" type="text"/></label>
-<label>EMAIL ADDRESS<input id="accessEmail" placeholder="Enter your email" required="" type="email"/></label>
+<label>GMAIL ADDRESS<input id="accessEmail" placeholder="yourname@gmail.com" required="" type="email"/></label>
 <label>REQUESTED ROLE<select id="accessRole" required=""><option disabled="" selected="" value="">Select a role</option><option value="staff">Staff</option><option value="secretary">Secretary</option></select></label>
-<div class="pm2v-role-info"><strong>Staff</strong> — Manage daily collection logs and view physical inventory.<br/><br/><strong>Secretary</strong> — Handle transactions, generate reports, and manage inventory records.</div>
+<div class="pm2v-role-info"><strong>Staff</strong> — Manage daily collection logs and view physical inventory.<br/><br/><strong>Secretary</strong> — Handle transactions, generate reports, and manage inventory records.</div><div class="pm2v-gmail-rule"><strong>Gmail required:</strong> Applications must use a real <strong>@gmail.com</strong> account. After approval, sign in with Google using that same Gmail address. The only non-Gmail exception is the existing <strong>owner@pm2v.com</strong> Owner account.</div>
 <div class="pm2v-access-msg" id="accessMessage"></div>
 <button class="pm2v-access-submit" id="accessSubmitBtn" type="submit">Submit Application</button>
 </form>
@@ -1540,13 +1568,13 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 <div class="user-text"><div class="user-name">Nando Reyes</div><div class="user-role">Staff</div></div>
 </div>
 <nav class="nav">
-<div class="nav-group-label">Workspace</div>
+<div class="nav-divider"></div>
 <a data-page="dashboard" href="#"><span aria-hidden="true" class="nav-icon"><svg fill="none" viewbox="0 0 24 24"><rect height="7" rx="1.5" stroke="currentColor" stroke-width="2" width="7" x="3" y="3"></rect><rect height="7" rx="1.5" stroke="currentColor" stroke-width="2" width="7" x="14" y="3"></rect><rect height="7" rx="1.5" stroke="currentColor" stroke-width="2" width="7" x="3" y="14"></rect><rect height="7" rx="1.5" stroke="currentColor" stroke-width="2" width="7" x="14" y="14"></rect></svg></span>Dashboard</a>
 <a data-page="inventory" href="#"><span aria-hidden="true" class="nav-icon"><svg fill="none" viewbox="0 0 24 24"><path d="M12 3 20 7.5v9L12 21l-8-4.5v-9L12 3Z" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path><path d="m4.5 7.5 7.5 4.25 7.5-4.25M12 11.75V21" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg></span>Physical Inventory</a>
 <a class="role-secretary-owner" data-page="transactions" href="#"><span aria-hidden="true" class="nav-icon"><svg fill="none" viewbox="0 0 24 24"><path d="M6 3h9l3 3v15H6V3Z" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path><path d="M15 3v4h4M9 11h6M9 15h6M9 19h4" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg></span>Transactions</a>
 <a class="role-secretary-owner" data-page="reports" href="#"><span aria-hidden="true" class="nav-icon"><svg fill="none" viewbox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path><path d="m4 8 6-4 6 5 6-5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></span>Reports</a>
 <a class="role-only role-owner" data-page="users" href="#"><span aria-hidden="true" class="nav-icon"><svg fill="none" viewbox="0 0 24 24"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="2"></circle><path d="M3 20c.7-3.1 2.7-5 6-5s5.3 1.9 6 5" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path><circle cx="17" cy="9" r="2.3" stroke="currentColor" stroke-width="2"></circle><path d="M15.5 15.2c2.5.3 4.1 1.9 4.5 4.8" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg></span>User Management</a>
-<div class="nav-group-label account-label">Account</div>
+<div class="nav-divider"></div>
 <a data-page="profile" href="#"><span aria-hidden="true" class="nav-icon"><svg fill="none" viewbox="0 0 24 24"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="2"></circle><path d="M4.5 21c.8-4.1 3.2-6.5 7.5-6.5s6.7 2.4 7.5 6.5" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg></span>Profile</a>
 </nav>
 <div class="logout"><a href="#"><span>↪</span>Logout</a></div>
@@ -1566,28 +1594,28 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 <div class="topbar dashboard-topbar">
 <div>
 <h1>Dashboard</h1>
-<div class="subtitle">Welcome back! Here's your inventory overview.</div>
+
 </div>
-<div class="date">▣   Tuesday, August 18, 2026 <span class="sep">|</span> ◷  05:26 PM</div>
+<div class="date" id="dashboardDate"></div>
 </div>
 <section class="dashboard-stats">
-<div class="dashboard-stat">
+<div class="dashboard-stat cursor-pointer" data-click-page="inventory">
 <div class="dashboard-stat-icon">⬡</div>
-<div>
+<div class="dashboard-stat-content">
 <div class="dashboard-stat-label">Total Items</div>
 <div class="dashboard-stat-value" id="dashTotalItems">0</div>
 </div>
 </div>
-<div class="dashboard-stat">
+<div class="dashboard-stat cursor-pointer" data-click-page="inventory">
 <div class="dashboard-stat-icon">☷</div>
-<div>
+<div class="dashboard-stat-content">
 <div class="dashboard-stat-label">Categories</div>
 <div class="dashboard-stat-value" id="dashCategories">0</div>
 </div>
 </div>
-<div class="dashboard-stat">
+<div class="dashboard-stat cursor-pointer" data-click-page="inventory">
 <div class="dashboard-stat-icon">✓</div>
-<div>
+<div class="dashboard-stat-content">
 <div class="dashboard-stat-label">Active Items</div>
 <div class="dashboard-stat-value" id="dashActiveItems">0</div>
 </div>
@@ -1659,7 +1687,7 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 <section class="page" id="inventory">
 <div class="topbar">
 <div><h1>Physical Inventory</h1><div class="subtitle">Scan scrap, confirm the result, and add it to inventory.</div></div>
-<div class="date">Tuesday, August 18, 2026 <span class="sep">|</span> 05:11:45 PM</div>
+<div class="date" id="inventoryDate"></div>
 </div>
 <div aria-label="Inventory summary" class="inventory-summary">
 <div class="inventory-summary-item"><span>Items</span><strong id="inventorySummaryCount">0</strong></div>
@@ -1833,25 +1861,25 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 <!-- REPORTS: SECRETARY + OWNER -->
 <section class="page role-secretary-owner" id="reports">
 <div class="topbar">
-<div><h1>Reports</h1><div class="subtitle">Business intelligence overview of inventory and transaction activity.</div></div>
-<div class="report-topbar-actions"><button type="button" class="report-export-btn" id="reportExportPdf" title="Generate a professional PDF report">Export PDF</button><div class="date" id="reportsDate"></div></div>
+<div><h1>Reports</h1></div>
+<div class="date" id="reportsDate"></div>
 </div>
 <div class="report-dashboard-v7">
   <div class="report-grid report-kpi-grid">
-    <div class="role-card report-kpi-card"><div class="report-kpi-label">Total Items</div><div class="report-kpi-value" id="rTotal">0</div><div class="report-kpi-note">Inventory records</div></div>
-    <div class="role-card report-kpi-card"><div class="report-kpi-label">In Stock</div><div class="report-kpi-value" id="rAvailable">0</div><div class="report-kpi-note">Within target stock range</div></div>
-    <div class="role-card report-kpi-card"><div class="report-kpi-label">Transactions</div><div class="report-kpi-value" id="rTransactions">0</div><div class="report-kpi-note">Recorded transactions</div></div>
-    <div class="role-card report-kpi-card"><div class="report-kpi-label">Total Weight</div><div class="report-kpi-value" id="rWeight">0 kg</div><div class="report-kpi-note">Current inventory weight</div></div>
+        <div class="role-card report-kpi-card cursor-pointer" data-click-page="inventory"><div class="report-kpi-label">Total Items</div><div class="report-kpi-value" id="rTotal">0</div><div class="report-kpi-note">Inventory records</div></div>
+    <div class="role-card report-kpi-card cursor-pointer"><div class="report-kpi-label">In Stock</div><div class="report-kpi-value" id="rAvailable">0</div><div class="report-kpi-note">Within target stock range</div></div>
+    <div class="role-card report-kpi-card cursor-pointer"><div class="report-kpi-label">Transactions</div><div class="report-kpi-value" id="rTransactions">0</div><div class="report-kpi-note">Recorded transactions</div></div>
+    <div class="role-card report-kpi-card cursor-pointer"><div class="report-kpi-label">Total Weight</div><div class="report-kpi-value" id="rWeight">0 kg</div><div class="report-kpi-note">Current inventory weight</div></div>
   </div>
 
   <section class="report-section-card" aria-label="Stock status summary">
     <div class="report-section-card-header"><div><h2>Stock Status Summary</h2><p>Current record count by automatic stock classification.</p></div></div>
     <div class="stock-status-summary" style="padding:14px 20px 20px;margin:0" id="reportStatusCards">
-      <div class="stock-status-card in-stock"><span>●</span><div><strong id="rInStock">0</strong><small>In Stock</small></div></div>
-      <div class="stock-status-card low-stock"><span>●</span><div><strong id="rLowStock">0</strong><small>Low Stock</small></div></div>
-      <div class="stock-status-card out-stock"><span>●</span><div><strong id="rOutOfStock">0</strong><small>Out of Stock</small></div></div>
-      <div class="stock-status-card overstock"><span>●</span><div><strong id="rOverstock">0</strong><small>Overstock</small></div></div>
-      <div class="stock-status-card inactive"><span>●</span><div><strong id="rInactive">0</strong><small>Inactive</small></div></div>
+            <div class="stock-status-card in-stock cursor-pointer"><span>●</span><div><strong id="rInStock">0</strong><small>In Stock</small></div></div>
+      <div class="stock-status-card low-stock cursor-pointer"><span>●</span><div><strong id="rLowStock">0</strong><small>Low Stock</small></div></div>
+      <div class="stock-status-card out-stock cursor-pointer"><span>●</span><div><strong id="rOutOfStock">0</strong><small>Out of Stock</small></div></div>
+      <div class="stock-status-card overstock cursor-pointer"><span>●</span><div><strong id="rOverstock">0</strong><small>Overstock</small></div></div>
+      <div class="stock-status-card inactive cursor-pointer"><span>●</span><div><strong id="rInactive">0</strong><small>Inactive</small></div></div>
     </div>
   </section>
 
@@ -1922,7 +1950,7 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 <h1>Profile</h1>
 <div class="subtitle">Manage your account information and settings.</div>
 </div>
-<div class="date">▣   Tuesday, August 18, 2026 <span class="sep">|</span> ◷  05:30:22 PM</div>
+<div class="date" id="profileDate"></div>
 </div>
 <section class="profile-hero">
 <div class="profile-avatar-large" id="profileAvatar">N</div>
@@ -2011,13 +2039,14 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
 </div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, createUserWithEmailAndPassword, deleteUser } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, doc, getDoc, getDocs, addDoc, updateDoc, setDoc, deleteDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 const firebaseConfig={apiKey:"AIzaSyDBIkDxyrj6JU-wDgaTCvf_B6fpXAE7wH8",authDomain:"pm2vstorage.firebaseapp.com",projectId:"pm2vstorage",storageBucket:"pm2vstorage.firebasestorage.app",messagingSenderId:"399594566749",appId:"1:399594566749:web:2b357f98d2801fe36889b4",measurementId:"G-SX0TDMD407"};
 const firebaseApp=initializeApp(firebaseConfig),auth=getAuth(firebaseApp),db=getFirestore(firebaseApp);
-const provisionApp=initializeApp(firebaseConfig,'pm2vProvisioner');
-const provisionAuth=getAuth(provisionApp);
 let PM2V_USER=null,PM2V_PROFILE=null;
+const PM2V_OWNER_EMAIL='owner@pm2v.com';
+function isGmailAddress(email){return /^[^\s@]+@gmail\.com$/i.test(String(email||'').trim())}
+function isGoogleAuthenticatedUser(user){return Array.isArray(user?.providerData)&&user.providerData.some(p=>p?.providerId==='google.com')}
 window.PM2VFirebase={firebaseApp,auth,db};
 function toast(message,type="success"){document.querySelector('.pm2v-toast')?.remove();const el=document.createElement('div');el.className=`pm2v-toast ${type}`;el.textContent=message;document.body.appendChild(el);setTimeout(()=>el.remove(),3600)}
 function valueDate(v){if(!v)return null;if(v?.toDate)return v.toDate();const d=new Date(v);return Number.isNaN(d.getTime())?null:d}
@@ -2243,6 +2272,11 @@ function setRoleAccess(role){
   refreshMobileRoleMenu();
 }
 async function initPM2V(user){
+  const email=String(user?.email||'').trim().toLowerCase();
+  if(email!==PM2V_OWNER_EMAIL){
+    if(!isGmailAddress(email))throw new Error('This account is not allowed. PM2V accepts @gmail.com accounts only, except owner@pm2v.com.');
+    if(!isGoogleAuthenticatedUser(user))throw new Error('This Gmail account must sign in with Google. Use Continue with Google on the PM2V login screen.');
+  }
   let s;
   try{
     s=await getDoc(doc(db,'users',user.uid));
@@ -2255,14 +2289,38 @@ async function initPM2V(user){
     throw err;
   }
   if(!s.exists()){
-    const e=new Error('Login succeeded, but no PM2V profile exists for this Firebase account. The users/{uid} document is missing.');
-    e.code='pm2v-profile-missing';
-    throw e;
+    if(email===PM2V_OWNER_EMAIL)throw new Error('Login succeeded, but no PM2V Owner profile exists for owner@pm2v.com. The users/{uid} document is missing.');
+    let applicantSnap;
+    try{
+      applicantSnap=await getDocs(query(collection(db,'applicants'),where('email','==',email)));
+    }catch(err){
+      if(err?.code==='permission-denied')throw new Error('Google sign-in succeeded, but PM2V could not verify your application. Firestore denied applicant lookup.');
+      throw err;
+    }
+    const applicants=applicantSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const applicant=applicants.find(x=>String(x.status||'').trim().toLowerCase()==='approved');
+    const pending=applicants.find(x=>String(x.status||'').trim().toLowerCase()==='pending');
+    if(!applicant){
+      if(pending)throw new Error('Your PM2V application is still pending owner approval. Please wait for approval, then sign in with Google again.');
+      throw new Error('This Gmail account is not approved for PM2V. Submit an access application first and wait for owner approval.');
+    }
+    const requestedRole=String(applicant.roleRequested||applicant.role||'staff').trim().toLowerCase();
+    const role=['staff','secretary'].includes(requestedRole)?requestedRole:'staff';
+    try{
+      await setDoc(doc(db,'users',user.uid),{fullName:applicant.fullName||applicant.name||user.displayName||email.split('@')[0],email,role,status:'active',authProvider:'google.com',memberSince:serverTimestamp(),approvedAt:applicant.approvedAt||serverTimestamp(),approvedBy:applicant.reviewedBy||'',linkedFromApplicant:applicant.id},{merge:true});
+      await updateDoc(doc(db,'applicants',applicant.id),{uid:user.uid,authUid:user.uid,authMethod:'google',linkedAt:serverTimestamp()});
+      s=await getDoc(doc(db,'users',user.uid));
+    }catch(err){
+      if(err?.code==='permission-denied')throw new Error('Your Gmail account is approved, but PM2V could not create its user profile. Update Firestore rules to allow an approved Gmail user to create users/{uid} and link the approved applicant.');
+      throw err;
+    }
   }
   const p=s.data();
   const role=String(p.role||'').trim().toLowerCase();
   if(!['staff','secretary','owner'].includes(role))throw new Error('Your PM2V account has an unsupported role.');
   if(String(p.status||'').trim().toLowerCase()!=='active')throw new Error('Your PM2V account is not active.');
+  if(email!==PM2V_OWNER_EMAIL && !isGmailAddress(email))throw new Error('This account is not allowed. PM2V accepts @gmail.com accounts only, except owner@pm2v.com.');
+  if(email!==PM2V_OWNER_EMAIL && !isGoogleAuthenticatedUser(user))throw new Error('This Gmail account must sign in with Google.');
   PM2V_USER=user; PM2V_PROFILE=p; window.PM2VCurrentUser={...user,profile:p};
   applyProfile(user,p); setRoleAccess(role);
   await loadInventory();
@@ -2286,8 +2344,12 @@ function canAccessPage(id,role){
 }
 function friendlyLoginError(e){
   const c=e?.code||'';
+  if(c.includes('auth/popup-closed-by-user')||c.includes('auth/cancelled-popup-request'))return 'Google sign-in was cancelled.';
+  if(c.includes('auth/popup-blocked'))return 'Your browser blocked the Google sign-in popup. Allow popups for the PM2V site and try again.';
+  if(c.includes('auth/account-exists-with-different-credential'))return 'This Gmail already has another Firebase sign-in method. Use the existing account method or have the account linked to Google first.';
+  if(c.includes('auth/unauthorized-domain'))return 'This website is not authorized for Google Sign-In in Firebase. Add the PM2V site domain to Firebase Authentication authorized domains.';
   if(c.includes('permission-denied'))return 'Login succeeded, but PM2V could not read your account profile. Check Firestore rules for users/{uid}.';
-  if(c.includes('invalid-credential')||c.includes('wrong-password')||c.includes('user-not-found'))return 'Invalid email or password.';
+  if(c.includes('invalid-credential')||c.includes('wrong-password')||c.includes('user-not-found'))return 'Invalid owner email or password.';
   if(c.includes('too-many-requests'))return 'Too many attempts. Please wait and try again.';
   if(c.includes('network-request-failed'))return 'Network error. Check your internet connection.';
   return e?.message||'Unable to sign in.';
@@ -2353,29 +2415,55 @@ document.getElementById('accessForm')?.addEventListener('submit',async e=>{
   const role=document.getElementById('accessRole').value;
   msg.textContent='';msg.className='pm2v-access-msg';
   if(!fullName||!email||!role){msg.textContent='Please complete all fields.';return}
+  if(!isGmailAddress(email)){msg.textContent='Only a real @gmail.com address can be used for PM2V Staff or Secretary access.';return}
   btn.disabled=true;btn.textContent='Submitting…';
   try{
-    await addDoc(collection(db,'applicants'),{name:fullName,fullName,email,roleRequested:role,status:'pending',submittedAt:serverTimestamp()});
-    msg.textContent='Application submitted successfully. Please wait for owner approval.';msg.className='pm2v-access-msg success';
+    const existing=await getDocs(query(collection(db,'applicants'),where('email','==',email)));
+    const pending=existing.docs.find(d=>String(d.data().status||'').toLowerCase()==='pending');
+    const approved=existing.docs.find(d=>String(d.data().status||'').toLowerCase()==='approved');
+    if(approved){msg.textContent='This Gmail address already has an approved PM2V application. Sign in with Google.';msg.className='pm2v-access-msg success';return}
+    if(pending){msg.textContent='An application for this Gmail address is already pending owner approval.';return}
+    await addDoc(collection(db,'applicants'),{name:fullName,fullName,email,roleRequested:role,status:'pending',submittedAt:serverTimestamp(),authMethod:'google'});
+    msg.textContent='Application submitted successfully. After owner approval, sign in with Google using this same Gmail address.';msg.className='pm2v-access-msg success';
     document.getElementById('accessForm').reset();
-    setTimeout(closeAccessModal,1800);
+    setTimeout(closeAccessModal,2200);
   }catch(err){
     console.error('Access application failed:',err);
-    msg.textContent=(err?.code==='permission-denied')?'Application submission is blocked by Firestore rules.':'Could not submit your application. Please try again.';
+    msg.textContent=(err?.code==='permission-denied')?'Application submission is blocked by Firestore rules.':(err?.message||'Could not submit your application. Please try again.');
   }finally{btn.disabled=false;btn.textContent='Submit Application'}
 });
 
+document.getElementById('googleLoginBtn')?.addEventListener('click',async()=>{
+  const btn=document.getElementById('googleLoginBtn'),msg=document.getElementById('loginMessage');
+  btn.disabled=true;btn.textContent='Connecting to Google…';msg.textContent='';msg.className='login-message';
+  try{
+    const provider=new GoogleAuthProvider();
+    provider.setCustomParameters({prompt:'select_account'});
+    const result=await signInWithPopup(auth,provider);
+    const email=String(result.user?.email||'').trim().toLowerCase();
+    if(!isGmailAddress(email)){
+      await signOut(auth).catch(()=>{});
+      throw new Error('Only a real @gmail.com Google account can access PM2V. The only non-Gmail exception is owner@pm2v.com.');
+    }
+  }catch(err){
+    console.error('Google sign-in failed:',err);
+    msg.textContent=friendlyLoginError(err);
+  }finally{btn.disabled=false;btn.innerHTML='<span aria-hidden="true" class="login-google-icon"><svg viewBox="0 0 24 24"><path d="M21.35 12.27c0-.79-.07-1.55-.22-2.27H12v4.3h5.23a4.47 4.47 0 0 1-1.94 2.93v2.44h3.14c1.84-1.69 2.92-4.18 2.92-7.4Z" fill="#4285F4"></path><path d="M12 21.75c2.63 0 4.84-.87 6.45-2.35l-3.14-2.44c-.87.58-1.98.93-3.31.93-2.54 0-4.69-1.72-5.46-4.03H3.29v2.52A9.74 9.74 0 0 0 12 21.75Z" fill="#34A853"></path><path d="M6.54 13.86A5.86 5.86 0 0 1 6.23 12c0-.65.11-1.28.31-1.86V7.62H3.29A9.74 9.74 0 0 0 2.25 12c0 1.57.38 3.05 1.04 4.38l3.25-2.52Z" fill="#FBBC05"></path><path d="M12 6.11c1.43 0 2.71.49 3.72 1.45l2.79-2.79C16.84 3.17 14.63 2.25 12 2.25a9.74 9.74 0 0 0-8.71 5.37l3.25 2.52C7.31 7.83 9.46 6.11 12 6.11Z" fill="#EA4335"></path></svg></span>Continue with Google';}
+});
 document.getElementById('loginForm')?.addEventListener('submit',async e=>{
   e.preventDefault();
   const btn=document.getElementById('loginBtn'),msg=document.getElementById('loginMessage');
+  const email=document.getElementById('loginEmail').value.trim().toLowerCase();
   btn.disabled=true;btn.textContent='Signing In…';msg.textContent='';msg.className='login-message';
-  try{await signInWithEmailAndPassword(auth,document.getElementById('loginEmail').value.trim(),document.getElementById('loginPassword').value);}
-  catch(err){msg.textContent=friendlyLoginError(err);}
-  finally{btn.disabled=false;btn.textContent='Sign In →';}
+  try{
+    if(email!==PM2V_OWNER_EMAIL)throw new Error('Password sign-in is reserved for owner@pm2v.com. Staff and Secretary accounts must use Continue with Google with a real @gmail.com account.');
+    await signInWithEmailAndPassword(auth,email,document.getElementById('loginPassword').value);
+  }catch(err){msg.textContent=friendlyLoginError(err)}
+  finally{btn.disabled=false;btn.textContent='Sign In as Owner →';}
 });
 document.getElementById('forgotBtn')?.addEventListener('click',async()=>{
-  const email=document.getElementById('loginEmail').value.trim(),msg=document.getElementById('loginMessage');
-  if(!email){msg.textContent='Enter your email first.';return}
+  const email=document.getElementById('loginEmail').value.trim().toLowerCase(),msg=document.getElementById('loginMessage');
+  if(email!==PM2V_OWNER_EMAIL){msg.textContent='Password reset is only available for owner@pm2v.com. Staff and Secretary accounts use Google Sign-In.';return}
   try{await sendPasswordResetEmail(auth,email);msg.textContent='Password reset email sent.';msg.className='login-message success'}
   catch(e){msg.textContent=friendlyLoginError(e)}
 });
@@ -2484,6 +2572,9 @@ document.getElementById('inventoryTableBody')?.addEventListener('click',async e=
 });
 
 document.querySelector('[data-dashboard-inventory]')?.addEventListener('click',e=>{e.preventDefault();showPage('inventory')});
+document.querySelectorAll('.dashboard-stat[data-click-page]').forEach(card=>{card.addEventListener('click',()=>{showPage(card.dataset.clickPage)})});
+document.querySelectorAll('.report-kpi-card[data-click-page]').forEach(card=>{card.addEventListener('click',()=>{showPage(card.dataset.clickPage)})});
+document.querySelectorAll('.stock-status-card.cursor-pointer').forEach(card=>{card.addEventListener('click',()=>{showPage('inventory')})});
 
 const inventoryCategoryFilter=document.getElementById('inventoryCategoryFilter');
 const inventoryCategoryTrigger=document.getElementById('inventoryCategoryTrigger');
@@ -3119,16 +3210,15 @@ function ensureApprovalModal(){
   modal=document.createElement('div');
   modal.id='pm2vApprovalModal';
   modal.innerHTML=`<div class="pm2v-approval-backdrop"></div><div class="pm2v-approval-card" role="dialog" aria-modal="true" aria-labelledby="pm2vApprovalTitle">
-    <div class="pm2v-approval-head"><div><div class="pm2v-approval-eyebrow">USER MANAGEMENT</div><h2 id="pm2vApprovalTitle">Create PM2V Account</h2></div><button type="button" class="pm2v-approval-close" id="pm2vApprovalClose" aria-label="Close">×</button></div>
+    <div class="pm2v-approval-head"><div><div class="pm2v-approval-eyebrow">USER MANAGEMENT</div><h2 id="pm2vApprovalTitle">Approve Gmail Account</h2></div><button type="button" class="pm2v-approval-close" id="pm2vApprovalClose" aria-label="Close">×</button></div>
     <div class="pm2v-approval-person" id="pm2vApprovalPerson"></div>
     <div class="pm2v-approval-grid">
       <label>Email<input id="pm2vApprovalEmail" type="email" readonly></label>
       <label>Role<select id="pm2vApprovalRole"><option value="staff">Staff</option><option value="secretary">Secretary</option><option value="owner">Owner</option></select></label>
     </div>
-    <label class="pm2v-approval-password-label">Temporary Password<input id="pm2vApprovalPassword" type="password" minlength="6" autocomplete="new-password" placeholder="At least 6 characters"></label>
-    <div class="pm2v-approval-note">The account will be created in Firebase Authentication and linked to the applicant. The owner remains signed in.</div>
+    <div class="pm2v-approval-note">This applicant must use Google Sign-In with the Gmail address above. Approval activates the PM2V profile; Firebase Authentication is created when the applicant signs in with Google. No temporary password is created.</div>
     <div class="pm2v-approval-error" id="pm2vApprovalError"></div>
-    <div class="pm2v-approval-actions"><button type="button" class="pm2v-approval-cancel" id="pm2vApprovalCancel">Cancel</button><button type="button" class="pm2v-approval-confirm" id="pm2vApprovalConfirm">Approve & Create Account</button></div>
+    <div class="pm2v-approval-actions"><button type="button" class="pm2v-approval-cancel" id="pm2vApprovalCancel">Cancel</button><button type="button" class="pm2v-approval-confirm" id="pm2vApprovalConfirm">Approve Gmail Access</button></div>
   </div>`;
   document.body.appendChild(modal);
   const close=()=>{modal.classList.remove('open');modal._resolve?.(null);modal._resolve=null};
@@ -3142,21 +3232,19 @@ function requestApprovalDetails(applicant){
     const modal=ensureApprovalModal();
     modal._resolve=resolve;
     const name=applicant.fullName||applicant.name||'Applicant';
-    const email=String(applicant.email||'').trim();
+    const email=String(applicant.email||'').trim().toLowerCase();
     const requested=String(applicant.roleRequested||applicant.role||'staff').trim().toLowerCase();
-    const role=['staff','secretary','owner'].includes(requested)?requested:'staff';
-    modal.querySelector('#pm2vApprovalPerson').textContent=`Approve ${name} and create their PM2V login account.`;
+    const role=['staff','secretary'].includes(requested)?requested:'staff';
+    modal.querySelector('#pm2vApprovalPerson').textContent=`Approve ${name} for PM2V Gmail access.`;
     modal.querySelector('#pm2vApprovalEmail').value=email;
     modal.querySelector('#pm2vApprovalRole').value=role;
-    modal.querySelector('#pm2vApprovalPassword').value='';
     modal.querySelector('#pm2vApprovalError').textContent='';
+    const password=modal.querySelector('#pm2vApprovalPassword');
+    if(password)password.value='';
     modal.classList.add('open');
-    setTimeout(()=>modal.querySelector('#pm2vApprovalPassword')?.focus(),50);
     modal.querySelector('#pm2vApprovalConfirm').onclick=()=>{
-      const password=modal.querySelector('#pm2vApprovalPassword').value;
-      if(password.length<6){modal.querySelector('#pm2vApprovalError').textContent='Temporary password must be at least 6 characters.';return}
-      if(!email){modal.querySelector('#pm2vApprovalError').textContent='This applicant has no email address.';return}
-      modal.classList.remove('open');resolve({password,role:modal.querySelector('#pm2vApprovalRole').value});
+      if(!isGmailAddress(email)){modal.querySelector('#pm2vApprovalError').textContent='Only @gmail.com applicants can be approved. owner@pm2v.com is the sole existing non-Gmail exception.';return}
+      modal.classList.remove('open');resolve({role});
     };
   });
 }
@@ -3165,36 +3253,25 @@ async function approveApplicant(applicantId,button){
   if(role!=='owner'){toast('Only the owner can approve applicants.','error');return}
   if(button?.disabled)return;
   if(button)button.disabled=true;
-  let createdAuthUser=null;
   try{
     const applicantRef=doc(db,'applicants',applicantId);
     const applicantSnap=await getDoc(applicantRef);
     if(!applicantSnap.exists()){toast('Applicant no longer exists.','error');await loadApplicants();return}
     const applicant=applicantSnap.data();
-    const existingUid=String(applicant.uid||applicant.userId||applicant.authUid||'').trim();
+    const email=String(applicant.email||'').trim().toLowerCase();
+    if(!isGmailAddress(email)){toast('Only @gmail.com applicants can be approved. owner@pm2v.com remains the only non-Gmail exception.','error');return}
     const details=await requestApprovalDetails(applicant);
     if(!details)return;
+    const approvedAt=serverTimestamp();
+    const approvedBy=PM2V_USER?.email||PM2V_OWNER_EMAIL;
     const assignedRole=details.role;
-
+    const existingUid=String(applicant.uid||applicant.userId||applicant.authUid||'').trim();
     if(existingUid){
-      await setDoc(doc(db,'users',existingUid),{fullName:applicant.fullName||applicant.name||'',email:applicant.email||'',role:assignedRole,status:'active',memberSince:serverTimestamp(),approvedAt:serverTimestamp(),approvedBy:PM2V_USER?.email||''},{merge:true});
-      await updateDoc(applicantRef,{status:'approved',reviewedAt:serverTimestamp(),reviewedBy:PM2V_USER?.email||''});
-    }else{
-      try{
-        const cred=await createUserWithEmailAndPassword(provisionAuth,String(applicant.email||'').trim(),details.password);
-        createdAuthUser=cred.user;
-        await setDoc(doc(db,'users',cred.user.uid),{fullName:applicant.fullName||applicant.name||'',email:applicant.email||cred.user.email||'',role:assignedRole,status:'active',memberSince:serverTimestamp(),approvedAt:serverTimestamp(),approvedBy:PM2V_USER?.email||''});
-        await updateDoc(applicantRef,{uid:cred.user.uid,status:'approved',reviewedAt:serverTimestamp(),reviewedBy:PM2V_USER?.email||''});
-      }catch(err){
-        console.error('Account provisioning failed:',err);
-        if(createdAuthUser){try{await deleteUser(createdAuthUser)}catch(cleanErr){console.error('Could not roll back created Auth user:',cleanErr)}}
-        if(err?.code==='auth/email-already-in-use')throw new Error('An Authentication account already exists for this email. Add that user UID to the applicant record, then approve again.');
-        if(err?.code==='permission-denied')throw new Error('Firestore denied the users/{uid} or applicants update. Publish the owner rules for both collections.');
-        throw err;
-      }
+      await setDoc(doc(db,'users',existingUid),{fullName:applicant.fullName||applicant.name||'',email,role:assignedRole,status:'active',authProvider:'google.com',approvedAt,approvedBy},{merge:true});
     }
+    await updateDoc(applicantRef,{status:'approved',reviewedAt:serverTimestamp(),reviewedBy:approvedBy,roleRequested:assignedRole,authMethod:'google'});
     await loadApplicants();await loadUsers();
-    toast(`Applicant approved. ${applicant.fullName||applicant.name||'User'} can now sign in.`);
+    toast(`Gmail access approved. ${applicant.fullName||applicant.name||'User'} can now sign in with Google.`);
   }catch(err){
     console.error('Applicant approval failed:',err);
     const code=err?.code||'';
@@ -3203,7 +3280,7 @@ async function approveApplicant(applicantId,button){
 }
 document.getElementById('applicantBody')?.addEventListener('click',async e=>{const b=e.target.closest('[data-approve]');if(!b)return;await approveApplicant(b.dataset.approve,b);});
 window.approveApplicant=approveApplicant;
-function updateRoleClocks(){const d=new Date(),text=d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})+' | '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});['transactionsDate','reportsDate','usersDate'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=text})}
+function updateRoleClocks(){const d=new Date(),text=d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})+' | '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});['dashboardDate','inventoryDate','transactionsDate','profileDate','reportsDate','usersDate'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=text})}
 setInterval(updateRoleClocks,1000);updateRoleClocks();
 
 const manualEntryToggle=document.getElementById('manualEntryToggle');const inventoryWriteSection=document.getElementById('inventoryWriteSection');if(manualEntryToggle&&inventoryWriteSection){manualEntryToggle.addEventListener('click',()=>{const open=!inventoryWriteSection.classList.contains('manual-entry-collapsed');if(open){inventoryWriteSection.classList.add('manual-entry-collapsed');manualEntryToggle.setAttribute('aria-expanded','false')}else{inventoryWriteSection.classList.remove('manual-entry-collapsed');manualEntryToggle.setAttribute('aria-expanded','true');setTimeout(()=>inventoryWriteSection.scrollIntoView({behavior:'smooth',block:'nearest'}),30)}})}
@@ -3978,6 +4055,7 @@ pm2vInitReportControls();
 .pm2v-landing-materials{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:1050px;margin:auto}.pm2v-landing-material{min-height:145px;border-radius:18px;padding:22px;background:linear-gradient(145deg,#0b6333,#168444);color:#fff;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:0 10px 25px rgba(11,99,51,.12)}.pm2v-landing-material b{font-size:18px}.pm2v-landing-material span{font-size:12px;color:#d7f1df;margin-top:4px}
 .pm2v-landing-cta{margin:0 clamp(18px,5vw,70px) 60px;border-radius:25px;padding:50px clamp(25px,6vw,70px);background:#083e21;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:30px}.pm2v-landing-cta h2{margin:0 0 8px;font-size:32px;letter-spacing:-1px}.pm2v-landing-cta p{margin:0;color:#c8e2d1;line-height:1.6}.pm2v-landing-cta .pm2v-landing-primary{background:#fff;color:#096b35;border-color:#fff;white-space:nowrap}
 .pm2v-landing-footer{padding:28px clamp(24px,7vw,100px);background:#062e19;color:#b9d4c2;display:flex;justify-content:space-between;gap:20px;font-size:12px}.pm2v-landing-footer strong{color:#fff}
+.login-google{height:54px;border:1px solid #d7e0e9;border-radius:13px;background:#fff;color:#24364d;font-size:15px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:11px;transition:border-color .2s,box-shadow .2s,transform .15s}.login-google:hover{border-color:#b8c7d6;box-shadow:0 8px 20px rgba(23,34,53,.08);transform:translateY(-1px)}.login-google:disabled{opacity:.65;cursor:wait;transform:none}.login-google-icon{width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center}.login-google-icon svg{width:20px;height:20px}.login-auth-divider{display:flex;align-items:center;gap:11px;color:#93a1b2;font-size:11px;font-weight:800;margin:2px 0}.login-auth-divider:before,.login-auth-divider:after{content:"";height:1px;background:#e3e8ee;flex:1}.login-auth-note{text-align:center;color:#71839a;font-size:11px;line-height:1.5;margin-top:-4px}.pm2v-gmail-rule{padding:11px 13px;border:1px solid #dfe9e2;border-radius:10px;background:#f7fbf8;color:#557062;font-size:11px;line-height:1.5}.pm2v-gmail-rule strong{color:#126f38}@media(max-width:600px){.login-google{height:50px;border-radius:11px;font-size:14px}.login-auth-divider{font-size:10px}.login-auth-note{font-size:10px}}
 .pm2v-login-modal{position:absolute;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(3,25,14,.62);backdrop-filter:blur(7px);overflow:auto}.pm2v-login-modal.open{display:flex}.pm2v-login-modal-card{width:min(520px,100%);max-height:calc(100% - 24px);overflow:auto;background:#fff;border-radius:22px;box-shadow:0 30px 90px rgba(0,0,0,.28);position:relative}.pm2v-login-modal-close{position:absolute;right:15px;top:14px;width:36px;height:36px;border:0;border-radius:50%;background:#edf5ef;color:#164c30;font-size:22px;cursor:pointer;z-index:2}.pm2v-login-modal .login-panel{padding:48px 48px 38px}.pm2v-login-modal .login-panel h1{font-size:30px}.pm2v-login-modal .login-panel-subtitle{margin-bottom:27px}
 @media(max-width:900px){.pm2v-landing-hero{grid-template-columns:1fr;padding-top:55px}.pm2v-landing-visual{min-height:340px}.pm2v-landing-cards{grid-template-columns:repeat(2,1fr)}.pm2v-landing-materials{grid-template-columns:repeat(2,1fr)}.pm2v-landing-nav{gap:13px}.pm2v-landing-nav a{display:none}.pm2v-landing-cta{flex-direction:column;align-items:flex-start}}
 @media(max-width:600px){.pm2v-landing-header{height:64px;padding:0 15px}.pm2v-landing-brand{font-size:14px}.pm2v-landing-brand img{width:38px;height:38px}.pm2v-landing-login{padding:9px 13px}.pm2v-landing-hero{padding:45px 20px 55px;min-height:0}.pm2v-landing-hero h1{letter-spacing:-1.8px;font-size:42px}.pm2v-landing-hero p{font-size:15px}.pm2v-landing-section{padding:55px 20px}.pm2v-landing-cards,.pm2v-landing-materials{grid-template-columns:1fr}.pm2v-landing-cta{margin:0 15px 35px;padding:35px 25px}.pm2v-landing-cta h2{font-size:26px}.pm2v-login-modal{padding:12px}.pm2v-login-modal .login-panel{padding:42px 22px 28px}}
