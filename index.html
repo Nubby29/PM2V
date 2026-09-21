@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — VERSION V27: Professional split-screen landing/login page using the PM2V shop photo and logo, while preserving the existing Firebase authentication and access-application workflow. -->
+<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — VERSION V28: Public landing/login is the only visible surface when logged out; authenticated sessions reveal the dashboard as the application landing page. -->
 
 <html lang="en">
 <head>
@@ -242,7 +242,7 @@ td{height:59px;border-top:1px solid #edf0f3;padding:0 25px;font-size:15px;color:
 }
 
 /* FIREBASE AUTH / DATA LOADING */
-body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#eaf7eb;z-index:9999}.auth-loading-card{background:#fff;border-radius:18px;padding:28px 34px;box-shadow:0 15px 45px rgba(18,72,38,.12);text-align:center;color:#17335a}.auth-loading-spinner{width:30px;height:30px;border:3px solid #d9eadc;border-top-color:#146b35;border-radius:50%;animation:pm2vspin .8s linear infinite;margin:0 auto 14px}@keyframes pm2vspin{to{transform:rotate(360deg)}}.pm2v-toast{position:fixed;right:24px;bottom:24px;z-index:10001;max-width:420px;background:#17335a;color:#fff;padding:14px 18px;border-radius:12px;box-shadow:0 12px 35px rgba(0,0,0,.18);font-weight:700}.pm2v-toast.error{background:#b42318}.pm2v-toast.success{background:#146b35}
+body.auth-pending > .app{visibility:hidden;pointer-events:none}.auth-loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#eaf7eb;z-index:9999}.auth-loading-card{background:#fff;border-radius:18px;padding:28px 34px;box-shadow:0 15px 45px rgba(18,72,38,.12);text-align:center;color:#17335a}.auth-loading-spinner{width:30px;height:30px;border:3px solid #d9eadc;border-top-color:#146b35;border-radius:50%;animation:pm2vspin .8s linear infinite;margin:0 auto 14px}@keyframes pm2vspin{to{transform:rotate(360deg)}}.pm2v-toast{position:fixed;right:24px;bottom:24px;z-index:10001;max-width:420px;background:#17335a;color:#fff;padding:14px 18px;border-radius:12px;box-shadow:0 12px 35px rgba(0,0,0,.18);font-weight:700}.pm2v-toast.error{background:#b42318}.pm2v-toast.success{background:#146b35}
 
 /* LOGIN / PUBLIC ACCESS */
 .login-screen{position:fixed;inset:0;z-index:20000;display:flex;flex-direction:column;background:linear-gradient(135deg,#e9f7eb 0%,#f7fbf8 55%,#e6f1e8 100%);overflow:auto;padding:0;color:#172235}
@@ -2849,8 +2849,10 @@ document.querySelector('.logout a')?.addEventListener('click',async e=>{
 });
 onAuthStateChanged(auth,async user=>{
   if(!user){
+    // Keep the internal app hidden while logged out. The public landing/login
+    // page is the only visible landing surface for unauthenticated visitors.
+    document.body.classList.add('auth-pending');
     document.getElementById('loginScreen').style.display='flex';
-    document.body.classList.remove('auth-pending');
     document.getElementById('authLoading')?.remove();
     return;
   }
@@ -2862,7 +2864,9 @@ onAuthStateChanged(auth,async user=>{
     msg.textContent=e.message||'Unable to verify your PM2V account.';
     msg.className='login-message';
     document.getElementById('loginScreen').style.display='flex';
-    document.body.classList.remove('auth-pending');
+    // Failed account verification is still an unauthenticated state.
+    // Keep the dashboard hidden behind the public landing/login page.
+    document.body.classList.add('auth-pending');
     document.getElementById('authLoading')?.remove();
   }
 });
