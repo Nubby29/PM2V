@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH — VERSION V18: Client-requested unified internal UI, dynamic header clock, business-focused reports, interactive summary cards, profile/activity polish, and AI classifier presentation/validation improvements. This is the current baseline/source of truth and replaces V17. -->
+<!-- PM2V CURRENT BASELINE / SOURCE OF TRUTH - VERSION V19: Professional split-screen public landing/login, left pm2v-shop.jpg storefront photo with brand overlay, right pm2v-logo.png logo with inline Email/Password login, login attempts counter, Forgot password, Sign In, and Apply for Access. All login element IDs and Firebase auth flows preserved. This is the current baseline/source of truth and replaces V18. -->
 
 <html lang="en">
 <head>
@@ -242,7 +242,7 @@ td{height:59px;border-top:1px solid #edf0f3;padding:0 25px;font-size:15px;color:
 }
 
 /* FIREBASE AUTH / DATA LOADING */
-body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#eaf7eb;z-index:9999}.auth-loading-card{background:#fff;border-radius:18px;padding:28px 34px;box-shadow:0 15px 45px rgba(18,72,38,.12);text-align:center;color:#17335a}.auth-loading-spinner{width:30px;height:30px;border:3px solid #d9eadc;border-top-color:#146b35;border-radius:50%;animation:pm2vspin .8s linear infinite;margin:0 auto 14px}@keyframes pm2vspin{to{transform:rotate(360deg)}}.pm2v-toast{position:fixed;right:24px;bottom:24px;z-index:10001;max-width:420px;background:#17335a;color:#fff;padding:14px 18px;border-radius:12px;box-shadow:0 12px 35px rgba(0,0,0,.18);font-weight:700}.pm2v-toast.error{background:#b42318}.pm2v-toast.success{background:#146b35}
+body.auth-pending > .app{display:none!important}body:not(.auth-pending) > #loginScreen{display:none!important}#loginScreen{position:fixed!important;inset:0!important;z-index:20000!important}.auth-loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#eaf7eb;z-index:9999}.auth-loading-card{background:#fff;border-radius:18px;padding:28px 34px;box-shadow:0 15px 45px rgba(18,72,38,.12);text-align:center;color:#17335a}.auth-loading-spinner{width:30px;height:30px;border:3px solid #d9eadc;border-top-color:#146b35;border-radius:50%;animation:pm2vspin .8s linear infinite;margin:0 auto 14px}@keyframes pm2vspin{to{transform:rotate(360deg)}}.pm2v-toast{position:fixed;right:24px;bottom:24px;z-index:10001;max-width:420px;background:#17335a;color:#fff;padding:14px 18px;border-radius:12px;box-shadow:0 12px 35px rgba(0,0,0,.18);font-weight:700}.pm2v-toast.error{background:#b42318}.pm2v-toast.success{background:#146b35}
 
 /* LOGIN / PUBLIC ACCESS */
 .login-screen{position:fixed;inset:0;z-index:20000;display:flex;flex-direction:column;background:linear-gradient(135deg,#e9f7eb 0%,#f7fbf8 55%,#e6f1e8 100%);overflow:auto;padding:0;color:#172235}
@@ -427,7 +427,7 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   .brand-logo img,
   img[alt*="PM2V" i] {
     border-radius: 100%;
-    border: 1px solid black;
+    border: 0;
     box-sizing: border-box;
     overflow: hidden;
   }
@@ -453,7 +453,7 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   /* Native-like app header */
   .mobile-app-header{position:sticky;top:0;z-index:1000;margin:0 -16px 18px;padding:12px 16px 13px;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #e5ece7;display:flex;align-items:center;justify-content:space-between;min-height:64px}
   .mobile-header-brand{display:flex;align-items:center;gap:10px;min-width:0}
-  .mobile-header-logo{width:40px;height:40px;border-radius:50%;object-fit:cover;background:#eaf5ec;border:1px solid #111;box-shadow:0 2px 7px rgba(0,0,0,.10);flex:0 0 auto}
+  .mobile-header-logo{width:40px;height:40px;border-radius:50%;object-fit:cover;background:#eaf5ec;border:0;box-shadow:0 2px 7px rgba(0,0,0,.10);flex:0 0 auto}
   .mobile-header-copy{min-width:0}
   .mobile-header-kicker{font-size:10px;line-height:1.1;text-transform:uppercase;letter-spacing:1px;font-weight:900;color:#7a8d80}
   .mobile-header-title{font-size:19px;line-height:1.2;font-weight:900;color:#102844;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
@@ -563,7 +563,7 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
     width:42px !important;
     height:42px !important;
     border-radius:50% !important;
-    border:1px solid #000 !important;
+    border:0 !important;
     box-sizing:border-box !important;
     object-fit:cover !important;
     box-shadow:0 2px 7px rgba(0,0,0,.10) !important;
@@ -886,6 +886,42 @@ body.auth-pending > .app{visibility:hidden}.auth-loading{position:fixed;inset:0;
   .dashboard-stat-value{font-size:19px !important}
 }
 </style>
+<style id="pm2v-inventory-upgrade">
+/* Physical Inventory: expanded clickable summary cards, archive toggle + actions. */
+#inventory .inventory-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:min(620px,100%);margin:2px 0 20px}
+#inventory .inventory-stat-card{display:flex;align-items:center;gap:14px;padding:18px 20px;background:#fff;border:1px solid #e2ebe5;border-radius:16px;box-shadow:0 3px 12px rgba(23,57,40,.05);cursor:pointer;text-align:left;font:inherit;transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease}
+#inventory .inventory-stat-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(23,57,40,.11);border-color:#b7d3bf}
+#inventory .inventory-stat-card:focus-visible{outline:2px solid #146f37;outline-offset:2px}
+#inventory .inventory-stat-icon{width:48px;height:48px;flex:0 0 48px;border-radius:13px;display:grid;place-items:center;font-size:22px}
+#inventory .inventory-stat-card:nth-child(1) .inventory-stat-icon{background:#e8f7eb;color:#16743c}
+#inventory .inventory-stat-card:nth-child(2) .inventory-stat-icon{background:#eef4ff;color:#2364ee}
+#inventory .inventory-stat-text{display:flex;flex-direction:column;gap:3px;min-width:0}
+#inventory .inventory-stat-text>span{font-size:11px;text-transform:uppercase;letter-spacing:.8px;font-weight:800;color:#6f8477}
+#inventory .inventory-stat-text strong{font-size:24px;line-height:1;color:#14331f}
+#inventory .inventory-stat-text small{font-size:10px;font-weight:600;color:#93a49a}
+@media(max-width:760px){
+  #inventory .inventory-stats{grid-template-columns:1fr 1fr;gap:8px;width:100%;margin:0 0 14px}
+  #inventory .inventory-stat-card{padding:12px;gap:10px;border-radius:13px}
+  #inventory .inventory-stat-icon{width:36px;height:36px;flex:0 0 36px;font-size:17px;border-radius:10px}
+  #inventory .inventory-stat-text strong{font-size:19px}
+  #inventory .inventory-stat-text small{display:none}
+}
+/* Current Inventory heading: record count + archived toggle on the right. */
+#inventory .current-inventory-heading-right{display:flex;align-items:center;gap:10px}
+#inventory .inventory-archive-toggle{border:1px solid #d7e3dc;background:#fff;color:#5c6f63;border-radius:999px;padding:6px 12px;font-size:10px;font-weight:800;letter-spacing:.4px;cursor:pointer;transition:background .15s ease,color .15s ease,border-color .15s ease;white-space:nowrap}
+#inventory .inventory-archive-toggle:hover{background:#f3faf5;color:#146f37;border-color:#bcd6c2}
+#inventory .inventory-archive-toggle.active{background:#5c6f63;border-color:#5c6f63;color:#fff}
+#inventory .inventory-archive-toggle.active:hover{background:#4c5d53}
+/* Archive / restore row actions. */
+.inventory-action.archive{background:#fff4e0;color:#a05e0b}
+.inventory-action.restore{background:#eaf5ed;color:#146f37}
+.inventory-action.archive:hover{background:#ffe9c2}
+.inventory-action.restore:hover{background:#d9efdf}
+#inventory .inventory-actions .inventory-action:only-child{grid-column:1/-1}
+/* Category filter now sits directly under the heading, above the table. */
+#inventory .current-inventory-heading+.filters{margin:0 0 12px}
+</style>
+<style id="pm2v-records-mobile-refinement">
 <style id="pm2v-records-mobile-refinement">
 /* Records / Reports mobile refinement: compact summary + denser category breakdown. */
 @media (max-width:760px){
@@ -1523,23 +1559,129 @@ section.page>.topbar{display:none!important}
 }
 @media(max-width:430px){#reports .report-kpi-card{min-height:92px!important;height:92px!important}.stock-status-card{min-height:68px}.stock-status-card strong{font-size:18px}}
 </style>
+<style id="pm2v-profile-upgrade">
+/* Profile: constrain content width on desktop (cards were stretching full-bleed). */
+@media(min-width:761px){
+#profile .profile-hero,#profile .profile-card,#profile .profile-actions{max-width:780px;margin-left:auto;margin-right:auto}
+#profile .profile-hero{min-height:0;padding:26px 30px}
+#profile .profile-name{margin-bottom:10px}
+#profile .profile-card{padding:20px 24px 22px}
+#profile .profile-card-title{margin-bottom:16px;padding-bottom:14px}
+#profile .profile-actions{justify-content:center;gap:12px}
+}
+/* Profile: action buttons match the rest of the app. */
+#profile .profile-action{cursor:pointer;transition:filter .15s ease,transform .1s ease}
+#profile .profile-action:hover{filter:brightness(.95)}
+#profile .profile-action:active{transform:translateY(1px)}
+/* Edit Profile modal: same fixed-overlay behavior as the approval modal (which is keyed to #pm2vApprovalModal). */
+#pm2vEditProfileModal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
+#pm2vEditProfileModal.open{display:flex}
+#pm2vEditProfileModal .pm2v-approval-card{width:min(520px,100%);max-height:calc(100vh - 40px);overflow:auto}
+/* Edit Applicant modal (User Management): same fixed-overlay behavior. */
+#pm2vEditApplicantModal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
+#pm2vEditApplicantModal.open{display:flex}
+#pm2vEditApplicantModal .pm2v-approval-card{width:min(520px,100%);max-height:calc(100vh - 40px);overflow:auto}
+</style>
+<style id="pm2v-reports-expand">
+/* Reports: centered clickable stock-status cards + roomier filter panel. */
+.stock-status-card{flex-direction:column;justify-content:center;align-items:center;gap:5px;text-align:center}
+.stock-status-card>span{font-size:13px}
+.report-status-action:focus-visible,.report-kpi-action:focus-visible{outline:2px solid #146f37;outline-offset:2px}
+.report-kpi-action:active,.report-status-action:active{transform:translateY(0) scale(.985)}
+.report-status-action.active{border-color:#146f37!important;box-shadow:inset 0 0 0 1px #146f37,0 7px 16px rgba(20,111,55,.12)}
+.report-status-action.active small{color:#146f37}
+.report-kpi-action.active{border-color:#146f37!important;box-shadow:inset 0 0 0 1px #146f37,0 8px 20px rgba(20,111,55,.10)}
+@media(min-width:761px){
+#reports .report-filter-toggle{padding:20px 24px}
+#reports .report-filter-toggle strong{font-size:14px;letter-spacing:.8px}
+#reports .report-filter-content{padding:8px 24px 22px}
+#reports .report-filter-bar{gap:16px!important}
+#reports .report-filter-control label{font-size:10px;letter-spacing:.6px}
+#reports .report-filter-control select{height:48px!important;font-size:13px!important;border-radius:11px;padding:0 32px 0 14px;cursor:pointer}
+#reports .report-filter-reset{height:48px!important;padding:0 20px!important;font-size:12px!important;border-radius:11px;align-self:end}
+#reports .report-filter-result{font-size:11px}
+#reports .report-filter-summary{font-size:11px!important}
+}
+</style>
+<style id="pm2v-users-upgrade">
+/* User Management: Manage Users row actions (Edit / Delete / Approve / Change password). */
+.pm2v-user-actions{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.pm2v-user-actions .role-btn{padding:7px 11px;font-size:12px;border-radius:8px;white-space:nowrap}
+.pm2v-user-btn.edit{background:#eaf5ed;color:#146f37}
+.pm2v-user-btn.delete{background:#fdecec;color:#b42318}
+.pm2v-user-btn.pwd{background:#eef3fb;color:#1d4f91}
+.pm2v-user-btn:hover,.pm2v-user-actions .role-btn.primary:hover{filter:brightness(.95)}
+.pm2v-user-btn:disabled,.pm2v-user-actions .role-btn.primary:disabled{opacity:.55;cursor:not-allowed}
+@media(max-width:760px){.pm2v-user-actions .role-btn{padding:7px 9px;font-size:11px}}
+</style>
+<style id="pm2v-dashboard-annotations-fix">
+/* Screenshot annotations: sidebar/logo/stats/header cleanup (desktop + mobile safe). */
+.sidebar .nav-group-label{display:none!important}
+.sidebar .logo-wrap{display:flex!important;align-items:center!important;justify-content:center!important;padding-left:0!important}
+.sidebar .logo{border-radius:50%!important;object-fit:cover!important;border:0!important;background:transparent!important;box-shadow:none!important}
+.sidebar .nav a.nav-logout{display:none!important}
+.sidebar .logout{display:none!important}
+#dashboard .dashboard-stats{align-items:stretch}
+#dashboard .dashboard-stat{justify-content:center;text-align:center}
+#dashboard .dashboard-stat>div:last-child{text-align:center}
+#dashboard .dashboard-stat-label,#dashboard .dashboard-stat-value{text-align:center}
+</style>
 </head>
 <body class="auth-pending">
 <div class="login-screen" id="loginScreen">
 <div class="pm2v-landing-wrap" id="pm2vLandingWrap">
-<header class="pm2v-landing-header">
-<a aria-label="PM2V Scrap Trading home" class="pm2v-landing-brand" data-landing-target="pm2v-home" href="#pm2v-home"><img alt="PM2V Scrap Trading logo" src="pm2v-logo.png"/><span>PM2V Scrap Trading</span></a>
-<nav aria-label="Public navigation" class="pm2v-landing-nav"><a data-landing-target="pm2v-about" href="#pm2v-about">About</a><a data-landing-target="pm2v-services" href="#pm2v-services">What We Do</a><a data-landing-target="pm2v-materials" href="#pm2v-materials">Materials</a><button class="pm2v-landing-login" id="pm2vOpenLogin" type="button">Login</button></nav>
-</header>
-<main>
-<section class="pm2v-landing-hero" id="pm2v-home"><div><span class="pm2v-landing-eyebrow"><i></i> Smart Scrap Management</span><h1>Smart Inventory.<br/><strong>Sustainable Future.</strong></h1><p>PM2V Scrap Trading combines practical scrap management with a smarter digital inventory system—helping teams track materials, organize physical inventory, and make better day-to-day decisions.</p><div class="pm2v-landing-actions"><button class="pm2v-landing-primary" id="pm2vHeroLogin" type="button">Access PM2V →</button><a class="pm2v-landing-secondary" data-landing-target="pm2v-about" href="#pm2v-about">Learn More</a></div></div><div class="pm2v-landing-visual"><div class="pm2v-landing-visual-card"><img alt="PM2V logo" class="pm2v-landing-logo-large" src="pm2v-logo.png"/><h3>One workspace for scrap inventory</h3><p>Keep material records, physical inventory, and AI-assisted identification connected in one secure portal.</p><div class="pm2v-landing-mini-grid"><div class="pm2v-landing-mini"><b>Inventory</b><span>Track current stock</span></div><div class="pm2v-landing-mini"><b>AI Scanner</b><span>Identify materials</span></div><div class="pm2v-landing-mini"><b>Records</b><span>Keep activity organized</span></div><div class="pm2v-landing-mini"><b>Access</b><span>Role-based workspace</span></div></div></div></div></section>
-<section class="pm2v-landing-section" id="pm2v-about"><div class="pm2v-landing-section-head"><div class="pm2v-landing-kicker">About PM2V</div><h2>Built around real-world scrap operations</h2><p>PM2V Scrap Trading is designed around the practical needs of managing scrap materials—from physical inventory to organized digital records.</p></div><div class="pm2v-landing-cards"><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">01</div><h3>Smart Inventory</h3><p>Keep a clear view of materials currently recorded in your physical inventory.</p></article><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">02</div><h3>Organized Records</h3><p>Bring inventory activity and operational records into one structured workspace.</p></article><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">03</div><h3>AI-Assisted Scanning</h3><p>Use the integrated ScrapScan workflow to help identify materials from photos.</p></article><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">04</div><h3>Controlled Access</h3><p>Role-based accounts keep workspace functions appropriate to each team member.</p></article></div></section>
-<section class="pm2v-landing-section alt" id="pm2v-services"><div class="pm2v-landing-section-head"><div class="pm2v-landing-kicker">What We Do</div><h2>From scrap on the ground to data on screen</h2><p>The public experience introduces PM2V. The secure portal takes your team into the operational tools behind it.</p></div><div class="pm2v-landing-cards"><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">▦</div><h3>Physical Inventory</h3><p>Record, review, and manage the materials currently in your inventory.</p></article><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">✦</div><h3>AI Scrap Scanner</h3><p>Capture or upload a photo and use the configured AI workflow for material identification.</p></article><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">↗</div><h3>Transactions &amp; Reports</h3><p>Authorized team members can work with operational records and reporting tools.</p></article><article class="pm2v-landing-card"><div class="pm2v-landing-card-icon">✓</div><h3>Team Access</h3><p>Secure sign-in and role-based access keep internal tools protected.</p></article></div></section>
-<section class="pm2v-landing-section" id="pm2v-materials"><div class="pm2v-landing-section-head"><div class="pm2v-landing-kicker">Materials</div><h2>Designed for the materials you handle</h2><p>Start with broad material categories, then manage the scanner classes from inside the PM2V portal as your operation evolves.</p></div><div class="pm2v-landing-materials"><div class="pm2v-landing-material"><b>Metal</b><span>Steel, aluminum, copper and more</span></div><div class="pm2v-landing-material"><b>Plastic</b><span>Plastic materials and recyclable grades</span></div><div class="pm2v-landing-material"><b>Paper &amp; Cardboard</b><span>Paper-based recyclable materials</span></div><div class="pm2v-landing-material"><b>Wood &amp; Other</b><span>Wood, textiles, e-waste and mixed scrap</span></div></div></section>
-<section class="pm2v-landing-cta"><div><h2>Ready to enter the PM2V workspace?</h2><p>Sign in to access your inventory and authorized operational tools.</p></div><button class="pm2v-landing-primary" id="pm2vCtaLogin" type="button">Login to PM2V →</button></section>
-</main><footer class="pm2v-landing-footer"><span><strong>PM2V Scrap Trading</strong> · Smart Inventory. Sustainable Future.</span><span>© 2026 PM2V Scrap Trading. All Rights Reserved.</span></footer>
+<header class="pm2v-landing-header"><div class="pm2v-landing-header-inner"><a class="pm2v-landing-brand"><img alt="PM2V logo" src="pm2v-logo.png"/>PM2V Scrap Trading</a><nav class="pm2v-landing-nav"><button class="pm2v-landing-nav-link" id="pm2vFaqBtn" type="button">FAQs</button><button class="pm2v-landing-nav-login" id="pm2vNavLogin" type="button">Login</button></nav></div></header>
+<div class="pm2v-auth-card" id="pm2vAuthCard">
+<section class="pm2v-auth-photo" aria-label="PM2V Scrap Trading shop">
+<img alt="PM2V Scrap Trading shop" src="pm2v-shop.jpg"/>
+<div class="pm2v-auth-photo-overlay">
+<span class="pm2v-auth-photo-pill"><i></i>Smart Scrap Management</span>
+<h2>PM2V Scrap Trading</h2>
+<p>National Highway, Barangay Maahas, Los Banos, Laguna. Smart Inventory. Sustainable Future.</p>
 </div>
-<div aria-hidden="true" class="pm2v-login-modal" id="pm2vLoginModal"><div aria-labelledby="pm2vLoginTitle" aria-modal="true" class="pm2v-login-modal-card" role="dialog"><button aria-label="Close login" class="pm2v-login-modal-close" id="pm2vCloseLogin" type="button">×</button><section class="login-panel"><h1 id="pm2vLoginTitle">Welcome Back</h1><div class="login-panel-subtitle">Sign in to manage your inventory</div><form class="login-form" id="loginForm"><div class="login-field"><span aria-hidden="true" class="login-field-icon"><svg fill="none" viewbox="0 0 24 24"><rect height="14" rx="2" stroke="currentColor" stroke-width="1.8" width="18" x="3" y="5"></rect><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg></span><input aria-label="Email Address" autocomplete="username" id="loginEmail" placeholder="Email Address" required="" type="email"/></div><div class="login-field"><span aria-hidden="true" class="login-field-icon"><svg fill="none" viewbox="0 0 24 24"><rect height="10" rx="2" stroke="currentColor" stroke-width="1.8" width="14" x="5" y="10"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"></path></svg></span><input aria-label="Password" autocomplete="current-password" id="loginPassword" placeholder="Password" required="" type="password"/><button aria-label="Show password" class="login-password-toggle" id="loginPasswordToggle" type="button"><svg fill="none" viewbox="0 0 24 24"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" stroke="currentColor" stroke-width="1.8"></path><circle cx="12" cy="12" r="2.6" stroke="currentColor" stroke-width="1.8"></circle></svg></button></div><button class="login-forgot" id="forgotBtn" type="button">Forgot password?</button><button class="login-submit" id="loginBtn" type="submit">Sign In →</button><div class="login-message" id="loginMessage"></div></form><div class="login-protected"><span class="lock">♧</span> Protected by encrypted connection</div><div class="login-apply">Don't have an account? <button id="openAccessBtn" type="button">Apply for Access</button></div><div class="login-legal">By signing in, you agree to your organization's access policies.</div></section></div></div>
+</section>
+<section class="pm2v-auth-form-side">
+<img alt="PM2V logo" class="pm2v-auth-logo" src="pm2v-logo.png"/>
+<h1 class="pm2v-auth-title" id="pm2vLoginTitle">PM2V Scrap Trading</h1>
+<div class="pm2v-auth-sub">Sign in to manage your inventory</div>
+<form class="login-form" id="loginForm">
+<div class="login-field"><span aria-hidden="true" class="login-field-icon"><svg fill="none" viewbox="0 0 24 24"><rect height="14" rx="2" stroke="currentColor" stroke-width="1.8" width="18" x="3" y="5"></rect><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg></span><input aria-label="Email Address" autocomplete="username" id="loginEmail" placeholder="Email Address" required="" type="email"/></div>
+<div class="login-field"><span aria-hidden="true" class="login-field-icon"><svg fill="none" viewbox="0 0 24 24"><rect height="10" rx="2" stroke="currentColor" stroke-width="1.8" width="14" x="5" y="10"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"></path></svg></span><input aria-label="Password" autocomplete="current-password" id="loginPassword" placeholder="Password" required="" type="password"/><button aria-label="Show password" class="login-password-toggle" id="loginPasswordToggle" type="button"><svg fill="none" viewbox="0 0 24 24"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" stroke="currentColor" stroke-width="1.8"></path><circle cx="12" cy="12" r="2.6" stroke="currentColor" stroke-width="1.8"></circle></svg></button></div>
+<button class="login-forgot" id="forgotBtn" type="button">Forgot password?</button>
+<button class="login-submit" id="loginBtn" type="submit">Sign In &#8594;</button>
+<div class="login-message" id="loginMessage"></div>
+</form>
+<div class="pm2v-auth-apply"><em>Don&#8217;t have an access? <button id="openAccessBtn" type="button">Apply for Access.</button></em></div>
+</section>
+</div>
+<section aria-label="PM2V frequently asked questions" class="pm2v-faq-view" hidden id="pm2vFaqView">
+<div class="pm2v-faq-card">
+<button class="pm2v-faq-back" id="pm2vFaqBack" type="button">&#8592; Back to Sign In</button>
+<div class="pm2v-faq-hero">
+<span class="pm2v-faq-kicker">Help Center</span>
+<h2>How PM2V Works</h2>
+<p>A quick guide to how the PM2V Scrap Trading system functions &#8212; from getting access to managing inventory, recording transactions, and reading reports.</p>
+</div>
+<div class="pm2v-faq-flow">
+<div class="pm2v-faq-step"><i>1</i><b>Sign In</b><span>Approved account? Enter your email and password to open your workspace.</span></div>
+<div class="pm2v-faq-step"><i>2</i><b>Manage Inventory</b><span>Add and update scrap items with category, weight, and stock status.</span></div>
+<div class="pm2v-faq-step"><i>3</i><b>Record Transactions</b><span>Log every purchase or sale to keep a complete record.</span></div>
+<div class="pm2v-faq-step"><i>4</i><b>Review Reports</b><span>Check totals and activity over time; the Owner manages accounts.</span></div>
+</div>
+<div class="pm2v-faq-list">
+<div class="pm2v-faq-item open"><button class="pm2v-faq-q" type="button"><span>What is PM2V Scrap Trading?</span><span aria-hidden="true" class="pm2v-faq-chev">&#8250;</span></button><div class="pm2v-faq-a"><p>PM2V is the shop&#8217;s web-based inventory and transaction system. It tracks every scrap item &#8212; name, category, weight in kg, and stock status &#8212; records each purchase or sale as a transaction, and turns that data into reports so you always know what is in stock, what is moving, and what needs restocking.</p></div></div>
+<div class="pm2v-faq-item"><button class="pm2v-faq-q" type="button"><span>How does the daily workflow go?</span><span aria-hidden="true" class="pm2v-faq-chev">&#8250;</span></button><div class="pm2v-faq-a"><p>The daily flow follows the sidebar from top to bottom:</p><ul><li><b>Dashboard</b> &#8212; your starting overview: total items, categories, active items, and low-stock warnings.</li><li><b>Physical Inventory</b> &#8212; add and update every scrap item (category, weight, status).</li><li><b>Transactions</b> &#8212; record each scrap purchase or sale so nothing goes untracked.</li><li><b>Reports</b> &#8212; review inventory totals and activity over time.</li><li><b>User Management</b> (Owner only) &#8212; approve access requests and manage accounts.</li></ul></div></div>
+<div class="pm2v-faq-item"><button class="pm2v-faq-q" type="button"><span>How do I get an account?</span><span aria-hidden="true" class="pm2v-faq-chev">&#8250;</span></button><div class="pm2v-faq-a"><p>Accounts are created through owner approval. Click <b>&#8220;Apply for Access.&#8221;</b> under the Sign In form, submit your full name, email, and role, then wait. Once the owner approves your application, you can sign in with your email and password.</p></div></div>
+<div class="pm2v-faq-item"><button class="pm2v-faq-q" type="button"><span>What do the stock statuses mean?</span><span aria-hidden="true" class="pm2v-faq-chev">&#8250;</span></button><div class="pm2v-faq-a"><p><b>In Stock</b> &#8212; normal levels. <b>Low Stock</b> &#8212; at or below the restock point; the Dashboard flags it so you can buy soon. <b>Overstock</b> &#8212; above the target; prioritize selling before buying more.</p></div></div>
+<div class="pm2v-faq-item"><button class="pm2v-faq-q" type="button"><span>What can each role do?</span><span aria-hidden="true" class="pm2v-faq-chev">&#8250;</span></button><div class="pm2v-faq-a"><p><b>Owner</b> &#8212; full control: inventory, transactions, and reports, plus User Management (approving access requests, assigning roles, managing accounts). <b>Secretary</b> &#8212; inventory, transactions, and reports. <b>Staff</b> &#8212; dashboard, physical inventory, and profile. Your sidebar only shows the pages your role can open.</p></div></div>
+<div class="pm2v-faq-item"><button class="pm2v-faq-q" type="button"><span>My sign-in is not working. What now?</span><span aria-hidden="true" class="pm2v-faq-chev">&#8250;</span></button><div class="pm2v-faq-a"><p>First, confirm the owner has approved your account &#8212; pending applications cannot sign in yet. Already approved? Use <b>&#8220;Forgot password?&#8221;</b> to reset it via your email, or ask the owner to check your account under User Management.</p></div></div>
+<div class="pm2v-faq-item"><button class="pm2v-faq-q" type="button"><span>How do I update my name or password?</span><span aria-hidden="true" class="pm2v-faq-chev">&#8250;</span></button><div class="pm2v-faq-a"><p>Open <b>Profile</b> from the sidebar. You can update your display name and change your password there; changes apply to your session right away.</p></div></div>
+<div class="pm2v-faq-item"><button class="pm2v-faq-q" type="button"><span>Is our data safe?</span><span aria-hidden="true" class="pm2v-faq-chev">&#8250;</span></button><div class="pm2v-faq-a"><p>Yes. Accounts, inventory, and transaction records are stored in secured cloud storage (Firebase) and are only reachable by approved accounts. Your session is tied to your sign-in &#8212; log out on shared computers.</p></div></div>
+</div>
+<div class="pm2v-faq-cta"><button id="pm2vFaqLoginCta" type="button">Go to Sign In</button><button id="pm2vFaqApplyCta" type="button">Apply for Access</button></div>
+</div>
+</section>
+<footer class="pm2v-landing-foot"><span><strong>PM2V Scrap Trading</strong> - Smart Inventory. Sustainable Future.</span><span>&#169; 2026 PM2V Scrap Trading. All Rights Reserved.</span></footer>
 </div>
 <div aria-hidden="true" id="pm2vAccessModal">
 <div aria-labelledby="pm2vAccessTitle" aria-modal="true" class="pm2v-access-card" role="dialog">
@@ -1551,10 +1693,10 @@ section.page>.topbar{display:none!important}
 <label>FULL NAME<input id="accessFullName" placeholder="Enter your full name" required="" type="text"/></label>
 <label>EMAIL ADDRESS<input id="accessEmail" placeholder="Enter your email" required="" type="email"/></label>
 <label>REQUESTED ROLE<select id="accessRole" required=""><option disabled="" selected="" value="">Select a role</option><option value="staff">Staff</option><option value="secretary">Secretary</option></select></label>
-<div class="pm2v-role-info"><strong>Staff</strong> — Manage daily collection logs and view physical inventory.<br/><br/><strong>Secretary</strong> — Handle transactions, generate reports, and manage inventory records.</div>
 <div class="pm2v-access-msg" id="accessMessage"></div>
 <button class="pm2v-access-submit" id="accessSubmitBtn" type="submit">Submit Application</button>
 </form>
+</div>
 </div>
 </div>
 <div class="auth-loading" id="authLoading"><div class="auth-loading-card"><div class="auth-loading-spinner"></div><strong>Checking your PM2V account…</strong></div></div>
@@ -1572,8 +1714,8 @@ section.page>.topbar{display:none!important}
 <a class="role-secretary-owner" data-page="reports" href="#"><span aria-hidden="true" class="nav-icon"><svg fill="none" viewbox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path><path d="m4 8 6-4 6 5 6-5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></span>Reports</a>
 <a class="role-only role-owner" data-page="users" href="#"><span aria-hidden="true" class="nav-icon"><svg fill="none" viewbox="0 0 24 24"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="2"></circle><path d="M3 20c.7-3.1 2.7-5 6-5s5.3 1.9 6 5" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path><circle cx="17" cy="9" r="2.3" stroke="currentColor" stroke-width="2"></circle><path d="M15.5 15.2c2.5.3 4.1 1.9 4.5 4.8" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg></span>User Management</a>
 <a data-page="profile" href="#"><span aria-hidden="true" class="nav-icon"><svg fill="none" viewbox="0 0 24 24"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="2"></circle><path d="M4.5 21c.8-4.1 3.2-6.5 7.5-6.5s6.7 2.4 7.5 6.5" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg></span>Profile</a>
+<a href="#" id="sidebarLogoutLink" class="nav-logout"><span aria-hidden="true" class="nav-icon"><svg fill="none" viewbox="0 0 24 24"><path d="M14 4H6v16h8" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path><path d="M10 12h11M18 8.5 21.5 12 18 15.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>Logout</a>
 </nav>
-<div class="logout"><a href="#"><span>↪</span>Logout</a></div>
 </aside>
 <main class="main">
 <div class="global-page-header" id="globalPageHeader" aria-label="PM2V internal page header">
@@ -1599,12 +1741,6 @@ section.page>.topbar{display:none!important}
 </div>
 <!-- DASHBOARD -->
 <section class="page active" id="dashboard">
-<div class="topbar dashboard-topbar">
-<div>
-<h1>Dashboard</h1>
-</div>
-<div class="date">▣   Tuesday, August 18, 2026 <span class="sep">|</span> ◷  05:26 PM</div>
-</div>
 <section class="dashboard-stats">
 <button class="dashboard-stat dashboard-stat-action" data-dashboard-action="inventory" type="button" aria-label="View total inventory items">
 <div class="dashboard-stat-icon">⬡</div>
@@ -1620,13 +1756,13 @@ section.page>.topbar{display:none!important}
 <div class="dashboard-stat-value" id="dashCategories">0</div>
 </div>
 </button>
-<div class="dashboard-stat">
+<button class="dashboard-stat dashboard-stat-action" data-dashboard-action="active" type="button" aria-label="View active inventory items">
 <div class="dashboard-stat-icon">✓</div>
 <div>
 <div class="dashboard-stat-label">Active Items</div>
 <div class="dashboard-stat-value" id="dashActiveItems">0</div>
 </div>
-</div>
+</button>
 </section>
 <section class="dashboard-card">
 <div class="dashboard-card-head">
@@ -1665,28 +1801,18 @@ section.page>.topbar{display:none!important}
 <!-- PHYSICAL INVENTORY -->
 <section class="page" id="inventory">
 <div class="topbar">
-<div><h1>Physical Inventory</h1><div class="subtitle">Scan scrap, confirm the result, and add it to inventory.</div></div>
+<div><h1>Physical Inventory</h1></div>
 <div class="date">Tuesday, August 18, 2026 <span class="sep">|</span> 05:11:45 PM</div>
 </div>
-<div aria-label="Inventory summary" class="inventory-summary">
-<div class="inventory-summary-item"><span>Items</span><strong id="inventorySummaryCount">0</strong></div>
-<div class="inventory-summary-divider"></div>
-<div class="inventory-summary-item"><span>Total Weight</span><strong id="inventorySummaryWeight">0 kg</strong></div>
-</div>
-<div class="filters" aria-label="Inventory category filter">
-  <div class="inventory-category-filter" id="inventoryCategoryFilter">
-    <button aria-expanded="false" aria-haspopup="listbox" aria-label="Filter inventory by category" class="inventory-category-trigger" id="inventoryCategoryTrigger" type="button">
-      <span id="inventoryCategoryLabel">All Categories</span><span aria-hidden="true" class="filter-chevron"></span>
-    </button>
-    <div aria-label="Inventory categories" class="inventory-category-menu" id="inventoryCategoryMenu" role="listbox">
-      <button aria-selected="true" class="inventory-category-option" data-category="All" role="option" type="button"><span>All Categories</span><span aria-hidden="true" class="filter-check">✓</span></button>
-      <button aria-selected="false" class="inventory-category-option" data-category="Metal" role="option" type="button"><span>Metal</span><span aria-hidden="true" class="filter-check">✓</span></button>
-      <button aria-selected="false" class="inventory-category-option" data-category="Wood" role="option" type="button"><span>Wood</span><span aria-hidden="true" class="filter-check">✓</span></button>
-      <button aria-selected="false" class="inventory-category-option" data-category="Plastic" role="option" type="button"><span>Plastic</span><span aria-hidden="true" class="filter-check">✓</span></button>
-      <button aria-selected="false" class="inventory-category-option" data-category="Paper" role="option" type="button"><span>Paper</span><span aria-hidden="true" class="filter-check">✓</span></button>
-      <button aria-selected="false" class="inventory-category-option" data-category="Fiber" role="option" type="button"><span>Fiber</span><span aria-hidden="true" class="filter-check">✓</span></button>
-    </div>
-  </div>
+<div aria-label="Inventory summary" class="inventory-stats">
+<button type="button" class="inventory-stat-card" data-inventory-stat="items" title="Show all active inventory records">
+<span class="inventory-stat-icon" aria-hidden="true">▦</span>
+<span class="inventory-stat-text"><span>Items</span><strong id="inventorySummaryCount">0</strong><small>Total active inventory records</small></span>
+</button>
+<button type="button" class="inventory-stat-card" data-inventory-stat="weight" title="Open inventory weight analytics in Reports">
+<span class="inventory-stat-icon" aria-hidden="true">⚖</span>
+<span class="inventory-stat-text"><span>Total Weight</span><strong id="inventorySummaryWeight">0 kg</strong><small>Combined stock weight</small></span>
+</button>
 </div>
 <section class="ai-scanner" id="aiScannerSection">
 <div class="ai-scanner-head">
@@ -1779,7 +1905,22 @@ section.page>.topbar{display:none!important}
 <button class="save" id="saveInventoryBtn" type="button">Save Item to Inventory</button>
 </div>
 </section>
-<div class="current-inventory-heading"><div><h2>Current Inventory</h2><p>Saved inventory records and their latest details.</p></div><span id="inventoryRecordCount">0 records</span></div>
+<div class="current-inventory-heading"><div><h2>Current Inventory</h2><p>Saved inventory records and their latest details.</p></div><div class="current-inventory-heading-right"><span id="inventoryRecordCount">0 records</span><button type="button" class="inventory-archive-toggle" id="inventoryArchiveToggle" aria-pressed="false" title="Show archived records">Archived <span id="inventoryArchivedCount">0</span></button></div></div>
+<div class="filters" aria-label="Inventory category filter">
+  <div class="inventory-category-filter" id="inventoryCategoryFilter">
+    <button aria-expanded="false" aria-haspopup="listbox" aria-label="Filter inventory by category" class="inventory-category-trigger" id="inventoryCategoryTrigger" type="button">
+      <span id="inventoryCategoryLabel">All Categories</span><span aria-hidden="true" class="filter-chevron"></span>
+    </button>
+    <div aria-label="Inventory categories" class="inventory-category-menu" id="inventoryCategoryMenu" role="listbox">
+      <button aria-selected="true" class="inventory-category-option" data-category="All" role="option" type="button"><span>All Categories</span><span aria-hidden="true" class="filter-check">✓</span></button>
+      <button aria-selected="false" class="inventory-category-option" data-category="Metal" role="option" type="button"><span>Metal</span><span aria-hidden="true" class="filter-check">✓</span></button>
+      <button aria-selected="false" class="inventory-category-option" data-category="Wood" role="option" type="button"><span>Wood</span><span aria-hidden="true" class="filter-check">✓</span></button>
+      <button aria-selected="false" class="inventory-category-option" data-category="Plastic" role="option" type="button"><span>Plastic</span><span aria-hidden="true" class="filter-check">✓</span></button>
+      <button aria-selected="false" class="inventory-category-option" data-category="Paper" role="option" type="button"><span>Paper</span><span aria-hidden="true" class="filter-check">✓</span></button>
+      <button aria-selected="false" class="inventory-category-option" data-category="Fiber" role="option" type="button"><span>Fiber</span><span aria-hidden="true" class="filter-check">✓</span></button>
+    </div>
+  </div>
+</div>
 <div class="table-wrap">
 <table>
 <thead><tr><th>ITEM NAME</th><th>CATEGORY</th><th>CURRENT WEIGHT</th><th>MIN / MAX</th><th>STOCK STATUS</th><th>CONDITION</th><th>LAST UPDATED</th><th id="inventoryActionsHeader" style="display:none">ACTIONS</th></tr></thead>
@@ -1790,7 +1931,7 @@ section.page>.topbar{display:none!important}
 <!-- TRANSACTIONS: SECRETARY + OWNER -->
 <section class="page role-secretary-owner" id="transactions">
 <div class="topbar">
-<div><h1>Transactions</h1><div class="subtitle">Record and review scrap trading transactions.</div></div>
+<div><h1>Transactions</h1></div>
 <div class="date" id="transactionsDate"></div>
 </div>
 <section class="role-card" style="margin-bottom:18px">
@@ -1838,7 +1979,7 @@ section.page>.topbar{display:none!important}
 <section class="page role-secretary-owner" id="reports">
 <div class="topbar">
 <div><h1>Reports</h1></div>
-<div class="report-topbar-actions"><div class="date" id="reportsDate"></div></div>
+<div class="report-topbar-actions"><button type="button" class="report-export-btn" id="reportExportPdf" title="Download the full filtered report as a PDF file">Export PDF</button><div class="date" id="reportsDate"></div></div>
 </div>
 <div class="report-dashboard-v7">
   <div class="report-grid report-kpi-grid">
@@ -1902,12 +2043,12 @@ section.page>.topbar{display:none!important}
 <!-- USER MANAGEMENT: OWNER ONLY -->
 <section class="page role-only role-owner" id="users">
 <div class="topbar">
-<div><h1>User Management</h1><div class="subtitle">Review applications and manage PM2V user records.</div></div>
+<div><h1>User Management</h1></div>
 <div class="date" id="usersDate"></div>
 </div>
 <section class="role-card" style="margin-bottom:18px">
-<h2 class="card-title">Pending Applicants</h2>
-<div style="overflow:auto"><table class="role-table"><thead><tr><th>NAME</th><th>EMAIL</th><th>ROLE REQUESTED</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="applicantBody"><tr><td class="empty-role" colspan="5">Loading applicants…</td></tr></tbody></table></div>
+<h2 class="card-title">Manage Users</h2>
+<div style="overflow:auto"><table class="role-table"><thead><tr><th>NAME</th><th>EMAIL</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="applicantBody"><tr><td class="empty-role" colspan="4">Loading applicants…</td></tr></tbody></table></div>
 </section>
 <section class="role-card">
 <h2 class="card-title">Current Users</h2>
@@ -1919,9 +2060,8 @@ section.page>.topbar{display:none!important}
 <div class="topbar">
 <div>
 <h1>Profile</h1>
-<div class="subtitle">Manage your account information and settings.</div>
 </div>
-<div class="date">▣   Tuesday, August 18, 2026 <span class="sep">|</span> ◷  05:30:22 PM</div>
+<div class="date" id="profileDate"></div>
 </div>
 <section class="profile-hero">
 <div class="profile-avatar-large" id="profileAvatar">N</div>
@@ -1975,7 +2115,7 @@ section.page>.topbar{display:none!important}
 </div>
 </section>
 <div class="profile-actions">
-<button class="profile-action profile-edit">♧   Edit Profile</button>
+<button class="profile-action profile-edit" id="profileEditBtn" type="button">♧   Edit Profile</button>
 <button class="profile-action profile-password" id="changePasswordBtn">♧   Change Password</button>
 <button class="profile-action profile-password" id="mobileProfileLogoutBtn" type="button">↪   Log Out</button>
 </div>
@@ -2065,29 +2205,41 @@ async function loadInventory(){
     const manualToggle=document.getElementById('manualEntryToggle');
     if(manualToggle)manualToggle.style.display=canCreate?'':'none';
 
-    if(body)body.innerHTML=rows.length?rows.map(x=>{
-      const status=pm2vStockStatus(x),{min,max}=pm2vStockThresholds(x);
-      return `<tr><td><strong>${esc(x.itemName||'Unnamed Item')}</strong></td><td><span class="inventory-category-pill">${esc(x.category||'—')}</span></td><td>${pm2vNum(x.weight).toLocaleString(undefined,{maximumFractionDigits:2})} kg</td><td><span class="stock-range">${min.toLocaleString(undefined,{maximumFractionDigits:2})} / ${max.toLocaleString(undefined,{maximumFractionDigits:2})} kg</span></td><td>${pm2vStockPill(status)}</td><td><span class="inventory-condition-pill condition-${String(x.condition||'unknown').toLowerCase().replace(/[^a-z]+/g,'-')}">${esc(x.condition||'—')}</span></td><td>${fmtDate(x.lastUpdated)}</td>${canManage?`<td><div class="inventory-actions"><button type="button" class="inventory-action edit" data-inventory-action="edit" data-inventory-id="${encodeURIComponent(x.id)}">Edit</button><button type="button" class="inventory-action delete" data-inventory-action="delete" data-inventory-id="${encodeURIComponent(x.id)}">Delete</button></div></td>`:''}</tr>`;
-    }).join(''):`<tr><td colspan="${canManage?8:7}" class="empty">No inventory records found.</td></tr>`;
+    const activeRows=rows.filter(x=>!x.archived);
+    const archivedRows=rows.filter(x=>x.archived);
+    const listView=PM2V_INVENTORY_SHOW_ARCHIVED?archivedRows:activeRows;
+    const showingArchived=PM2V_INVENTORY_SHOW_ARCHIVED;
 
-    if(dash)dash.innerHTML=rows.slice(0,10).map(x=>{
+    if(body)body.innerHTML=listView.length?listView.map(x=>{
+      const status=pm2vStockStatus(x),{min,max}=pm2vStockThresholds(x);
+      const actions=showingArchived
+        ?`<button type="button" class="inventory-action restore" data-inventory-action="restore" data-inventory-id="${encodeURIComponent(x.id)}">Restore</button>`
+        :`<button type="button" class="inventory-action edit" data-inventory-action="edit" data-inventory-id="${encodeURIComponent(x.id)}">Edit</button><button type="button" class="inventory-action archive" data-inventory-action="archive" data-inventory-id="${encodeURIComponent(x.id)}">Archive</button>`;
+      return `<tr><td><strong>${esc(x.itemName||'Unnamed Item')}</strong></td><td><span class="inventory-category-pill">${esc(x.category||'—')}</span></td><td>${pm2vNum(x.weight).toLocaleString(undefined,{maximumFractionDigits:2})} kg</td><td><span class="stock-range">${min.toLocaleString(undefined,{maximumFractionDigits:2})} / ${max.toLocaleString(undefined,{maximumFractionDigits:2})} kg</span></td><td>${pm2vStockPill(status)}</td><td><span class="inventory-condition-pill condition-${String(x.condition||'unknown').toLowerCase().replace(/[^a-z]+/g,'-')}">${esc(x.condition||'—')}</span></td><td>${fmtDate(x.lastUpdated)}</td>${canManage?`<td><div class="inventory-actions">${actions}</div></td>`:''}</tr>`;
+    }).join(''):`<tr><td colspan="${canManage?8:7}" class="empty">${showingArchived?'No archived inventory records.':'No inventory records found.'}</td></tr>`;
+
+    if(dash)dash.innerHTML=activeRows.slice(0,10).map(x=>{
       const status=pm2vStockStatus(x);
       return `<tr><td><strong>${esc(x.itemName||'Unnamed Item')}</strong></td><td><span class="category-pill">${esc(x.category||'—')}</span></td><td>${pm2vNum(x.weight).toLocaleString(undefined,{maximumFractionDigits:2})} kg</td><td>${pm2vStockPill(status)}</td><td class="dashboard-updated">${fmtDate(x.lastUpdated)}</td></tr>`;
     }).join('')||'<tr><td colspan="5" style="text-align:center;color:#98a8ba">No inventory records found.</td></tr>';
     const activity=document.getElementById('dashboardActivityBody');
     if(activity){
-      activity.innerHTML=rows.slice(0,5).map(x=>{const status=pm2vStockStatus(x);return `<div class="activity-row"><div><div class="activity-name">${esc(x.itemName||'Unnamed Item')}</div><div class="activity-category">${esc(x.category||'Uncategorized')} · ${esc(status)}</div><div class="activity-time">Updated ${esc(fmtDateTime(x.lastUpdated))}</div></div><div class="activity-right"><span class="activity-weight">${pm2vNum(x.weight).toLocaleString(undefined,{maximumFractionDigits:2})} kg</span><span class="activity-status">Updated</span></div></div>`}).join('')||'<div class="activity-empty">No inventory activity is available yet.</div>';
+      activity.innerHTML=activeRows.slice(0,5).map(x=>{const status=pm2vStockStatus(x);return `<div class="activity-row"><div><div class="activity-name">${esc(x.itemName||'Unnamed Item')}</div><div class="activity-category">${esc(x.category||'Uncategorized')} · ${esc(status)}</div><div class="activity-time">Updated ${esc(fmtDateTime(x.lastUpdated))}</div></div><div class="activity-right"><span class="activity-weight">${pm2vNum(x.weight).toLocaleString(undefined,{maximumFractionDigits:2})} kg</span><span class="activity-status">Updated</span></div></div>`}).join('')||'<div class="activity-empty">No inventory activity is available yet.</div>';
     }
 
-    document.getElementById('dashTotalItems')?.replaceChildren(document.createTextNode(String(rows.length)));
-    document.getElementById('dashCategories')?.replaceChildren(document.createTextNode(String(new Set(rows.map(x=>x.category).filter(Boolean)).size)));
-    document.getElementById('dashActiveItems')?.replaceChildren(document.createTextNode(String(rows.filter(x=>pm2vStockStatus(x)!=='Inactive').length)));
+    document.getElementById('dashTotalItems')?.replaceChildren(document.createTextNode(String(activeRows.length)));
+    document.getElementById('dashCategories')?.replaceChildren(document.createTextNode(String(new Set(activeRows.map(x=>x.category).filter(Boolean)).size)));
+    document.getElementById('dashActiveItems')?.replaceChildren(document.createTextNode(String(activeRows.filter(x=>pm2vStockStatus(x)!=='Inactive').length)));
     const summaryCount=document.getElementById('inventorySummaryCount');
     const summaryWeight=document.getElementById('inventorySummaryWeight');
-    if(summaryCount)summaryCount.textContent=String(rows.length);
     const recordCount=document.getElementById('inventoryRecordCount');
-    if(recordCount)recordCount.textContent=rows.length+' record'+(rows.length===1?'':'s');
-    if(summaryWeight)summaryWeight.textContent=rows.reduce((sum,x)=>sum+pm2vNum(x.weight),0).toLocaleString(undefined,{maximumFractionDigits:2})+' kg';
+    const archivedCount=document.getElementById('inventoryArchivedCount');
+    if(archivedCount)archivedCount.textContent=String(archivedRows.length);
+    if(recordCount)recordCount.textContent=showingArchived
+      ?(listView.length+' archived record'+(listView.length===1?'':'s'))
+      :(listView.length+' record'+(listView.length===1?'':'s'));
+    if(summaryCount)summaryCount.textContent=String(activeRows.length);
+    if(summaryWeight)summaryWeight.textContent=activeRows.reduce((sum,x)=>sum+pm2vNum(x.weight),0).toLocaleString(undefined,{maximumFractionDigits:2})+' kg';
     const writeSection=document.getElementById('inventoryWriteSection');
     if(writeSection&&!document.body.classList.contains('inventory-editing'))writeSection.style.display=canCreate?'':'none';
   }catch(e){console.error(e);toast('Could not load inventory. Check Firestore rules.','error')}
@@ -2173,12 +2325,32 @@ async function updateInventory(){
   finally{b.disabled=false}
 }
 async function deleteInventory(id){const role=String(PM2V_PROFILE?.role||'').trim().toLowerCase();if(!['secretary','owner'].includes(role)){toast('Only secretary and owner can delete inventory items.','error');return}if(!confirm('Delete this inventory item? This action cannot be undone.'))return;try{await deleteDoc(doc(db,'inventory',id));await loadInventory();toast('Inventory item deleted.')}catch(e){console.error(e);toast('Could not delete inventory item. Check Firestore rules.','error')}}
+async function archiveInventory(id){
+  const role=String(PM2V_PROFILE?.role||'').trim().toLowerCase();
+  if(!['secretary','owner'].includes(role)){toast('Only secretary and owner can archive inventory items.','error');return}
+  if(!confirm('Archive this inventory item? It will be hidden from the active inventory list and can be restored anytime.'))return;
+  try{
+    await updateDoc(doc(db,'inventory',id),{archived:true,archivedBy:pm2vCurrentUserName(),archivedAt:serverTimestamp()});
+    await loadInventory();await loadReports();toast('Inventory item archived.');
+  }catch(e){console.error(e);toast('Could not archive inventory item. Check Firestore rules.','error')}
+}
+async function restoreInventory(id){
+  const role=String(PM2V_PROFILE?.role||'').trim().toLowerCase();
+  if(!['secretary','owner'].includes(role)){toast('Only secretary and owner can restore inventory items.','error');return}
+  if(!confirm('Restore this inventory item to the active inventory list?'))return;
+  try{
+    await updateDoc(doc(db,'inventory',id),{archived:false,restoredBy:pm2vCurrentUserName(),restoredAt:serverTimestamp()});
+    await loadInventory();await loadReports();toast('Inventory item restored.');
+  }catch(e){console.error(e);toast('Could not restore inventory item. Check Firestore rules.','error')}
+}
 // Compatibility: expose inventory actions globally as well as through the
 // delegated table listener. This prevents module-scope functions from breaking
 // if an older cached DOM still contains inline action handlers.
 window.editInventory=editInventory;
 window.updateInventory=updateInventory;
 window.deleteInventory=deleteInventory;
+window.archiveInventory=archiveInventory;
+window.restoreInventory=restoreInventory;
 window.cancelInventoryEdit=cancelInventoryEdit;
 
 function cancelInventoryEdit(){
@@ -2311,6 +2483,26 @@ function openAccessModal(){
 document.getElementById('openAccessBtn')?.addEventListener('click',openAccessModal);
 document.getElementById('closeAccessBtn')?.addEventListener('click',closeAccessModal);
 document.getElementById('pm2vAccessModal')?.addEventListener('click',e=>{if(e.target.id==='pm2vAccessModal')closeAccessModal()});
+function openPM2VFaq(){
+  const view=document.getElementById('pm2vFaqView'),card=document.getElementById('pm2vAuthCard');
+  if(!view)return;
+  view.hidden=false;card?.classList.add('pm2v-occluded');
+  document.getElementById('pm2vFaqBtn')?.classList.add('active');
+  const wrap=document.getElementById('pm2vLandingWrap');if(wrap)wrap.scrollTop=0;
+}
+function closePM2VFaq(){
+  const view=document.getElementById('pm2vFaqView'),card=document.getElementById('pm2vAuthCard');
+  if(!view||view.hidden)return;
+  view.hidden=true;card?.classList.remove('pm2v-occluded');
+  document.getElementById('pm2vFaqBtn')?.classList.remove('active');
+}
+function togglePM2VFaq(){const v=document.getElementById('pm2vFaqView');if(!v)return;if(v.hidden)openPM2VFaq();else closePM2VFaq();}
+document.getElementById('pm2vFaqBtn')?.addEventListener('click',togglePM2VFaq);
+document.getElementById('pm2vFaqBack')?.addEventListener('click',closePM2VFaq);
+document.getElementById('pm2vFaqLoginCta')?.addEventListener('click',()=>{closePM2VFaq();setTimeout(()=>document.getElementById('loginEmail')?.focus(),60)});
+document.getElementById('pm2vFaqApplyCta')?.addEventListener('click',openAccessModal);
+document.querySelectorAll('#pm2vFaqView .pm2v-faq-q').forEach(q=>q.addEventListener('click',()=>q.closest('.pm2v-faq-item')?.classList.toggle('open')));
+document.getElementById('pm2vNavLogin')?.addEventListener('click',()=>{closePM2VFaq();document.getElementById('loginEmail')?.focus()});
 function applyProfile(user,p){
   const name=p.fullName||user.displayName||user.email?.split('@')[0]||'PM2V User';
   // Current session display name used by system-generated receipts.
@@ -2339,11 +2531,12 @@ document.getElementById('loginPasswordToggle')?.addEventListener('click',()=>{
   const input=document.getElementById('loginPassword'),btn=document.getElementById('loginPasswordToggle');
   if(!input)return; const show=input.type==='password'; input.type=show?'text':'password'; btn.setAttribute('aria-label',show?'Hide password':'Show password');
 });
-/* PM2V public landing navigation + login modal — scoped to landing controls */
+/* PM2V public landing inline login - IDs preserved, modal removed */
 const pm2vLoginModal=document.getElementById('pm2vLoginModal');
-function openPM2VLogin(){if(!pm2vLoginModal)return;pm2vLoginModal.classList.add('open');pm2vLoginModal.setAttribute('aria-hidden','false');setTimeout(()=>document.getElementById('loginEmail')?.focus(),80)}
-function closePM2VLogin(){if(!pm2vLoginModal)return;pm2vLoginModal.classList.remove('open');pm2vLoginModal.setAttribute('aria-hidden','true')}
-document.getElementById('pm2vOpenLogin')?.addEventListener('click',openPM2VLogin);document.getElementById('pm2vHeroLogin')?.addEventListener('click',openPM2VLogin);document.getElementById('pm2vCtaLogin')?.addEventListener('click',openPM2VLogin);document.getElementById('pm2vCloseLogin')?.addEventListener('click',closePM2VLogin);pm2vLoginModal?.addEventListener('click',e=>{if(e.target===pm2vLoginModal)closePM2VLogin()});document.querySelectorAll('[data-landing-target]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.getElementById(a.dataset.landingTarget)?.scrollIntoView({behavior:'smooth',block:'start'})}));
+function openPM2VLogin(){document.getElementById('loginEmail')?.focus()}
+function closePM2VLogin(){}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAccessModal();closePM2VFaq();}});
+
 document.querySelectorAll('[data-login-info]').forEach(a=>a.addEventListener('click',e=>{
   e.preventDefault();
   const key=a.dataset.loginInfo;
@@ -2384,13 +2577,13 @@ document.getElementById('forgotBtn')?.addEventListener('click',async()=>{
   try{await sendPasswordResetEmail(auth,email);msg.textContent='Password reset email sent.';msg.className='login-message success'}
   catch(e){msg.textContent=friendlyLoginError(e)}
 });
-document.querySelector('.logout a')?.addEventListener('click',async e=>{
-  e.preventDefault(); await signOut(auth); document.body.classList.add('auth-pending'); document.getElementById('loginScreen').style.display='flex'; closePM2VLogin(); showPage('dashboard');
+document.getElementById('sidebarLogoutLink')?.addEventListener('click',async e=>{
+  e.preventDefault(); await signOut(auth); document.body.classList.add('auth-pending'); document.getElementById('loginScreen').style.display='flex'; closePM2VLogin(); closePM2VFaq(); showPage('dashboard');
 });
 onAuthStateChanged(auth,async user=>{
   if(!user){
+    document.body.classList.add('auth-pending');
     document.getElementById('loginScreen').style.display='flex';
-    document.body.classList.remove('auth-pending');
     document.getElementById('authLoading')?.remove();
     return;
   }
@@ -2401,8 +2594,8 @@ onAuthStateChanged(auth,async user=>{
     const msg=document.getElementById('loginMessage');
     msg.textContent=e.message||'Unable to verify your PM2V account.';
     msg.className='login-message';
+    document.body.classList.add('auth-pending');
     document.getElementById('loginScreen').style.display='flex';
-    document.body.classList.remove('auth-pending');
     document.getElementById('authLoading')?.remove();
   }
 });
@@ -2443,7 +2636,7 @@ function showMobilePage(id){
   document.querySelectorAll('.mobile-nav-btn[data-mobile-page]').forEach(b=>b.classList.toggle('active',b.dataset.mobilePage===resolvedPage));
 }
 document.querySelectorAll('.mobile-nav-btn[data-mobile-page]').forEach(btn=>btn.addEventListener('click',()=>showMobilePage(btn.dataset.mobilePage)));
-document.getElementById('mobileProfileLogoutBtn')?.addEventListener('click',()=>document.querySelector('.logout a')?.click());
+document.getElementById('mobileProfileLogoutBtn')?.addEventListener('click',()=>document.getElementById('sidebarLogoutLink')?.click());
 function refreshMobileRoleMenu(){
   const role=String(PM2V_PROFILE?.role||'').toLowerCase();
   const elevated=['secretary','owner'].includes(role);
@@ -2490,6 +2683,10 @@ document.getElementById('inventoryTableBody')?.addEventListener('click',async e=
   try{
     if(action==='edit'){
       await editInventory(id);
+    }else if(action==='archive'){
+      await archiveInventory(id);
+    }else if(action==='restore'){
+      await restoreInventory(id);
     }else if(action==='delete'){
       await deleteInventory(id);
     }
@@ -2503,18 +2700,49 @@ document.getElementById('inventoryTableBody')?.addEventListener('click',async e=
 
 document.querySelector('[data-dashboard-inventory]')?.addEventListener('click',e=>{e.preventDefault();showPage('inventory')});
 document.querySelectorAll('[data-dashboard-action]').forEach(btn=>btn.addEventListener('click',()=>showPage('inventory')));
+document.querySelectorAll('[data-inventory-stat]').forEach(btn=>btn.addEventListener('click',()=>{
+  const what=btn.dataset.inventoryStat;
+  if(what==='weight'){showPage('reports');document.getElementById('reports')?.scrollIntoView({behavior:'smooth',block:'start'});return}
+  // Items card — return to the full active list and jump to the table.
+  if(PM2V_INVENTORY_SHOW_ARCHIVED)pm2vSetArchiveView(false);
+  applyInventoryCategoryFilter('All');
+  document.querySelector('#inventory .table-wrap')?.scrollIntoView({behavior:'smooth',block:'start'});
+}));
+function pm2vSetArchiveView(show){
+  PM2V_INVENTORY_SHOW_ARCHIVED=!!show;
+  const toggle=document.getElementById('inventoryArchiveToggle');
+  if(toggle){
+    toggle.setAttribute('aria-pressed',PM2V_INVENTORY_SHOW_ARCHIVED?'true':'false');
+    toggle.classList.toggle('active',PM2V_INVENTORY_SHOW_ARCHIVED);
+  }
+  loadInventory();
+}
+document.getElementById('inventoryArchiveToggle')?.addEventListener('click',()=>pm2vSetArchiveView(!PM2V_INVENTORY_SHOW_ARCHIVED));
 const REPORT_STATUS_VALUES={'in-stock':'In Stock','low-stock':'Low Stock','out-stock':'Out of Stock','overstock':'Overstock','inactive':'Inactive'};
 function focusReports(){showPage('reports');document.getElementById('reports')?.scrollIntoView({behavior:'smooth',block:'start'});}
+function pm2vSyncReportFilterUI(){
+  const s=document.getElementById('reportStatusFilter');
+  const val=s?s.value:'__all__';
+  document.querySelectorAll('[data-report-status]').forEach(btn=>{
+    const on=REPORT_STATUS_VALUES[btn.dataset.reportStatus]===val;
+    btn.classList.toggle('active',on);
+    btn.setAttribute('aria-pressed',on?'true':'false');
+  });
+  document.querySelectorAll('[data-report-action="in-stock"]').forEach(kpi=>kpi.classList.toggle('active',val==='In Stock'));
+}
 document.querySelectorAll('[data-report-action]').forEach(btn=>btn.addEventListener('click',()=>{
   const action=btn.dataset.reportAction;const c=document.getElementById('reportCategoryFilter'),s=document.getElementById('reportStatusFilter');
   if(c)c.value='__all__';if(s)s.value=action==='in-stock'?'In Stock':'__all__';
-  focusReports();pm2vRenderReports();
+  focusReports();pm2vRenderReports();pm2vSyncReportFilterUI();
   if(action==='transactions')document.getElementById('reportActivitySvg')?.scrollIntoView({behavior:'smooth',block:'center'});
   if(action==='weight')document.getElementById('reportDonutWrap')?.scrollIntoView({behavior:'smooth',block:'center'});
 }));
 document.querySelectorAll('[data-report-status]').forEach(btn=>btn.addEventListener('click',()=>{
-  const s=document.getElementById('reportStatusFilter');if(s)s.value=REPORT_STATUS_VALUES[btn.dataset.reportStatus]||'__all__';
-  focusReports();pm2vRenderReports();
+  const s=document.getElementById('reportStatusFilter');if(!s)return;
+  const target=REPORT_STATUS_VALUES[btn.dataset.reportStatus]||'__all__';
+  // Clicking the same status again clears the filter back to all statuses.
+  s.value=(s.value===target)?'__all__':target;
+  focusReports();pm2vRenderReports();pm2vSyncReportFilterUI();
 }));
 
 
@@ -2524,6 +2752,7 @@ const inventoryCategoryMenu=document.getElementById('inventoryCategoryMenu');
 const inventoryCategoryLabel=document.getElementById('inventoryCategoryLabel');
 const inventoryCategoryOptions=[...document.querySelectorAll('.inventory-category-option')];
 let PM2V_INVENTORY_CATEGORY='All';
+let PM2V_INVENTORY_SHOW_ARCHIVED=false;
 function closeInventoryCategoryMenu(){
   inventoryCategoryMenu?.classList.remove('open');
   inventoryCategoryTrigger?.setAttribute('aria-expanded','false');
@@ -2998,7 +3227,7 @@ function pm2vRenderReports(){
 }
 function pm2vPopulateReportFilters(inv){const select=document.getElementById('reportCategoryFilter');if(!select)return;const current=select.value;const cats=[...new Set(inv.map(x=>String(x.category||'Uncategorized')))].sort((a,b)=>a.localeCompare(b));select.innerHTML='<option value="__all__">All Categories</option>'+cats.map(c=>`<option value="${pm2vReportEsc(c)}">${pm2vReportEsc(c)}</option>`).join('');if(cats.includes(current))select.value=current;}
 function pm2vResetReportFilters(){const c=document.getElementById('reportCategoryFilter'),s=document.getElementById('reportStatusFilter'),p=document.getElementById('reportPeriodFilter');if(c)c.value='__all__';if(s)s.value='__all__';if(p)p.value='7';pm2vRenderReports();}
-async function loadReports(){try{const invSnap=await getDocs(collection(db,'inventory'));PM2V_REPORT_CACHE.inv=invSnap.docs.map(d=>d.data());const txSnap=await getDocs(collection(db,'transactions'));PM2V_REPORT_CACHE.tx=txSnap.docs.map(d=>d.data());pm2vPopulateReportFilters(PM2V_REPORT_CACHE.inv);pm2vRenderReports();}catch(e){console.error(e);toast('Could not load reports. Check Firestore rules.','error')}}
+async function loadReports(){try{const invSnap=await getDocs(collection(db,'inventory'));PM2V_REPORT_CACHE.inv=invSnap.docs.map(d=>d.data()).filter(x=>!x.archived);const txSnap=await getDocs(collection(db,'transactions'));PM2V_REPORT_CACHE.tx=txSnap.docs.map(d=>d.data());pm2vPopulateReportFilters(PM2V_REPORT_CACHE.inv);pm2vRenderReports();}catch(e){console.error(e);toast('Could not load reports. Check Firestore rules.','error')}}
 /* =========================================================
    PM2V REPORTS — CLIENT-SIDE PDF EXPORT
    Uses pinned jsPDF + AutoTable CDN libraries only when export is requested.
@@ -3121,13 +3350,14 @@ async function pm2vExportReportsPdf(){
 }
 
 function pm2vInitReportControls(){
-  ['reportCategoryFilter','reportStatusFilter','reportPeriodFilter'].forEach(id=>document.getElementById(id)?.addEventListener('change',pm2vRenderReports));
-  document.getElementById('reportFilterReset')?.addEventListener('click',pm2vResetReportFilters);
+  ['reportCategoryFilter','reportStatusFilter','reportPeriodFilter'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>{pm2vRenderReports();pm2vSyncReportFilterUI()}));
+  document.getElementById('reportFilterReset')?.addEventListener('click',()=>{pm2vResetReportFilters();pm2vSyncReportFilterUI()});
   document.getElementById('reportFilterToggle')?.addEventListener('click',()=>{
     const b=document.getElementById('reportFilterToggle'),c=document.getElementById('reportFilterContent');
     if(!b||!c)return;const open=b.getAttribute('aria-expanded')==='true';b.setAttribute('aria-expanded',String(!open));c.hidden=open;
   });
-  // Keep PDF generation code available for compatibility, but the client-facing Reports UI no longer exposes Export PDF.
+  // Export PDF — generates the filtered multi-page business report on demand.
+  document.getElementById('reportExportPdf')?.addEventListener('click',()=>{pm2vExportReportsPdf().catch(e=>console.error(e))});
 }
 
 async function loadApplicants(){
@@ -3135,8 +3365,8 @@ async function loadApplicants(){
   try{
     const snap=await getDocs(collection(db,'applicants'));
     const rows=snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>String(x.status||'pending').toLowerCase()==='pending');
-    body.innerHTML=rows.length?rows.map(x=>`<tr><td>${esc(x.name||x.fullName||'—')}</td><td>${esc(x.email||'—')}</td><td>${esc(x.roleRequested||'—')}</td><td>${esc(x.status||'pending')}</td><td><button class="role-btn primary" data-approve="${x.id}">Approve</button></td></tr>`).join(''):'<tr><td colspan="5" class="empty-role">No pending applicants.</td></tr>';
-  }catch(e){console.error(e);body.innerHTML='<tr><td colspan="5" class="empty-role">Could not load applicants.</td></tr>'}
+    body.innerHTML=rows.length?rows.map(x=>`<tr><td>${esc(x.name||x.fullName||'—')}</td><td>${esc(x.email||'—')}</td><td>${esc(x.status||'pending')}</td><td><div class="pm2v-user-actions"><button type="button" class="role-btn pm2v-user-btn edit" data-edit="${x.id}">Edit</button><button type="button" class="role-btn pm2v-user-btn delete" data-delete="${x.id}">Delete</button><button type="button" class="role-btn primary" data-approve="${x.id}">Approve</button><button type="button" class="role-btn pm2v-user-btn pwd" data-pwd="${x.id}">Change password</button></div></td></tr>`).join(''):'<tr><td colspan="4" class="empty-role">No pending applicants.</td></tr>';
+  }catch(e){console.error(e);body.innerHTML='<tr><td colspan="4" class="empty-role">Could not load applicants.</td></tr>'}
 }
 async function loadUsers(){
   const body=document.getElementById('usersBody');if(!body)return;
@@ -3201,6 +3431,121 @@ function requestApprovalDetails(applicant){
     };
   });
 }
+function ensureEditApplicantModal(){
+  let modal=document.getElementById('pm2vEditApplicantModal');
+  if(modal)return modal;
+  modal=document.createElement('div');
+  modal.id='pm2vEditApplicantModal';
+  modal.innerHTML=`<div class="pm2v-approval-backdrop"></div><div class="pm2v-approval-card" role="dialog" aria-modal="true" aria-labelledby="pm2vEditApplicantTitle">
+    <div class="pm2v-approval-head"><div><div class="pm2v-approval-eyebrow">MANAGE USERS</div><h2 id="pm2vEditApplicantTitle">Edit Applicant</h2></div><button type="button" class="pm2v-approval-close" id="pm2vEditApplicantClose" aria-label="Close">×</button></div>
+    <div class="pm2v-approval-person" id="pm2vEditApplicantPerson"></div>
+    <div class="pm2v-approval-grid">
+      <label>Name<input id="pm2vEditApplicantName" type="text" placeholder="Full name"></label>
+      <label>Role<select id="pm2vEditApplicantRole"><option value="staff">Staff</option><option value="secretary">Secretary</option><option value="owner">Owner</option></select></label>
+    </div>
+    <label class="pm2v-approval-password-label">Email<input id="pm2vEditApplicantEmail" type="email" placeholder="name@gmail.com"></label>
+    <div class="pm2v-approval-note">Changes are saved to the application record. Use Approve to create the login account.</div>
+    <div class="pm2v-approval-error" id="pm2vEditApplicantError"></div>
+    <div class="pm2v-approval-actions"><button type="button" class="pm2v-approval-cancel" id="pm2vEditApplicantCancel">Cancel</button><button type="button" class="pm2v-approval-confirm" id="pm2vEditApplicantSave">Save Changes</button></div>
+  </div>`;
+  document.body.appendChild(modal);
+  const close=()=>{modal.classList.remove('open');modal._resolve?.(null);modal._resolve=null};
+  modal.querySelector('#pm2vEditApplicantClose').addEventListener('click',close);
+  modal.querySelector('#pm2vEditApplicantCancel').addEventListener('click',close);
+  modal.querySelector('.pm2v-approval-backdrop').addEventListener('click',close);
+  return modal;
+}
+function requestEditApplicantDetails(applicant){
+  return new Promise(resolve=>{
+    const modal=ensureEditApplicantModal();
+    modal._resolve=resolve;
+    const requested=String(applicant.roleRequested||applicant.role||'staff').trim().toLowerCase();
+    const role=['staff','secretary','owner'].includes(requested)?requested:'staff';
+    modal.querySelector('#pm2vEditApplicantPerson').textContent=`Edit the application details for ${applicant.fullName||applicant.name||'this applicant'}.`;
+    modal.querySelector('#pm2vEditApplicantName').value=applicant.fullName||applicant.name||'';
+    modal.querySelector('#pm2vEditApplicantEmail').value=String(applicant.email||'');
+    modal.querySelector('#pm2vEditApplicantRole').value=role;
+    modal.querySelector('#pm2vEditApplicantError').textContent='';
+    modal.classList.add('open');
+    setTimeout(()=>modal.querySelector('#pm2vEditApplicantName')?.focus(),50);
+    modal.querySelector('#pm2vEditApplicantSave').onclick=()=>{
+      const name=modal.querySelector('#pm2vEditApplicantName').value.trim();
+      const email=modal.querySelector('#pm2vEditApplicantEmail').value.trim();
+      if(!name){modal.querySelector('#pm2vEditApplicantError').textContent='Enter a name.';return}
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){modal.querySelector('#pm2vEditApplicantError').textContent='Enter a valid email address.';return}
+      modal.classList.remove('open');modal._resolve=null;
+      resolve({name,email,role:modal.querySelector('#pm2vEditApplicantRole').value});
+    };
+  });
+}
+function ensureEditProfileModal(){
+  let modal=document.getElementById('pm2vEditProfileModal');
+  if(modal)return modal;
+  modal=document.createElement('div');
+  modal.id='pm2vEditProfileModal';
+  modal.innerHTML=`<div class="pm2v-approval-backdrop"></div><div class="pm2v-approval-card" role="dialog" aria-modal="true" aria-labelledby="pm2vEditProfileTitle">
+    <div class="pm2v-approval-head"><div><div class="pm2v-approval-eyebrow">PROFILE</div><h2 id="pm2vEditProfileTitle">Edit Profile</h2></div><button type="button" class="pm2v-approval-close" id="pm2vEditProfileClose" aria-label="Close">×</button></div>
+    <div class="pm2v-approval-person" id="pm2vEditProfilePerson"></div>
+    <label class="pm2v-approval-password-label">Full Name<input id="pm2vEditProfileName" type="text" placeholder="Full name" maxlength="80"></label>
+    <div class="pm2v-approval-note">Only your display name can be changed. Email, role, and status are managed by the owner.</div>
+    <div class="pm2v-approval-error" id="pm2vEditProfileError"></div>
+    <div class="pm2v-approval-actions"><button type="button" class="pm2v-approval-cancel" id="pm2vEditProfileCancel">Cancel</button><button type="button" class="pm2v-approval-confirm" id="pm2vEditProfileSave">Save Changes</button></div>
+  </div>`;
+  document.body.appendChild(modal);
+  const close=()=>{modal.classList.remove('open');modal._resolve?.(null);modal._resolve=null};
+  modal.querySelector('#pm2vEditProfileClose').addEventListener('click',close);
+  modal.querySelector('#pm2vEditProfileCancel').addEventListener('click',close);
+  modal.querySelector('.pm2v-approval-backdrop').addEventListener('click',close);
+  return modal;
+}
+function requestEditProfileDetails(currentName,userEmail){
+  return new Promise(resolve=>{
+    const modal=ensureEditProfileModal();
+    modal._resolve=resolve;
+    modal.querySelector('#pm2vEditProfilePerson').textContent=`Signed in as ${userEmail||'PM2V user'}.`;
+    modal.querySelector('#pm2vEditProfileName').value=currentName||'';
+    modal.querySelector('#pm2vEditProfileError').textContent='';
+    modal.classList.add('open');
+    setTimeout(()=>modal.querySelector('#pm2vEditProfileName')?.focus(),50);
+    modal.querySelector('#pm2vEditProfileSave').onclick=()=>{
+      const name=modal.querySelector('#pm2vEditProfileName').value.trim();
+      if(!name){modal.querySelector('#pm2vEditProfileError').textContent='Enter your full name.';return}
+      modal.classList.remove('open');modal._resolve=null;
+      resolve({name});
+    };
+  });
+}
+async function saveProfileName(){
+  if(!PM2V_USER){toast('You must be signed in to edit your profile.','error');return}
+  const modal=ensureEditProfileModal();
+  const currentName=window.pm2vCurrentUserName||PM2V_USER.email?.split('@')[0]||'';
+  const result=await requestEditProfileDetails(currentName,PM2V_USER.email);
+  if(!result)return;
+  const saveBtn=modal.querySelector('#pm2vEditProfileSave');saveBtn.disabled=true;
+  try{
+    await updateDoc(doc(db,'users',PM2V_USER.uid),{fullName:result.name,updatedAt:serverTimestamp(),updatedBy:PM2V_USER.email||''});
+    PM2V_PROFILE=PM2V_PROFILE&&typeof PM2V_PROFILE==='object'?{...PM2V_PROFILE,fullName:result.name}:{fullName:result.name};
+    applyProfile(PM2V_USER,PM2V_PROFILE);
+    toast('Profile updated.');
+  }catch(err){
+    console.error(err);
+    toast(err?.code==='permission-denied'?'Update was blocked by Firestore rules. You can only edit your own user record.':(err?.message||'Could not update your profile.'),'error');
+  }finally{saveBtn.disabled=false}
+}
+async function sendOwnPasswordReset(){
+  if(!PM2V_USER?.email){toast('No email address found for your account.','error');return}
+  if(!confirm(`Send a password reset email to ${PM2V_USER.email}?`))return;
+  try{
+    await sendPasswordResetEmail(auth,PM2V_USER.email);
+    toast(`Password reset email sent to ${PM2V_USER.email}.`);
+  }catch(err){
+    console.error(err);
+    const code=err?.code||'';
+    toast(code==='auth/too-many-requests'?'Too many attempts. Please wait a moment and try again.':(err?.message||'Could not send the password reset email.'),'error');
+  }
+}
+document.getElementById('profileEditBtn')?.addEventListener('click',()=>{saveProfileName().catch(e=>console.error(e))});
+document.getElementById('changePasswordBtn')?.addEventListener('click',()=>{sendOwnPasswordReset().catch(e=>console.error(e))});
 async function approveApplicant(applicantId,button){
   const role=String(PM2V_PROFILE?.role||'').trim().toLowerCase();
   if(role!=='owner'){toast('Only the owner can approve applicants.','error');return}
@@ -3242,9 +3587,59 @@ async function approveApplicant(applicantId,button){
     toast(code==='permission-denied'?'Approval was blocked by Firestore rules. Check owner update access for applicants and users.':(err?.message||'Could not approve applicant.'),'error');
   }finally{if(button)button.disabled=false;}
 }
-document.getElementById('applicantBody')?.addEventListener('click',async e=>{const b=e.target.closest('[data-approve]');if(!b)return;await approveApplicant(b.dataset.approve,b);});
-window.approveApplicant=approveApplicant;
-function updateRoleClocks(){const d=new Date(),text=d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})+' | '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});['transactionsDate','reportsDate','usersDate'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=text})}
+async function editApplicant(applicantId,button){
+  if(String(PM2V_PROFILE?.role||'').trim().toLowerCase()!=='owner'){toast('Only the owner can edit applicants.','error');return}
+  if(button?.disabled)return;
+  if(button)button.disabled=true;
+  try{
+    const snap=await getDoc(doc(db,'applicants',applicantId));
+    if(!snap.exists()){toast('Applicant no longer exists.','error');await loadApplicants();return}
+    const details=await requestEditApplicantDetails(snap.data());
+    if(!details)return;
+    await updateDoc(doc(db,'applicants',applicantId),{name:details.name,fullName:details.name,email:details.email,roleRequested:details.role,editedAt:serverTimestamp(),editedBy:PM2V_USER?.email||''});
+    await loadApplicants();
+    toast('Applicant details updated.');
+  }catch(err){console.error(err);toast(err?.code==='permission-denied'?'Update was blocked by Firestore rules. Check owner write access for applicants.':(err?.message||'Could not update applicant.'),'error')}
+  finally{if(button)button.disabled=false}
+}
+async function deleteApplicant(applicantId,button){
+  if(String(PM2V_PROFILE?.role||'').trim().toLowerCase()!=='owner'){toast('Only the owner can delete applicants.','error');return}
+  if(!confirm('Delete this application? This permanently removes the applicant record and cannot be undone.'))return;
+  if(button?.disabled)return;
+  if(button)button.disabled=true;
+  try{
+    await deleteDoc(doc(db,'applicants',applicantId));
+    await loadApplicants();
+    toast('Application deleted.');
+  }catch(err){console.error(err);toast(err?.code==='permission-denied'?'Delete was blocked by Firestore rules. Check owner write access for applicants.':(err?.message||'Could not delete applicant.'),'error')}
+  finally{if(button)button.disabled=false}
+}
+async function sendApplicantPasswordReset(applicantId,button){
+  if(String(PM2V_PROFILE?.role||'').trim().toLowerCase()!=='owner'){toast('Only the owner can send password resets.','error');return}
+  try{
+    const snap=await getDoc(doc(db,'applicants',applicantId));
+    if(!snap.exists()){toast('Applicant no longer exists.','error');await loadApplicants();return}
+    const email=String(snap.data().email||'').trim();
+    if(!email){toast('This applicant has no email address on file.','error');return}
+    if(!confirm(`Send a password reset email to ${email}?`))return;
+    if(button)button.disabled=true;
+    await sendPasswordResetEmail(auth,email);
+    toast(`Password reset email sent to ${email}.`);
+  }catch(err){
+    console.error(err);
+    const code=err?.code||'';
+    toast(code==='auth/user-not-found'?'No Firebase Authentication account exists for this email yet. Approve the applicant first.':(code==='auth/invalid-email'?'That email address is invalid.':(err?.message||'Could not send the password reset email.')),'error');
+  }finally{if(button)button.disabled=false}
+}
+document.getElementById('applicantBody')?.addEventListener('click',async e=>{
+  const editBtn=e.target.closest('[data-edit]');if(editBtn){await editApplicant(editBtn.dataset.edit,editBtn);return}
+  const delBtn=e.target.closest('[data-delete]');if(delBtn){await deleteApplicant(delBtn.dataset.delete,delBtn);return}
+  const pwdBtn=e.target.closest('[data-pwd]');if(pwdBtn){await sendApplicantPasswordReset(pwdBtn.dataset.pwd,pwdBtn);return}
+  const approveBtn=e.target.closest('[data-approve]');if(!approveBtn)return;
+  await approveApplicant(approveBtn.dataset.approve,approveBtn);
+});
+window.approveApplicant=approveApplicant;window.editApplicant=editApplicant;window.deleteApplicant=deleteApplicant;window.sendApplicantPasswordReset=sendApplicantPasswordReset;
+function updateRoleClocks(){const d=new Date(),text=d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})+' | '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});['transactionsDate','reportsDate','usersDate','profileDate'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=text})}
 setInterval(updateRoleClocks,1000);updateRoleClocks();
 
 const manualEntryToggle=document.getElementById('manualEntryToggle');const inventoryWriteSection=document.getElementById('inventoryWriteSection');if(manualEntryToggle&&inventoryWriteSection){manualEntryToggle.addEventListener('click',()=>{const open=!inventoryWriteSection.classList.contains('manual-entry-collapsed');if(open){inventoryWriteSection.classList.add('manual-entry-collapsed');manualEntryToggle.setAttribute('aria-expanded','false')}else{inventoryWriteSection.classList.remove('manual-entry-collapsed');manualEntryToggle.setAttribute('aria-expanded','true');setTimeout(()=>inventoryWriteSection.scrollIntoView({behavior:'smooth',block:'nearest'}),30)}})}
@@ -3968,8 +4363,8 @@ pm2vInitReportControls();
    and dashboard information density for the functional management app. */
 @media (min-width:901px){
   .sidebar{width:270px;padding:22px 24px 24px;background:#146b35}
-  .logo-wrap{height:138px;justify-content:flex-start;padding-left:14px}
-  .logo{width:112px;height:112px}
+  .logo-wrap{height:150px;display:flex;align-items:center;justify-content:center;padding-left:0}
+  .logo{width:124px;height:124px;border-radius:50%;object-fit:cover;border:0;background:transparent;box-shadow:none}
   .user-card{height:72px;padding:10px 14px;margin:0 0 28px;border-radius:14px}
   .avatar{width:44px;height:44px;font-size:18px}
   .user-text{margin-left:12px}
@@ -4010,24 +4405,82 @@ pm2vInitReportControls();
   .nav-group-label{display:none}
 }
 
-/* PM2V PUBLIC LANDING PAGE — fully scoped */
-.pm2v-landing-wrap{position:absolute;inset:0;overflow:auto;background:#f5faf6;color:#17335a;font-family:inherit}
-.pm2v-landing-header{position:sticky;top:0;z-index:20;height:76px;background:rgba(6,60,32,.97);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(22px,5vw,72px);box-shadow:0 2px 16px rgba(3,50,27,.16)}
-.pm2v-landing-brand{display:flex;align-items:center;gap:11px;color:#fff;text-decoration:none;font-weight:900;font-size:18px}.pm2v-landing-brand img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #000;background:#25d36d}
-.pm2v-landing-nav{display:flex;align-items:center;gap:28px}.pm2v-landing-nav a{color:#dceee3;text-decoration:none;font-size:13px;font-weight:800;transition:.2s}.pm2v-landing-nav a:hover{color:#fff}
-.pm2v-landing-login{border:1px solid rgba(255,255,255,.38);background:#fff;color:#075e2e;border-radius:10px;padding:11px 19px;font-weight:900;cursor:pointer;font-size:13px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
-.pm2v-landing-hero{min-height:590px;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:42px;padding:72px clamp(24px,7vw,100px);background:linear-gradient(135deg,#eff9f1 0%,#fff 52%,#e4f4e8 100%);position:relative;overflow:hidden}.pm2v-landing-hero:before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;right:-120px;top:-140px;background:rgba(37,211,109,.09);pointer-events:none}
-.pm2v-landing-eyebrow{display:inline-flex;align-items:center;gap:8px;background:#dcf5e3;color:#096b35;border-radius:999px;padding:8px 13px;font-size:11px;font-weight:900;letter-spacing:.7px;text-transform:uppercase;margin-bottom:18px}.pm2v-landing-eyebrow i{width:7px;height:7px;border-radius:50%;background:#18a957;display:block}
-.pm2v-landing-hero h1{font-size:clamp(40px,5.2vw,70px);line-height:1.02;letter-spacing:-2.8px;margin:0 0 20px;color:#12395d;max-width:700px}.pm2v-landing-hero h1 strong{color:#087a3b}.pm2v-landing-hero p{font-size:17px;line-height:1.75;color:#60758b;max-width:620px;margin:0 0 30px}
-.pm2v-landing-actions{display:flex;gap:12px;flex-wrap:wrap}.pm2v-landing-primary,.pm2v-landing-secondary{border-radius:12px;padding:14px 21px;font-size:14px;font-weight:900;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.pm2v-landing-primary{background:#11763a;color:#fff;border:1px solid #11763a;box-shadow:0 10px 24px rgba(17,118,58,.18)}.pm2v-landing-secondary{background:#fff;color:#174267;border:1px solid #d7e4dc}
-.pm2v-landing-visual{min-height:410px;border-radius:28px;background:linear-gradient(145deg,#0a5d30,#158343);padding:22px;box-shadow:0 28px 70px rgba(14,86,44,.2);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}.pm2v-landing-visual:before,.pm2v-landing-visual:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.08)}.pm2v-landing-visual:before{width:300px;height:300px;right:-90px;top:-100px}.pm2v-landing-visual:after{width:240px;height:240px;left:-120px;bottom:-100px}
-.pm2v-landing-visual-card{width:min(430px,90%);background:#fff;border-radius:22px;padding:28px;position:relative;z-index:1;box-shadow:0 18px 45px rgba(0,0,0,.18)}.pm2v-landing-logo-large{width:86px;height:86px;border-radius:50%;object-fit:cover;border:4px solid #111;background:#25d36d;display:block;margin:0 auto 18px}.pm2v-landing-visual-card h3{text-align:center;color:#12395d;font-size:22px;margin:0 0 8px}.pm2v-landing-visual-card>p{text-align:center;color:#71859a;font-size:13px;line-height:1.55;margin:0 0 22px}.pm2v-landing-mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.pm2v-landing-mini{border:1px solid #e3ebe6;border-radius:12px;padding:14px;background:#f8fbf9}.pm2v-landing-mini b{display:block;color:#12395d;font-size:13px;margin-bottom:3px}.pm2v-landing-mini span{color:#7890a0;font-size:11px}
-.pm2v-landing-section{padding:76px clamp(24px,7vw,100px);background:#fff}.pm2v-landing-section.alt{background:#f5faf6}.pm2v-landing-section-head{max-width:700px;margin:0 auto 38px;text-align:center}.pm2v-landing-kicker{color:#0a7639;font-weight:900;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}.pm2v-landing-section h2{font-size:clamp(30px,4vw,45px);line-height:1.08;letter-spacing:-1.5px;color:#12395d;margin:0 0 13px}.pm2v-landing-section-head p{color:#6b8094;line-height:1.7;margin:0}
-.pm2v-landing-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1180px;margin:auto}.pm2v-landing-card{background:#fff;border:1px solid #dfebe2;border-radius:18px;padding:23px;box-shadow:0 8px 25px rgba(17,67,39,.05)}.pm2v-landing-card-icon{width:42px;height:42px;border-radius:12px;background:#e4f6e9;color:#08763a;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:900;margin-bottom:15px}.pm2v-landing-card h3{margin:0 0 7px;color:#173f62;font-size:16px}.pm2v-landing-card p{margin:0;color:#74889b;font-size:13px;line-height:1.6}
-.pm2v-landing-materials{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:1050px;margin:auto}.pm2v-landing-material{min-height:145px;border-radius:18px;padding:22px;background:linear-gradient(145deg,#0b6333,#168444);color:#fff;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:0 10px 25px rgba(11,99,51,.12)}.pm2v-landing-material b{font-size:18px}.pm2v-landing-material span{font-size:12px;color:#d7f1df;margin-top:4px}
-.pm2v-landing-cta{margin:0 clamp(18px,5vw,70px) 60px;border-radius:25px;padding:50px clamp(25px,6vw,70px);background:#083e21;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:30px}.pm2v-landing-cta h2{margin:0 0 8px;font-size:32px;letter-spacing:-1px}.pm2v-landing-cta p{margin:0;color:#c8e2d1;line-height:1.6}.pm2v-landing-cta .pm2v-landing-primary{background:#fff;color:#096b35;border-color:#fff;white-space:nowrap}
-.pm2v-landing-footer{padding:28px clamp(24px,7vw,100px);background:#062e19;color:#b9d4c2;display:flex;justify-content:space-between;gap:20px;font-size:12px}.pm2v-landing-footer strong{color:#fff}
-.pm2v-login-modal{position:absolute;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(3,25,14,.62);backdrop-filter:blur(7px);overflow:auto}.pm2v-login-modal.open{display:flex}.pm2v-login-modal-card{width:min(520px,100%);max-height:calc(100% - 24px);overflow:auto;background:#fff;border-radius:22px;box-shadow:0 30px 90px rgba(0,0,0,.28);position:relative}.pm2v-login-modal-close{position:absolute;right:15px;top:14px;width:36px;height:36px;border:0;border-radius:50%;background:#edf5ef;color:#164c30;font-size:22px;cursor:pointer;z-index:2}.pm2v-login-modal .login-panel{padding:48px 48px 38px}.pm2v-login-modal .login-panel h1{font-size:30px}.pm2v-login-modal .login-panel-subtitle{margin-bottom:27px}
-@media(max-width:900px){.pm2v-landing-hero{grid-template-columns:1fr;padding-top:55px}.pm2v-landing-visual{min-height:340px}.pm2v-landing-cards{grid-template-columns:repeat(2,1fr)}.pm2v-landing-materials{grid-template-columns:repeat(2,1fr)}.pm2v-landing-nav{gap:13px}.pm2v-landing-nav a{display:none}.pm2v-landing-cta{flex-direction:column;align-items:flex-start}}
-@media(max-width:600px){.pm2v-landing-header{height:64px;padding:0 15px}.pm2v-landing-brand{font-size:14px}.pm2v-landing-brand img{width:38px;height:38px}.pm2v-landing-login{padding:9px 13px}.pm2v-landing-hero{padding:45px 20px 55px;min-height:0}.pm2v-landing-hero h1{letter-spacing:-1.8px;font-size:42px}.pm2v-landing-hero p{font-size:15px}.pm2v-landing-section{padding:55px 20px}.pm2v-landing-cards,.pm2v-landing-materials{grid-template-columns:1fr}.pm2v-landing-cta{margin:0 15px 35px;padding:35px 25px}.pm2v-landing-cta h2{font-size:26px}.pm2v-login-modal{padding:12px}.pm2v-login-modal .login-panel{padding:42px 22px 28px}}
+/* PM2V PUBLIC LANDING PAGE */
+.pm2v-landing-wrap{position:absolute;inset:0;overflow:auto;background:radial-gradient(1200px 600px at 15% 10%,#e8f5ec 0%,transparent 60%),radial-gradient(1000px 600px at 90% 90%,#e3f1e6 0%,transparent 55%),linear-gradient(135deg,#eef4ef 0%,#f7faf8 55%,#e9f1ea 100%);color:#172235;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:0 0 28px;gap:0}
+.pm2v-landing-header{position:sticky;top:0;z-index:30;align-self:stretch;width:100%;margin:0;background:#063c20;border-bottom:1px solid rgba(255,255,255,.10);box-shadow:0 4px 18px rgba(3,50,27,.22);box-sizing:border-box}
+.pm2v-landing-header-inner{width:min(1020px,calc(100% - 40px));margin:0 auto;height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0;box-sizing:border-box}
+.pm2v-landing-brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:800;font-size:16px;letter-spacing:-.2px;text-decoration:none;white-space:nowrap}
+.pm2v-landing-brand img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:0;background:transparent;display:block;box-shadow:none}
+.pm2v-landing-nav{display:flex;align-items:center;gap:10px}
+.pm2v-landing-nav-link{border:0;background:transparent;color:rgba(255,255,255,.88);font-size:14px;font-weight:600;cursor:pointer;padding:9px 14px;border-radius:999px;transition:background .18s ease,color .18s ease}
+.pm2v-landing-nav-link:hover{color:#fff;background:rgba(255,255,255,.12)}
+.pm2v-landing-nav-login{border:0;background:#fff;color:#064d24;font-size:14px;font-weight:800;border-radius:999px;padding:9px 26px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.18);transition:transform .15s ease,box-shadow .15s ease,background .15s ease;white-space:nowrap}
+.pm2v-landing-nav-login:hover{background:#eef6f0;transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,.22)}
+.pm2v-auth-card{width:min(1020px,calc(100% - 40px));margin-top:22px;background:#fff;border:1px solid #e3ece5;border-radius:22px;overflow:hidden;box-shadow:0 30px 80px rgba(18,72,38,.16),0 2px 8px rgba(18,72,38,.06);display:grid;grid-template-columns:1.02fr 1fr;min-height:620px}
+.pm2v-auth-photo{position:relative;background:#0a3d22;min-height:100%;overflow:hidden}
+.pm2v-auth-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.pm2v-auth-photo:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,61,34,.06) 0%,rgba(10,61,34,.10) 45%,rgba(6,46,25,.72) 100%)}
+.pm2v-auth-photo-overlay{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:26px 28px;color:#fff}
+.pm2v-auth-photo-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);color:#fff;font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;border-radius:999px;padding:7px 12px;margin-bottom:12px}
+.pm2v-auth-form-side{background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:52px 54px 38px;text-align:center}
+.pm2v-auth-logo{width:112px;height:112px;border-radius:50%;object-fit:cover;background:#eaf5ec;border:0;display:block;margin:0 auto 16px}
+.pm2v-auth-title{margin:0;font-size:26px;letter-spacing:-.6px;color:#1a2b1f;font-weight:900}
+.pm2v-auth-sub{margin:8px 0 26px;color:#75879a;font-size:14px}
+#pm2vLoginModal{display:none!important}
+.pm2v-auth-form-side .login-form{width:100%;max-width:400px;display:grid;gap:12px;text-align:left}
+.pm2v-auth-form-side .login-field{position:relative}
+.pm2v-auth-form-side .login-field input{width:100%;height:54px;border:1.5px solid #dfe7e2;border-radius:12px;padding:0 46px 0 52px;font-size:14.5px;color:#24364d;outline:none;background:#fbfcfd}
+.pm2v-auth-form-side .login-field input:focus{border-color:#149149;box-shadow:0 0 0 4px rgba(20,145,73,.10);background:#fff}
+.pm2v-auth-form-side .login-field input::placeholder{color:#98a8bc}
+.pm2v-auth-form-side .login-field-icon{position:absolute;left:0;top:0;bottom:0;width:52px;height:auto;transform:none;display:flex;align-items:center;justify-content:center;color:#8aa0b8;pointer-events:none}
+.pm2v-auth-form-side .login-field-icon svg{width:19px;height:19px;display:block;flex:0 0 19px}
+.pm2v-auth-form-side .login-password-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);border:0;background:none;color:#8aa0b8;padding:6px;cursor:pointer;border-radius:8px}
+.pm2v-auth-form-side .login-password-toggle svg{width:19px;height:19px;display:block}
+.pm2v-auth-form-side .login-forgot{display:block;border:0;background:none;color:#0b7438;font-size:13.5px;font-weight:800;cursor:pointer;margin:4px auto 2px;padding:4px 8px}
+.pm2v-auth-form-side .login-submit{height:52px;border:0;border-radius:12px;background:linear-gradient(135deg,#146d35,#087d3e);color:#fff;font-size:15px;font-weight:900;cursor:pointer}
+.pm2v-auth-form-side .login-submit:disabled{opacity:.65;cursor:wait}
+.pm2v-auth-form-side .login-message{min-height:18px;text-align:center;font-size:12.5px;font-weight:700;color:#b42318}
+.pm2v-auth-form-side .login-message.success{color:#146b35}
+.pm2v-auth-apply{margin:14px 0 0;font-size:13.5px;color:#5b6f83;font-style:italic}
+.pm2v-auth-apply button{border:0;background:none;padding:0;color:#172235;font-size:13.5px;font-style:italic;text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-weight:600}
+.pm2v-landing-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;width:min(1020px,calc(100% - 40px));margin-top:18px;color:#7d90a5;font-size:11.5px;padding:0 4px}
+.pm2v-landing-foot strong{color:#3d5469}
+/* PM2V FAQ VIEW (public help center) */
+.pm2v-auth-card.pm2v-occluded{display:none}
+.pm2v-faq-view{width:min(1020px,calc(100% - 40px));margin-top:22px}
+.pm2v-faq-card{background:#fff;border:1px solid #e3ece5;border-radius:22px;box-shadow:0 30px 80px rgba(18,72,38,.16),0 2px 8px rgba(18,72,38,.06);padding:30px 36px}
+.pm2v-faq-back{display:inline-flex;align-items:center;gap:7px;border:1.5px solid #dfe7e2;background:#fff;color:#2c4b36;font-size:12.5px;font-weight:800;border-radius:999px;padding:8px 16px;cursor:pointer}
+.pm2v-faq-back:hover{background:#f2f8f4;border-color:#cfe3d5}
+.pm2v-faq-hero{text-align:center;margin:14px 0 22px}
+.pm2v-faq-kicker{display:inline-block;font-size:10.5px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;color:#146b35;background:#eaf5ec;border-radius:999px;padding:6px 14px;margin-bottom:10px}
+.pm2v-faq-hero h2{margin:0;font-size:26px;letter-spacing:-.5px;color:#1a2b1f;font-weight:900}
+.pm2v-faq-hero p{margin:8px auto 0;max-width:660px;color:#75879a;font-size:14px;line-height:1.6}
+.pm2v-faq-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 24px}
+.pm2v-faq-step{background:#f4faf5;border:1px solid #dceee0;border-radius:14px;padding:16px 14px 14px}
+.pm2v-faq-step i{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#146b35;color:#fff;font-style:normal;font-weight:900;font-size:12.5px;margin-bottom:10px}
+.pm2v-faq-step b{display:block;color:#0b7438;font-size:11px;font-weight:900;letter-spacing:.8px;text-transform:uppercase;margin-bottom:5px}
+.pm2v-faq-step span{display:block;color:#3d5469;font-size:12.5px;line-height:1.5}
+.pm2v-faq-list{display:grid;gap:10px;border-top:1px solid #e7efe9;padding-top:20px}
+.pm2v-faq-item{border:1px solid #e2ece4;border-radius:14px;overflow:hidden;background:#fff}
+.pm2v-faq-q{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;text-align:left;border:0;background:#fbfdfc;color:#172235;font-size:14px;font-weight:800;padding:15px 18px;cursor:pointer}
+.pm2v-faq-q:hover{background:#f3f9f5}
+.pm2v-faq-chev{flex:0 0 auto;transition:transform .18s ease;color:#146b35;font-weight:900}
+.pm2v-faq-item.open .pm2v-faq-chev{transform:rotate(90deg)}
+.pm2v-faq-a{display:none;padding:0 18px 15px;color:#52677e;font-size:13px;line-height:1.65}
+.pm2v-faq-item.open .pm2v-faq-a{display:block}
+.pm2v-faq-a p{margin:0}
+.pm2v-faq-a ul{margin:8px 0 0;padding-left:18px}
+.pm2v-faq-a li{margin:4px 0}
+.pm2v-faq-a b{color:#1a2b1f}
+.pm2v-faq-cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+.pm2v-faq-cta button{height:46px;border-radius:999px;padding:0 22px;font-size:13.5px;font-weight:800;cursor:pointer}
+#pm2vFaqLoginCta{border:0;background:linear-gradient(135deg,#146d35,#087d3e);color:#fff}
+#pm2vFaqLoginCta:hover{filter:brightness(1.06)}
+#pm2vFaqApplyCta{border:1.5px solid #dfe7e2;background:#fff;color:#2c4b36}
+#pm2vFaqApplyCta:hover{background:#f2f8f4}
+.pm2v-landing-nav-link.active{color:#fff;background:rgba(255,255,255,.16)}
+@media(max-width:900px){.pm2v-faq-view{width:calc(100% - 28px);margin-top:16px}.pm2v-faq-card{padding:22px 18px;border-radius:18px}.pm2v-faq-flow{grid-template-columns:1fr 1fr}.pm2v-faq-hero h2{font-size:22px}}
+@media(max-width:480px){.pm2v-faq-flow{grid-template-columns:1fr}}
+@media(max-width:900px){.pm2v-landing-wrap{justify-content:flex-start;padding:0 0 18px}.pm2v-landing-header-inner{width:calc(100% - 28px);height:60px;margin:0 auto}.pm2v-landing-brand{font-size:14px}.pm2v-landing-brand img{width:30px;height:30px}.pm2v-landing-nav{gap:6px}.pm2v-landing-nav-link{padding:8px 10px;font-size:13px}.pm2v-landing-nav-login{padding:8px 18px;font-size:13px}.pm2v-auth-card{grid-template-columns:1fr;min-height:0;width:calc(100% - 28px);margin-top:16px}.pm2v-auth-photo{min-height:230px;height:230px}.pm2v-auth-form-side{padding:32px 24px 28px}.pm2v-auth-logo{width:92px;height:92px}.pm2v-auth-title{font-size:22px}.pm2v-landing-foot{flex-direction:column;text-align:center}}
+@media(max-width:480px){.pm2v-auth-photo{height:200px;min-height:200px}.pm2v-auth-form-side{padding:28px 18px 24px}.pm2v-auth-form-side .login-field input{height:52px;font-size:16px}}
 </style>
