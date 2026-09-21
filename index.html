@@ -10883,7 +10883,7 @@
       const base64 = await blobToBase64(aiBlob);
       const payload = {
         workflowUrl: buildWorkflowUrl(),
-        inputs: { image: { type: 'base64', value: base64 }, classes: getAIClasses() }
+        inputs: { image: { type: 'base64', value: base64 }, classes: [...getAIClasses(), 'Not a Scrap'].filter((x, i, a) => a.findIndex(y => y.toLowerCase() === x.toLowerCase()) === i) }
       };
 
       // First use the same local proxy architecture as ScrapScan.
@@ -10945,13 +10945,16 @@
       const num = v => { const n = Number(v); return Number.isFinite(n) ? n : null };
       const confidenceOf = v => { const n = num(v); return n == null ? 0 : (n > 1 ? n / 100 : n) };
       const cleanName = v => v == null ? '' : String(v).trim().replace(/^['"`]+|['"`]+$/g, '');
+      let personConf = 0;
       const addEntry = (name, value, source = '') => {
         const n = cleanName(name);
-        if (!n || /^(unknown|null|undefined|image|predictions|predicted_classes|inference_id|parent_id|person|success|ok|true|false)$/i.test(n)) return;
-        if (n.length > 100) return;
+        if (!n) return;
         let conf = 0;
         if (value && typeof value === 'object') conf = confidenceOf(value.confidence ?? value.score ?? value.probability ?? value.confidenceScore);
         else conf = confidenceOf(value);
+        if (/^(person|human|people)$/i.test(n)) { personConf = Math.max(personConf, conf); return; }
+        if (/^(unknown|null|undefined|image|predictions|predicted_classes|inference_id|parent_id|success|ok|true|false)$/i.test(n)) return;
+        if (n.length > 100) return;
         entries.push({ name: n, confidence: conf, source });
       };
 
@@ -11005,6 +11008,17 @@
         }
       }
 
+      // A detected person is never a scrap item (e.g. the model fixates on their clothing).
+      if (personConf >= 0.5) {
+        return {
+          material: 'Not a scrap', confidence: personConf, is_scrap: false,
+          condition: 'Person detected',
+          description: 'A person was detected in the photo — this is not a scrap item.',
+          evidence: [`person: ${(personConf * 100).toFixed(1)}%`],
+          alternatives: [], _raw: data
+        };
+      }
+
       if (entries.length) {
         const map = new Map();
         for (const e of entries) {
@@ -11048,6 +11062,8 @@
       let raw = Number(r.confidence ?? r.score ?? r.probability); if (raw > 1) raw /= 100;
       if (!Number.isFinite(raw) || raw <= 0) throw new Error('The AI workflow did not return a valid confidence score. Please retake the photo and try again.');
       let material = String(r.material || r.primary_material || r.label || r.class || '').trim();
+      const notScrap = /^not\s+a\s*scrap$/i.test(material);
+      if (notScrap) material = 'Not a scrap';
       const unidentifiable = !material || /^(unknown|unidentified|unidentifiable|null|undefined|n\/a)$/i.test(material);
       if (unidentifiable) material = 'Not a scrap';
       return {
@@ -11056,7 +11072,7 @@
         evidence: Array.isArray(r.evidence) ? r.evidence : [],
         alternatives: Array.isArray(r.alternatives) ? r.alternatives : [],
         description: unidentifiable ? 'The scanned image could not be identified as a supported scrap material.' : (r.description || r.caption || ''),
-        isScrap: unidentifiable ? false : (typeof r.is_scrap === 'boolean' ? r.is_scrap : (typeof r.isScrap === 'boolean' ? r.isScrap : getAIClasses().some(x => x.toLowerCase() === material.toLowerCase()))),
+        isScrap: (notScrap || unidentifiable) ? false : (typeof r.is_scrap === 'boolean' ? r.is_scrap : (typeof r.isScrap === 'boolean' ? r.isScrap : getAIClasses().some(x => x.toLowerCase() === material.toLowerCase()))),
         condition: unidentifiable ? 'Unidentifiable' : (r.condition || 'AI classification complete'),
         raw: r._raw || data
       };
@@ -11070,7 +11086,7 @@
       ai.description.textContent = result.description || 'Classification completed.';
       ai.isScrap.textContent = result.isScrap === undefined ? '—' : (result.isScrap ? 'Yes' : 'No');
       ai.condition.textContent = result.condition || 'AI classification complete';
-      ai.apply.disabled = !(result.material && result.material !== 'Not a scrap' && result.confidence > 0);
+      ai.apply.disabled = !(result.material && !/^not\s+a\s*scrap$/i.test(result.material) && result.confidence > 0);
       const classScores = new Map(getAIClasses().map(name => [name.toLowerCase(), { name, confidence: 0 }]));
       for (const x of (result.alternatives || [])) {
         const name = String(x.name || x.label || '').trim(); if (!name) continue;

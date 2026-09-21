@@ -4,6 +4,19 @@
 
 export const maxDuration = 60; // Roboflow workflows can take several seconds to run
 
+// Large base64 visualization images (e.g. classification_label_visualization) can make
+// responses ~4.5MB — dangerously close to Roboflow's 6MB cap. They are unused by the
+// frontend, so strip every *visualization key before returning.
+function stripVisualizations(x, depth = 0) {
+  if (x == null || typeof x !== 'object' || depth > 12) return x;
+  if (Array.isArray(x)) { for (const v of x) stripVisualizations(v, depth + 1); return x; }
+  for (const k of Object.keys(x)) {
+    if (/visualization$/i.test(k)) delete x[k];
+    else stripVisualizations(x[k], depth + 1);
+  }
+  return x;
+}
+
 const ALLOWED_HOST = 'serverless.roboflow.com';
 
 function setCors(res) {
@@ -74,6 +87,7 @@ export default async function handler(req, res) {
     let data;
     try {
       data = JSON.parse(text);
+      stripVisualizations(data);
     } catch {
       data = { error: `Non-JSON response from Roboflow (HTTP ${upstream.status}).`, raw: text.slice(0, 500) };
     }
