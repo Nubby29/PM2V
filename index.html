@@ -10624,7 +10624,7 @@
        Integrated from ScrapScan_v8
        ========================= */
     const AI_CONFIG = {
-      workflowUrl: 'https://serverless.roboflow.com/jhave-larios/workflows/muse-spark-1-1-classification',
+      workflowUrl: 'https://serverless.roboflow.com/infer/workflows/jhave-larios/muse-spark-1-1-classification',
       workspace: 'jhave-larios',
       workflowId: 'muse-spark-1-1-classification',
       modelName: 'Muse Spark 1.1',
@@ -10865,7 +10865,7 @@
       });
     }
     function buildWorkflowUrl() {
-      return AI_CONFIG.workflowUrl || `https://serverless.roboflow.com/${encodeURIComponent(AI_CONFIG.workspace)}/workflows/${encodeURIComponent(AI_CONFIG.workflowId)}`;
+      return AI_CONFIG.workflowUrl || `https://serverless.roboflow.com/infer/workflows/${encodeURIComponent(AI_CONFIG.workspace)}/${encodeURIComponent(AI_CONFIG.workflowId)}`;
     }
     async function parseResponse(response, label) {
       const text = await response.text();

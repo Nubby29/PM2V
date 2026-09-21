@@ -49,10 +49,14 @@ export default async function handler(req, res) {
   }
 
   // Normalize Roboflow's legacy "/{workspace}/workflows/{id}" path to the
-  // current documented endpoint "/infer/workflows/{workspace}/{id}".
+  // documented endpoint "/infer/workflows/{workspace}/{id}".
+  // NOTE: the workspace segment must move AFTER "workflows" — blindly
+  // prefixing "/infer" yields /infer/{ws}/workflows/{id}, which Roboflow
+  // answers with 405 Method Not Allowed.
   const path = url.pathname;
-  if (!path.startsWith('/infer/workflows/') && /^\/[^/]+\/workflows\/.+/.test(path)) {
-    url.pathname = `/infer${path}`;
+  if (!path.startsWith('/infer/workflows/')) {
+    const m = path.match(/^\/([^/]+)\/workflows\/([^/]+)\/?$/);
+    if (m) url.pathname = `/infer/workflows/${m[1]}/${m[2]}`;
   }
 
   try {
