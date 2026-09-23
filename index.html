@@ -884,6 +884,10 @@
       opacity: 1
     }
 
+    #inventory .table-wrap tr.inventory-category-hidden {
+      display: none !important
+    }
+
     .filter {
       border: 0;
       background: #fff;
@@ -3791,6 +3795,10 @@
     }
 
     @media (max-width:430px) {
+      .mobile-header-clock {
+        display: none !important
+      }
+
       .mobile-app-header {
         margin-left: -12px !important;
         margin-right: -12px !important;
@@ -4475,7 +4483,6 @@
       margin: 0 0 12px
     }
   </style>
-  <style id="pm2v-records-mobile-refinement">
     <style id="pm2v-records-mobile-refinement">
     /* Records / Reports mobile refinement: compact summary + denser category breakdown. */
     @media (max-width:760px) {
@@ -5846,8 +5853,6 @@
     }
 
     @media(max-width:430px) {
-      #transactions .main {}
-
       .tx-mobile-card {
         padding: 13px;
         border-radius: 14px
@@ -8068,20 +8073,31 @@
     .pm2v-user-trigger {
       width: 34px;
       height: 34px;
+      min-height: 34px;
+      display: inline-grid;
+      place-items: center;
       border: 0;
-      border-radius: 9px;
-      background: #f1f6f3;
-      color: #17335a;
-      font-size: 20px;
+      border-radius: 10px;
+      background: #050505;
+      color: #fff;
+      font-size: 0;
       line-height: 1;
-      letter-spacing: 2px;
-      cursor: pointer
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, .16)
+    }
+
+    .pm2v-user-trigger::before {
+      content: '\22EE';
+      color: #fff;
+      font-size: 23px;
+      line-height: 1;
+      transform: translateY(-1px)
     }
 
     .pm2v-user-trigger:hover,
     .pm2v-user-trigger[aria-expanded="true"] {
-      background: #e3f1e7;
-      color: #146b35
+      background: #242424;
+      color: #fff
     }
 
     .pm2v-user-menu {
@@ -9228,6 +9244,7 @@
             : `<button type="button" class="inventory-action edit" data-inventory-action="edit" data-inventory-id="${encodeURIComponent(x.id)}">Edit</button><button type="button" class="inventory-action archive" data-inventory-action="archive" data-inventory-id="${encodeURIComponent(x.id)}">Archive</button>`;
           return `<tr><td><strong>${esc(x.itemName || 'Unnamed Item')}</strong></td><td><span class="inventory-category-pill">${esc(x.category || '—')}</span></td><td>${pm2vNum(x.weight).toLocaleString(undefined, { maximumFractionDigits: 2 })} kg</td><td><span class="stock-range">${min.toLocaleString(undefined, { maximumFractionDigits: 2 })} / ${max.toLocaleString(undefined, { maximumFractionDigits: 2 })} kg</span></td><td>${pm2vStockPill(status)}</td><td><span class="inventory-condition-pill condition-${String(x.condition || 'unknown').toLowerCase().replace(/[^a-z]+/g, '-')}">${esc(x.condition || '—')}</span></td><td>${fmtDate(x.lastUpdated)}</td>${canManage ? `<td><div class="inventory-actions">${actions}</div></td>` : ''}</tr>`;
         }).join('') : `<tr><td colspan="${canManage ? 8 : 7}" class="empty">${showingArchived ? 'No archived inventory records.' : 'No inventory records found.'}</td></tr>`;
+        if (typeof applyInventoryCategoryFilter === 'function') applyInventoryCategoryFilter(PM2V_INVENTORY_CATEGORY);
 
         if (dash) dash.innerHTML = activeRows.slice(0, 10).map(x => {
           const status = pm2vStockStatus(x);
@@ -9776,7 +9793,8 @@
       rows.forEach(row => {
         const cell = row.children[1];
         const rowCategory = cell?.textContent?.trim() || '';
-        row.style.display = (!cell || PM2V_INVENTORY_CATEGORY === 'All' || rowCategory === PM2V_INVENTORY_CATEGORY) ? '' : 'none';
+        const hidden = !!cell && PM2V_INVENTORY_CATEGORY !== 'All' && rowCategory !== PM2V_INVENTORY_CATEGORY;
+        row.classList.toggle('inventory-category-hidden', hidden);
       });
     }
     inventoryCategoryTrigger?.addEventListener('click', e => {
@@ -10371,12 +10389,17 @@
       document.getElementById('reportExportPdf')?.addEventListener('click', () => { pm2vExportReportsPdf().catch(e => console.error(e)) });
     }
 
+    function pm2vUserStatusLabel(value) {
+      const status = String(value || '—').trim();
+      return status === '—' ? status : status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+    }
+
     async function loadApplicants() {
       const body = document.getElementById('applicantBody'); if (!body) return;
       try {
         const snap = await getDocs(collection(db, 'applicants'));
         const rows = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(x => String(x.status || 'pending').toLowerCase() === 'pending');
-        body.innerHTML = rows.length ? rows.map(x => `<tr><td>${esc(x.name || x.fullName || '—')}</td><td>${esc(x.email || '—')}</td><td>${esc(x.status || 'pending')}</td><td><div class="pm2v-user-actions"><button type="button" class="pm2v-user-trigger" aria-label="Actions for ${esc(x.name || x.fullName || 'applicant')}" aria-expanded="false">...</button><div class="pm2v-user-menu"><button type="button" class="role-btn pm2v-user-btn edit" data-edit="${x.id}">Edit</button><button type="button" class="role-btn pm2v-user-btn delete" data-delete="${x.id}">Delete</button><button type="button" class="role-btn primary" data-approve="${x.id}">Approve</button><button type="button" class="role-btn pm2v-user-btn pwd" data-pwd="${x.id}">Change password</button></div></div></td></tr>`).join('') : '<tr><td colspan="4" class="empty-role">No pending applicants.</td></tr>';
+        body.innerHTML = rows.length ? rows.map(x => `<tr><td>${esc(x.name || x.fullName || '—')}</td><td>${esc(x.email || '—')}</td><td>${esc(pm2vUserStatusLabel(x.status || 'pending'))}</td><td><div class="pm2v-user-actions"><button type="button" class="pm2v-user-trigger" aria-label="Actions for ${esc(x.name || x.fullName || 'applicant')}" aria-expanded="false"></button><div class="pm2v-user-menu"><button type="button" class="role-btn pm2v-user-btn edit" data-edit="${x.id}">Edit</button><button type="button" class="role-btn pm2v-user-btn delete" data-delete="${x.id}">Delete</button><button type="button" class="role-btn primary" data-approve="${x.id}">Approve</button><button type="button" class="role-btn pm2v-user-btn pwd" data-pwd="${x.id}">Change password</button></div></div></td></tr>`).join('') : '<tr><td colspan="4" class="empty-role">No pending applicants.</td></tr>';
       } catch (e) { console.error(e); body.innerHTML = '<tr><td colspan="4" class="empty-role">Could not load applicants.</td></tr>' }
     }
     async function loadUsers() {
@@ -10384,7 +10407,7 @@
       try {
         const snap = await getDocs(collection(db, 'users'));
         const rows = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        body.innerHTML = rows.length ? rows.map(x => `<tr><td>${esc(x.fullName || x.name || '—')}</td><td>${esc(x.email || '—')}</td><td>${esc(x.role || '—')}</td><td>${esc(x.status || '—')}</td></tr>`).join('') : '<tr><td colspan="4" class="empty-role">No users found.</td></tr>';
+        body.innerHTML = rows.length ? rows.map(x => `<tr><td>${esc(x.fullName || x.name || '—')}</td><td>${esc(x.email || '—')}</td><td>${esc(x.role || '—')}</td><td>${esc(pm2vUserStatusLabel(x.status))}</td></tr>`).join('') : '<tr><td colspan="4" class="empty-role">No users found.</td></tr>';
       } catch (e) { console.error(e); body.innerHTML = '<tr><td colspan="4" class="empty-role">Could not load users.</td></tr>' }
     }
     document.getElementById('txSave')?.addEventListener('click', saveTransaction);
@@ -12343,17 +12366,370 @@
 
   @media(max-width:480px) {
     .pm2v-auth-photo {
-      height: 200px;
-      min-height: 200px
+      height: 204px;
+      min-height: 204px
+    }
+
+    .pm2v-auth-photo-overlay {
+      padding: 12px 16px
+    }
+
+    .pm2v-auth-photo-pill {
+      font-size: 8px;
+      padding: 4px 8px;
+      margin-bottom: 5px
+    }
+
+    .pm2v-auth-photo-overlay h2 {
+      font-size: 18px;
+      margin-bottom: 4px
+    }
+
+    .pm2v-auth-photo-overlay p {
+      font-size: 11px;
+      line-height: 1.25;
+      margin: 0
     }
 
     .pm2v-auth-form-side {
-      padding: 28px 18px 24px
+      padding: 12px 18px 12px
+    }
+
+    .pm2v-auth-logo,
+    .pm2v-auth-title,
+    .pm2v-auth-sub {
+      display: none
+    }
+
+    .pm2v-auth-logo {
+      width: 58px;
+      height: 58px;
+      margin-bottom: 6px
+    }
+
+    .pm2v-auth-title {
+      font-size: 18px
+    }
+
+    .pm2v-auth-sub {
+      margin: 3px 0 8px;
+      font-size: 11px
+    }
+
+    .pm2v-auth-form-side .login-form {
+      gap: 5px
     }
 
     .pm2v-auth-form-side .login-field input {
-      height: 52px;
+      height: 44px;
       font-size: 16px
+    }
+
+    .pm2v-auth-form-side .login-submit {
+      height: 44px
+    }
+
+    .pm2v-auth-apply {
+      margin-top: 9px;
+      font-size: 12px
+    }
+  }
+
+  @media(max-width:360px) {
+    .pm2v-landing-header-inner {
+      width: calc(100% - 20px)
+    }
+
+    .pm2v-landing-nav-link {
+      display: none
+    }
+
+    .pm2v-landing-nav-login {
+      padding: 7px 15px
+    }
+
+    .pm2v-auth-photo {
+      height: 174px;
+      min-height: 174px
+    }
+
+    .pm2v-auth-form-side {
+      padding: 10px 14px 10px
+    }
+
+    .pm2v-auth-logo {
+      width: 52px;
+      height: 52px
+    }
+
+    .pm2v-auth-form-side .login-field input,
+    .pm2v-auth-form-side .login-submit {
+      height: 42px
+    }
+  }
+
+  @media(max-width:760px) {
+    /* Keep report and user tables inside their mobile cards. */
+    #users .role-card,
+    #users .role-card > div {
+      height: auto !important;
+      min-height: 0 !important
+    }
+
+    #reports .role-table-wrap,
+    #users [style*="overflow:auto"] {
+      overflow: hidden !important
+    }
+
+    #reports .role-table,
+    #users .role-table {
+      display: block !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      height: auto !important;
+      table-layout: fixed !important
+    }
+
+    #reports .role-table th,
+    #reports .role-table td,
+    #users .role-table th,
+    #users .role-table td {
+      max-width: 0;
+      overflow-wrap: anywhere
+    }
+
+    #reports .role-table th,
+    #users .role-table th {
+      white-space: normal
+    }
+
+    /* Turn user records into readable mobile cards instead of narrow columns. */
+    #users .role-table thead {
+      display: none !important
+    }
+
+    #users .role-table tbody {
+      display: block !important;
+      width: 100% !important;
+      height: auto !important
+    }
+
+    #users .role-table tr {
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-auto-rows: max-content;
+      align-content: start;
+      gap: 5px 10px;
+      margin: 0 0 9px;
+      padding: 12px 10px !important;
+      border: 1px solid #e5ece7;
+      border-radius: 12px;
+      background: #fff
+    }
+
+    #users .role-table tr:last-child {
+      margin-bottom: 0
+    }
+
+    #users .role-table td {
+      display: block !important;
+      min-width: 0;
+      height: auto !important;
+      padding: 0 !important;
+      border: 0 !important;
+      line-height: 1.3;
+      overflow-wrap: anywhere
+    }
+
+    #users .role-table td:first-child {
+      grid-column: 1 / -1;
+      color: #17335a;
+      font-size: 14px;
+      font-weight: 900
+    }
+
+    #users .role-table td:nth-child(2) {
+      color: #60768b;
+      font-size: 12px;
+      word-break: break-word
+    }
+
+    /* Stack profile activity metadata so timestamps never collide on mobile. */
+    #profile .profile-activity-grid {
+      display: grid !important;
+      grid-template-columns: 1fr !important;
+      gap: 0 !important;
+      flex-direction: column !important;
+      align-items: stretch !important
+    }
+
+    #profile .profile-activity-grid > div {
+      display: grid !important;
+      grid-template-columns: 1fr !important;
+      gap: 4px !important;
+      align-items: start !important;
+      width: 100% !important;
+      padding: 8px 0 !important;
+      border-bottom: 1px solid #eef2ef !important
+    }
+
+    #profile .profile-activity-grid > div:last-child {
+      border-bottom: 0 !important
+    }
+
+    #profile .profile-activity-grid .profile-field-label {
+      margin: 0 !important;
+      font-size: 8px !important;
+      letter-spacing: .6px !important
+    }
+
+    #profile .profile-activity-grid .profile-field-value {
+      font-size: 11px !important;
+      line-height: 1.3 !important;
+      text-align: left !important;
+      overflow-wrap: anywhere !important
+    }
+
+    #inventory .filters {
+      overflow: visible !important;
+      z-index: 20 !important
+    }
+
+    #inventory .inventory-category-filter {
+      z-index: 21
+    }
+
+    #inventory .inventory-category-menu {
+      z-index: 1200;
+      max-height: min(242px, calc(100vh - 150px));
+      overflow-y: auto
+    }
+
+    #users [style*="overflow:auto"],
+    #users .role-table,
+    #users .role-table tbody,
+    #users .role-table tr {
+      overflow: visible !important
+    }
+
+    #users .role-table td:nth-child(4) {
+      position: relative;
+      overflow: visible !important
+    }
+
+    #users .role-table td:nth-child(2)::before {
+      content: 'Email · ';
+      color: #9aa8a0;
+      font-weight: 800
+    }
+
+    #users .role-table td:nth-child(3) {
+      color: #146f37;
+      font-size: 12px;
+      font-weight: 800
+    }
+
+    #users .role-table td:nth-child(3)::before {
+      content: 'Status · ';
+      color: #9aa8a0;
+      font-weight: 800
+    }
+
+    #users .role-table td:nth-child(4) {
+      grid-column: 2;
+      grid-row: 2 / span 2;
+      justify-self: end;
+      align-self: center
+    }
+
+    #users #usersBody td:nth-child(3)::before {
+      content: 'Role · '
+    }
+
+    #users #usersBody td:nth-child(4) {
+      grid-row: 2 / span 2
+    }
+
+    /* Keep the semantic table compact and prevent long emails from expanding rows. */
+    #users .role-table {
+      display: table !important;
+      height: auto !important;
+      table-layout: fixed !important
+    }
+
+    #users .role-table thead {
+      display: table-header-group !important
+    }
+
+    #users .role-table tbody {
+      display: table-row-group !important;
+      height: auto !important
+    }
+
+    #users .role-table tr {
+      display: table-row !important;
+      margin: 0;
+      padding: 0 !important;
+      border: 0;
+      background: transparent
+    }
+
+    #users .role-table th,
+    #users .role-table td {
+      display: table-cell !important;
+      height: 52px !important;
+      padding: 8px 7px !important;
+      border-bottom: 1px solid #e8eee9 !important;
+      vertical-align: middle;
+      overflow: hidden
+    }
+
+    #users .role-table th:nth-child(1),
+    #users .role-table td:nth-child(1) {
+      width: 30%
+    }
+
+    #users .role-table th:nth-child(2),
+    #users .role-table td:nth-child(2) {
+      width: 31%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    #users .role-table th:nth-child(3),
+    #users .role-table td:nth-child(3) {
+      width: 20%
+    }
+
+    #users .role-table th:nth-child(4),
+    #users .role-table td:nth-child(4) {
+      width: 19%
+    }
+
+    #users .role-table th:nth-child(4) {
+      white-space: nowrap;
+      font-size: 10px
+    }
+
+    #users .role-table td:nth-child(4) {
+      text-align: right
+    }
+
+    #users .role-table td:nth-child(3) {
+      white-space: nowrap;
+      font-size: 11px
+    }
+
+    #users .role-table td:nth-child(2)::before,
+    #users .role-table td:nth-child(3)::before {
+      content: none !important
+    }
+
+    #users .role-table td:nth-child(4) {
+      grid-column: auto;
+      grid-row: auto;
+      justify-self: auto
     }
   }
 </style>
