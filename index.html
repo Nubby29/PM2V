@@ -8061,17 +8061,59 @@
   <style id="pm2v-users-upgrade">
     /* User Management: Manage Users row actions (Edit / Delete / Approve / Change password). */
     .pm2v-user-actions {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      align-items: center
+      position: relative;
+      display: inline-block
     }
 
-    .pm2v-user-actions .role-btn {
-      padding: 7px 11px;
+    .pm2v-user-trigger {
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 9px;
+      background: #f1f6f3;
+      color: #17335a;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: 2px;
+      cursor: pointer
+    }
+
+    .pm2v-user-trigger:hover,
+    .pm2v-user-trigger[aria-expanded="true"] {
+      background: #e3f1e7;
+      color: #146b35
+    }
+
+    .pm2v-user-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 5px);
+      z-index: 20;
+      display: none;
+      min-width: 158px;
+      padding: 5px;
+      background: #fff;
+      border: 1px solid #dfe8e2;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(23, 57, 40, .16)
+    }
+
+    .pm2v-user-menu.open {
+      display: grid;
+      gap: 2px
+    }
+
+    .pm2v-user-menu .role-btn {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: #294662;
+      border-radius: 7px;
+      padding: 9px 10px;
+      text-align: left;
       font-size: 12px;
-      border-radius: 8px;
-      white-space: nowrap
+      font-weight: 800;
+      cursor: pointer
     }
 
     .pm2v-user-btn.edit {
@@ -8089,21 +8131,19 @@
       color: #1d4f91
     }
 
-    .pm2v-user-btn:hover,
-    .pm2v-user-actions .role-btn.primary:hover {
-      filter: brightness(.95)
+    .pm2v-user-menu .role-btn:hover {
+      background: #f1f8f3;
+      color: #146f37
     }
 
-    .pm2v-user-btn:disabled,
-    .pm2v-user-actions .role-btn.primary:disabled {
+    .pm2v-user-menu .role-btn:disabled {
       opacity: .55;
       cursor: not-allowed
     }
 
     @media(max-width:760px) {
-      .pm2v-user-actions .role-btn {
-        padding: 7px 9px;
-        font-size: 11px
+      .pm2v-user-menu {
+        right: 0
       }
     }
   </style>
@@ -10336,7 +10376,7 @@
       try {
         const snap = await getDocs(collection(db, 'applicants'));
         const rows = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(x => String(x.status || 'pending').toLowerCase() === 'pending');
-        body.innerHTML = rows.length ? rows.map(x => `<tr><td>${esc(x.name || x.fullName || '—')}</td><td>${esc(x.email || '—')}</td><td>${esc(x.status || 'pending')}</td><td><div class="pm2v-user-actions"><button type="button" class="role-btn pm2v-user-btn edit" data-edit="${x.id}">Edit</button><button type="button" class="role-btn pm2v-user-btn delete" data-delete="${x.id}">Delete</button><button type="button" class="role-btn primary" data-approve="${x.id}">Approve</button><button type="button" class="role-btn pm2v-user-btn pwd" data-pwd="${x.id}">Change password</button></div></td></tr>`).join('') : '<tr><td colspan="4" class="empty-role">No pending applicants.</td></tr>';
+        body.innerHTML = rows.length ? rows.map(x => `<tr><td>${esc(x.name || x.fullName || '—')}</td><td>${esc(x.email || '—')}</td><td>${esc(x.status || 'pending')}</td><td><div class="pm2v-user-actions"><button type="button" class="pm2v-user-trigger" aria-label="Actions for ${esc(x.name || x.fullName || 'applicant')}" aria-expanded="false">...</button><div class="pm2v-user-menu"><button type="button" class="role-btn pm2v-user-btn edit" data-edit="${x.id}">Edit</button><button type="button" class="role-btn pm2v-user-btn delete" data-delete="${x.id}">Delete</button><button type="button" class="role-btn primary" data-approve="${x.id}">Approve</button><button type="button" class="role-btn pm2v-user-btn pwd" data-pwd="${x.id}">Change password</button></div></div></td></tr>`).join('') : '<tr><td colspan="4" class="empty-role">No pending applicants.</td></tr>';
       } catch (e) { console.error(e); body.innerHTML = '<tr><td colspan="4" class="empty-role">Could not load applicants.</td></tr>' }
     }
     async function loadUsers() {
@@ -10602,6 +10642,17 @@
         toast(code === 'auth/user-not-found' ? 'No Firebase Authentication account exists for this email yet. Approve the applicant first.' : (code === 'auth/invalid-email' ? 'That email address is invalid.' : (err?.message || 'Could not send the password reset email.')), 'error');
       } finally { if (button) button.disabled = false }
     }
+    document.addEventListener('click', e => {
+      const trigger = e.target.closest('.pm2v-user-trigger');
+      if (trigger) {
+        const menu = trigger.nextElementSibling, open = menu.classList.contains('open');
+        document.querySelectorAll('.pm2v-user-menu.open').forEach(item => { item.classList.remove('open'); item.previousElementSibling?.setAttribute('aria-expanded', 'false') });
+        menu.classList.toggle('open', !open);
+        trigger.setAttribute('aria-expanded', String(!open));
+        return;
+      }
+      if (!e.target.closest('.pm2v-user-actions')) document.querySelectorAll('.pm2v-user-menu.open').forEach(item => { item.classList.remove('open'); item.previousElementSibling?.setAttribute('aria-expanded', 'false') });
+    });
     document.getElementById('applicantBody')?.addEventListener('click', async e => {
       const editBtn = e.target.closest('[data-edit]'); if (editBtn) { await editApplicant(editBtn.dataset.edit, editBtn); return }
       const delBtn = e.target.closest('[data-delete]'); if (delBtn) { await deleteApplicant(delBtn.dataset.delete, delBtn); return }
